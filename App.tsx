@@ -26,7 +26,7 @@ const TabNavigator = () => {
           } else if (route.name === "Explore") {
             iconName = "map";
           } else if (route.name === "Inspiration") {
-            iconName = "map";
+            iconName = "lightbulb-o";
           } else if (route.name === "Nav") {
             iconName = "compass";
           }
