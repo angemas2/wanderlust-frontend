@@ -1,10 +1,13 @@
 import React from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
+import ExploreMap from "../components/ExploreMap"
+import ExploreSwipe from "../components/ExploreSwipe"
 
 export default function ExploreScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Explore screen</Text>
+      <ExploreSwipe />
+      <ExploreMap />
     </SafeAreaView>
   );
 }
