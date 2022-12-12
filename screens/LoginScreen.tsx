@@ -9,7 +9,8 @@ import {
   TextInput,
 } from "react-native";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
-import { Box, Input } from "native-base";
+import { Box, Input, Button, Icon } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type LoginScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -17,19 +18,32 @@ type LoginScreenProps = {
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+ 
+  const passwordInput = () => {
+    const [show, setShow] = React.useState(false);
+  
+    const handleClick = () => setShow(!show);
+  
+    return <Box alignItems="center">
+        <Input type={show ? "text" : "password"} 
+        w="100%" 
+        py="0"
+        mx="3" 
+        InputRightElement={<Button size="xs" rounded="none" w="100%" h="full" onPress={handleClick}>
+              {show ? "Hide" : "Show"}
+            </Button>} placeholder="Password" />
+      </Box>;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
-      <Pressable
-        onPress={() =>
-          navigation.navigate("TabNavigator", { screen: "Explore" })
-        }
-      >
-        <Text style={styles.text}>Login</Text>
+      
 
-        <Box alignItems="center">
-          <Input
+        <Box alignItems="center" style={styles.boxStyle}>
+        <Input
             placeholder="Email"
             autoCapitalize="none"
             textContentType="emailAddress"
@@ -39,8 +53,18 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             mx="3"
             w="100%"
           />
+          <Input 
+          placeholder="Password" 
+          w="100%"
+          type={show ? "text" : "password"}
+          onChangeText={(value) => setPassword(value)}
+          value={password}  
+          InputRightElement={<Pressable onPress={() => setShow(!show)}>
+          <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
+          </Pressable>} />
         </Box>
-      </Pressable>
+
+       <Button onPress={() => navigation.navigate("TabNavigator", { screen: "Explore" })}>Login</Button>
     </SafeAreaView>
   );
 }
@@ -59,5 +83,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 50,
     fontWeight: "bold",
+  },
+  boxStyle: {
+    width: "50%",
+    marginBottom: 50,
   },
 });
