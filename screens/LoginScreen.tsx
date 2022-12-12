@@ -126,6 +126,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           </Button>
         </View>
       </ImageBackground>
+      <Image
+        source={require("../assets/images/logowithtext.png")}
+        style={{ width: 250, height: 50, marginBottom:40}}
+      ></Image>
     </SafeAreaView>
   );
 }
