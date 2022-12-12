@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,9 +11,13 @@ import InspirationScreen from "./screens/InspirationScreen";
 import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as Location from 'expo-location';
+import PositionContext from './utils/context'
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 const TabNavigator = () => {
   return (
@@ -47,12 +52,33 @@ const TabNavigator = () => {
 };
 
 export default function App() {
+
+
+  const [positionObj, setPositionObj] = useState({})
+
+
+  //Get user position
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status === 'granted') {
+        Location.watchPositionAsync({ distanceInterval: 10 },
+          (location) => {
+            setPositionObj(location.coords)
+          });
+      }
+    })();
+  }, [])
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={LoginScreen} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <PositionContext.Provider value={positionObj}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={LoginScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PositionContext.Provider>
   );
 }
