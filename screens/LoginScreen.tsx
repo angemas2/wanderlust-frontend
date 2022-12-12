@@ -17,39 +17,40 @@ type LoginScreenProps = {
 };
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
  
-  const passwordInput = () => {
-    const [show, setShow] = React.useState(false);
-  
-    const handleClick = () => setShow(!show);
-  
-    return <Box alignItems="center">
-        <Input type={show ? "text" : "password"} 
-        w="100%" 
-        py="0"
-        mx="3" 
-        InputRightElement={<Button size="xs" rounded="none" w="100%" h="full" onPress={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>} placeholder="Password" />
-      </Box>;
-  };
+  const handleSubmit = () => {
+    type dataProps = { //props de la réponse data
+      result: boolean,
+      error: string,
+    }
+
+    fetch("http://192.168.1.9:3000/users/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username, password: password }),
+    }).then(response => response.json())
+        .then((data: dataProps) => {
+      if (data.result) {
+        navigation.navigate("TabNavigator", { screen: "Explore" });
+      } else {
+        console.log(data.error);
+      }
+    });
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
       
-
         <Box alignItems="center" style={styles.boxStyle}>
         <Input
             placeholder="Email"
             autoCapitalize="none"
-            textContentType="emailAddress"
-            keyboardType="email-address"
-            onChangeText={(value) => setEmail(value)}
-            value={email}
+            onChangeText={(value) => setUsername(value)}
+            value={username}
             mx="3"
             w="100%"
           />
@@ -64,7 +65,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           </Pressable>} />
         </Box>
 
-       <Button onPress={() => navigation.navigate("TabNavigator", { screen: "Explore" })}>Login</Button>
+       <Button onPress={handleSubmit}>Login</Button>
     </SafeAreaView>
   );
 }
