@@ -12,32 +12,31 @@ import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { extendTheme, NativeBaseProvider } from "native-base";
-import * as Location from 'expo-location';
-import PositionContext from './utils/context'
-
+import * as Location from "expo-location";
+import PositionContext from "./utils/context";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
+        tabBarStyle: { height: 70, paddingBottom:10},
+        tabBarIcon: ({ color }) => {
           let iconName: string = "";
 
           if (route.name === "Mytrips") {
             iconName = "map";
           } else if (route.name === "Explore") {
-            iconName = "map";
+            iconName = "road";
           } else if (route.name === "Inspiration") {
             iconName = "lightbulb-o";
           } else if (route.name === "Nav") {
             iconName = "compass";
           }
 
-          return <FontAwesome name={iconName} size={size} color={color} />;
+          return <FontAwesome name={iconName} size={25} color={color} />;
         },
         tabBarActiveTintColor: "#FFB703",
         tabBarInactiveTintColor: "#023047",
@@ -53,37 +52,40 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-
-
-  const [positionObj, setPositionObj] = useState({})
-
+  const [positionObj, setPositionObj] = useState({});
 
   //Get user position
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (status === 'granted') {
-        Location.watchPositionAsync({ distanceInterval: 10 },
-          (location) => {
-            setPositionObj(location.coords)
-          });
+      if (status === "granted") {
+        Location.watchPositionAsync(
+          { distanceInterval: 10 },
+          (location: any) => {
+            setPositionObj(location.coords);
+          }
+        );
       }
     })();
-  }, [])
+  }, []);
 
   return (
     <PositionContext.Provider value={positionObj}>
       <NativeBaseProvider>
         <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{ headerShown: false }}
-          >
+          <Stack.Navigator  screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={LoginScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>
-    </PositionContext.Provider >
+    </PositionContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  navbar: {
+    height:300,
+  },
+});
