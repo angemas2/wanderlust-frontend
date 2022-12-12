@@ -3,8 +3,8 @@ import { SafeAreaView, Text, StyleSheet } from "react-native";
 
 export default function NavScreen() {
   return (
-    <SafeAreaView>
-      <Text style={styles.container}>Nav screen</Text>
+    <SafeAreaView style={styles.container}>
+      <Text>Nav screen</Text>
     </SafeAreaView>
   );
 }
@@ -14,6 +14,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    paddingTop: 80,
+    justifyContent:"center",
   },
 });
