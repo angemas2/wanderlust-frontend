@@ -6,14 +6,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import ExploreScreen from "./screens/ExploreScreen";
 import InspirationScreen from "./screens/InspirationScreen";
 import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faMap, faMapLocationDot, faLightbulb, faCompass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import * as Location from 'expo-location';
 import PositionContext from './utils/context'
+import { IconDefinition, IconProp } from "@fortawesome/fontawesome-svg-core";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -25,23 +29,32 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let iconName: string = "";
+          let iconName: any;
 
-          if (route.name === "Mytrips") {
-            iconName = "map";
-          } else if (route.name === "Explore") {
-            iconName = "map";
-          } else if (route.name === "Inspiration") {
-            iconName = "lightbulb-o";
-          } else if (route.name === "Nav") {
-            iconName = "compass";
-          }
-
-          return <FontAwesome name={iconName} size={size} color={color} />;
+          switch(route.name) {
+            case "MyTrips":
+              iconName = {faMap};
+              break;
+            case "Explore":
+              iconName = {faMapLocationDot};
+              break;
+              case "Inspiration":
+              iconName = {faLightbulb};
+              break;
+              case "Nav":
+              iconName = {faCompass};
+              break;
+              default:
+              iconName = {faXmark};
+              break;
+            }
+          
+          return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "#FFB703",
         tabBarInactiveTintColor: "#023047",
         headerShown: false,
+        
       })}
     >
       <Tab.Screen name="Mytrips" component={MyTripsScreen} />
@@ -79,7 +92,8 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
           >
-            <Stack.Screen name="Home" component={LoginScreen} />
+            <Stack.Screen name="Home" component={RegisterScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
