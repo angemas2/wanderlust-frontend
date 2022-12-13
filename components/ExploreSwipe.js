@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import { useContext } from 'react';
-import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { SafeAreaView, Text, StyleSheet, View } from "react-native";
 import { FlatList } from 'react-native';
 import PositionContext from '../utils/context'
 import CardComponent from './Card'
+import Swiper from 'react-native-deck-swiper'
 
 
 function ExploreSwipe() {
 
     const [placesData, setPlacesData] = useState([])
-    const [swipeable, setSwipeable] = useState(true);
     //Get the context define in App.tsx
     const positionContext = useContext(PositionContext);
     const url = 
@@ -22,21 +22,63 @@ function ExploreSwipe() {
             });
 
             const places = placesData.map((e, i) => {
-                return  <CardComponent key={i} name={e.tags.name} style={{ zIndex: i }}/>
+                return  { key: i , name: e.tags.name}
             })
   return (
-    
-    <SafeAreaView style={styles.container}>
-        {places}
-    </SafeAreaView>
+    <View style={styles.container}>
+        <Swiper
+        cards={places}
+        index={places.i}
+        renderCard={(card) => <CardComponent card={card}/>}
+        disableTopSwipe
+        disableBottomSwipe
+        animateOverlayLabelsOpacity
+        infinite
+        overlayLabels={{
+            left: {
+                title: 'NOPE',
+                style: {
+                    label: {
+                        backgroundColor: "red",
+                        color: "#fff",
+                        fontSize: 20
+                    },
+                    wrapper: {
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                        justifyContent: "flex-start",
+                        marginTop: 10,
+                        marginLeft: -10
+                    }
+                }
+            },
+            right: { 
+                title: 'LOVE',
+            style: {
+                label: {
+                    backgroundColor: "#219EBC",
+                    color: "#fff",
+                    fontSize: 20
+                },
+                wrapper: {
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    marginTop: 10,
+                    marginLeft: 10
+                }
+            }},
+        }}
+        />
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
-        display: "flex",
         height: "50%",
-        width: "100%",
+        flex: 1,
+        backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center"
     }

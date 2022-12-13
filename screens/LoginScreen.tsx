@@ -121,7 +121,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             />
           </Box>
 
-          <Button size={"lg"} rounded={30} w="250px" onPress={handleSubmit}>
+          <Button size={"lg"} rounded={30} w="250px" onPress={navigation.navigate("TabNavigator", { screen: "Explore" })}>
             Login
           </Button>
         </View>
