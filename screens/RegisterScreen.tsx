@@ -36,9 +36,9 @@ type RegisterScreenProps = {
          }),
       }).then(response => response.json())
           .then((data: dataProps) => {
-        if (!data.result) {  // error message displayed if both fields are empty
+        if (data.result === false) {  // error message displayed if both fields are empty
           setEmptyField(true);
-        } else {
+        } else if(data.result) {
           navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
