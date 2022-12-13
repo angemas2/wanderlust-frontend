@@ -12,11 +12,11 @@ import InspirationScreen from "./screens/InspirationScreen";
 import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faMap, faMapLocationDot, faLightbulb, faCompass, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faMap ,faMapLocationDot, faLightbulb, faCompass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import * as Location from 'expo-location';
 import PositionContext from './utils/context'
-import { IconDefinition, IconProp } from "@fortawesome/fontawesome-svg-core";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 
 
@@ -29,23 +29,23 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let iconName: any;
+          let iconName: IconDefinition;
 
           switch(route.name) {
             case "MyTrips":
-              iconName = {faMap};
+              iconName = faMap;
               break;
             case "Explore":
-              iconName = {faMapLocationDot};
+              iconName = faMapLocationDot;
               break;
               case "Inspiration":
-              iconName = {faLightbulb};
+              iconName = faLightbulb;
               break;
               case "Nav":
-              iconName = {faCompass};
+              iconName = faCompass;
               break;
               default:
-              iconName = {faXmark};
+              iconName = faXmark;
               break;
             }
           
@@ -57,7 +57,7 @@ const TabNavigator = () => {
         
       })}
     >
-      <Tab.Screen name="Mytrips" component={MyTripsScreen} />
+      <Tab.Screen name="MyTrips" component={MyTripsScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Inspiration" component={InspirationScreen} />
       <Tab.Screen name="Nav" component={NavScreen} />
@@ -78,7 +78,7 @@ export default function App() {
 
       if (status === 'granted') {
         Location.watchPositionAsync({ distanceInterval: 10 },
-          (location) => {
+          (location: any) => {
             setPositionObj(location.coords)
           });
       }
