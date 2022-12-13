@@ -18,6 +18,7 @@ type RegisterScreenProps = {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emptyField, setEmptyField] = useState(false);
+    const [wrongDetails, setWrongDetails] = useState(false);
     const [show, setShow] = useState(false);
    
     const handleSubmit = () => { //props de la réponse data
@@ -26,23 +27,24 @@ type RegisterScreenProps = {
         error: string;
       }
 
-      fetch("http://192.168.1.9:3000/users/signup", {
+      fetch("http://192.168.1.9:3000/users/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            username: username, 
-            email: email, 
-            password: password
-         }),
-      }).then(response => response.json())
-          .then((data: dataProps) => {
-        if (!data.result) {  // error message displayed if both fields are empty
-          setEmptyField(true);
-        } else {
-          navigation.navigate("TabNavigator", { screen: "Explore" });
-        }
-      });
-    }
+        body: JSON.stringify({ email: email, password: password }),
+      })
+        .then((response) => response.json())
+        .then((data: dataProps) => {
+          if (email === "" || password === "") { // error message displayed if both fields are empty
+            setEmptyField(true);
+            setWrongDetails(false);
+          } else if (!data.result) { // error message displayed if user's details are wrong
+            setWrongDetails(true);
+            setEmptyField(false);
+          } else { // if user's details are correct, rerouting to ExploreScreen
+            navigation.navigate("TabNavigator", { screen: "Explore" }); 
+          }
+        });
+    };
   
     return (
       <SafeAreaView style={styles.container}>
@@ -79,6 +81,7 @@ type RegisterScreenProps = {
           </Box>
 
         {emptyField && <Text style={styles.error}>Champs manquants</Text>}
+        {wrongDetails && <Text style={styles.error}>E-mail et/ou mot de passe erronés</Text>}
         <Button onPress={handleSubmit}>S'inscrire</Button>
 
          <Text onPress={() => navigation.navigate("Login")}>Déjà inscrit ? Appuyez ici</Text>
