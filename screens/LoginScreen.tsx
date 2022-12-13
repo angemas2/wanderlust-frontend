@@ -20,8 +20,7 @@ type LoginScreenProps = {
   export default function LoginScreen({ navigation }: LoginScreenProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [emptyField, setEmptyField] = useState(false);
-    const [wrongDetails, setWrongDetails] = useState(false);
+    const [error, setError] = useState("")
     const [show, setShow] = useState(false);
    
     const handleSubmit = () => { //props de la réponse data
@@ -37,12 +36,8 @@ type LoginScreenProps = {
       })
         .then((response) => response.json())
         .then((data: dataProps) => {
-          if (email === "" || password === "") { // error message displayed if both fields are empty
-            setEmptyField(true);
-            setWrongDetails(false);
-          } else if (!data.result) { // error message displayed if user's details are wrong
-            setWrongDetails(true);
-            setEmptyField(false);
+          if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
+          setError(data.error);
           } else { // if user's details are correct, rerouting to ExploreScreen
             navigation.navigate("TabNavigator", { screen: "Explore" }); 
           }
@@ -79,10 +74,9 @@ type LoginScreenProps = {
               </Pressable>} />
             </Box>
 
-            {emptyField && <Text style={styles.error}>Champs manquants</Text>}
-            {wrongDetails && <Text style={styles.error}>E-mail et/ou mot de passe erronés</Text>}
+            {error && <Text style={styles.error}>{error}</Text>}
+            
             <Button onPress={handleSubmit}>Se connecter</Button>
-
             <Text onPress={() => navigation.navigate("Home")}>Pas encore inscrit ? Appuyez ici</Text>
 
 
