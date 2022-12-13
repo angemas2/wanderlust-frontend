@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   SafeAreaView,
+  View,
   Text,
   StyleSheet,
   Pressable,
@@ -9,9 +10,9 @@ import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Box, Input, Button, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 
-type RegisterScreenProps = {
-    navigation: NavigationProp<ParamListBase>;
-  };
+type LoginScreenProps = {
+  navigation: NavigationProp<ParamListBase>;
+};
 
   export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     const [username, setUsername] = useState("");

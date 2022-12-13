@@ -14,20 +14,20 @@ import NavScreen from "./screens/NavScreen";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faMap ,faMapLocationDot, faLightbulb, faCompass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { extendTheme, NativeBaseProvider } from "native-base";
-import * as Location from 'expo-location';
-import PositionContext from './utils/context'
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
+import * as Location from "expo-location";
+import PositionContext from "./utils/context";
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+
         tabBarIcon: ({ color, size }) => {
           let iconName: IconDefinition;
 
@@ -50,6 +50,7 @@ const TabNavigator = () => {
             }
           
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
+
         },
         tabBarActiveTintColor: "#FFB703",
         tabBarInactiveTintColor: "#023047",
@@ -66,38 +67,46 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-
-
-  const [positionObj, setPositionObj] = useState({})
-
+  const [positionObj, setPositionObj] = useState({});
 
   //Get user position
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (status === 'granted') {
-        Location.watchPositionAsync({ distanceInterval: 10 },
+
+      if (status === "granted") {
+        Location.watchPositionAsync(
+          { distanceInterval: 10 },
           (location: any) => {
-            setPositionObj(location.coords)
-          });
+            setPositionObj(location.coords);
+          }
+        );
       }
     })();
-  }, [])
+  }, []);
 
   return (
     <PositionContext.Provider value={positionObj}>
       <NativeBaseProvider>
         <NavigationContainer>
+
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
           >
             <Stack.Screen name="Home" component={RegisterScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
+
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>
-    </PositionContext.Provider >
+    </PositionContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  navbar: {
+    height:300,
+  },
+});
