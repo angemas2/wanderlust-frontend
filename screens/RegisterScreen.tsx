@@ -4,6 +4,9 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  ImageBackground,
+  View,
+  Image
 } from "react-native";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Box, Input, Button, Icon } from "native-base";
@@ -17,8 +20,9 @@ type RegisterScreenProps = {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [emptyField, setEmptyField] = useState(false);
+    const [error, setError] = useState("")
     const [show, setShow] = useState(false);
+    
    
     const handleSubmit = () => { //props de la réponse data
       type dataProps = { 
@@ -37,8 +41,8 @@ type RegisterScreenProps = {
       }).then(response => response.json())
           .then((data: dataProps) => {
         if (!data.result) {  // error message displayed if both fields are empty
-          setEmptyField(true);
-        } else {
+          setError(data.error);
+        } else if(data.result) {
           navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
@@ -46,6 +50,8 @@ type RegisterScreenProps = {
   
     return (
       <SafeAreaView style={styles.container}>
+        <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
+          <View style={styles.contentContainer}>
         <Text style={styles.title}>Inscription</Text>
         
             <Box alignItems="center" style={styles.boxStyle}>
@@ -78,10 +84,13 @@ type RegisterScreenProps = {
             </Pressable>} />
           </Box>
 
-        {emptyField && <Text style={styles.error}>Champs manquants</Text>}
+        {error && <Text style={styles.error}>{error}</Text>}
         <Button onPress={handleSubmit}>S'inscrire</Button>
-
          <Text onPress={() => navigation.navigate("Login")}>Déjà inscrit ? Appuyez ici</Text>
+
+         <Image source={require("../assets/images/logowithtext.png")} style={{ width: 250, height: 50, top: 270 }} />
+         </View>
+         </ImageBackground>
       </SafeAreaView>
     );
   }
@@ -93,6 +102,18 @@ type RegisterScreenProps = {
       justifyContent: "center",
       backgroundColor: "#182535",
     },
+    imageBackground: {
+      width: "100%",
+      height: "100%",
+      opacity: 0.9,
+    },
+    contentContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
+      height: "100%",
+    },
     text: {
       color: "white",
     },
@@ -102,8 +123,16 @@ type RegisterScreenProps = {
       fontWeight: "bold",
     },
     boxStyle: {
-      width: "50%",
+      width: "100%",
       marginBottom: 50,
+    },
+    subtitle: {
+      fontSize: 16,
+      lineHeight: 19,
+      color: "#9EC4DB",
+      opacity: 0.8,
+      marginTop:10,
+      marginBottom:20,
     },
     error: {
       marginBottom: 10,
