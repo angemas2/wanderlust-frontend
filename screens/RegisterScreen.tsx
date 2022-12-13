@@ -17,14 +17,15 @@ type RegisterScreenProps = {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [emptyField, setEmptyField] = useState(false);
     const [show, setShow] = useState(false);
    
-    const handleSubmit = () => {
-      type dataProps = { //props de la réponse data
-        result: boolean,
-        error: string,
+    const handleSubmit = () => { //props de la réponse data
+      type dataProps = { 
+        result: boolean;
+        error: string;
       }
-  
+
       fetch("http://192.168.1.9:3000/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,10 +36,10 @@ type RegisterScreenProps = {
          }),
       }).then(response => response.json())
           .then((data: dataProps) => {
-        if (data.result) {
-          navigation.navigate("TabNavigator", { screen: "Explore" });
+        if (!data.result) {  // error message displayed if both fields are empty
+          setEmptyField(true);
         } else {
-          console.log(data.error);
+          navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
     }
@@ -76,8 +77,9 @@ type RegisterScreenProps = {
             <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
             </Pressable>} />
           </Box>
-  
-         <Button onPress={handleSubmit}>S'inscrire</Button>
+
+        {emptyField && <Text style={styles.error}>Champs manquants</Text>}
+        <Button onPress={handleSubmit}>S'inscrire</Button>
 
          <Text onPress={() => navigation.navigate("Login")}>Déjà inscrit ? Appuyez ici</Text>
       </SafeAreaView>
@@ -102,5 +104,9 @@ type RegisterScreenProps = {
     boxStyle: {
       width: "50%",
       marginBottom: 50,
+    },
+    error: {
+      marginBottom: 10,
+      color: 'red',
     },
   });
