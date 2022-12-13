@@ -49,7 +49,11 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     <SafeAreaView style={styles.container}>
       <ImageBackground
         source={require("../assets/images/background.png")}
-        style={{ width: "100%", height: "100%", opacity: 0.6 }}
+        style={{
+          width: "100%",
+          height: "100%",
+          opacity: 0.9,
+        }}
       >
         <View
           style={{
@@ -58,7 +62,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             alignItems: "center",
             width: "100%",
             height: "100%",
-            backgroundColor: "#182535",
           }}
         >
           <Text style={styles.title}>Sign In</Text>
@@ -128,7 +131,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       </ImageBackground>
       <Image
         source={require("../assets/images/logowithtext.png")}
-        style={{ width: 250, height: 50, marginBottom:40}}
+        style={{ width: 250, height: 50, marginBottom: 40 }}
       ></Image>
     </SafeAreaView>
   );
