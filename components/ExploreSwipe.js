@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { useContext } from 'react';
 import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { FlatList } from 'react-native';
 import PositionContext from '../utils/context'
-import Swipe from 'react-native-swipeable';
-import Card from 'react-native-card-stack-swiper';
 import CardComponent from './Card'
 
 
@@ -23,25 +22,27 @@ function ExploreSwipe() {
             });
 
             const places = placesData.map((e, i) => {
-                return  <CardComponent key={i} name={e.tags.name}/>
+                return  <CardComponent key={i} name={e.tags.name} style={{ zIndex: i }}/>
             })
   return (
+    
     <SafeAreaView style={styles.container}>
-        <Swipe
-      onSwipe={() => setSwipeable(false)}
-      onRelease={() => setSwipeable(true)}
-    >
         {places}
-        </Swipe>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
+        display: "flex",
         height: "50%",
         width: "100%",
+        alignItems: "center",
+        justifyContent: "center"
     }
 })
 
 export default ExploreSwipe
+
+
+

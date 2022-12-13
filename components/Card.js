@@ -12,8 +12,12 @@ function Card(props) {
 }
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#182535",
-        margin: 10
+        backgroundColor: "red",
+        width: 50,
+        height:50,
+        margin: 3,
+      
+      
     }
 })
 
