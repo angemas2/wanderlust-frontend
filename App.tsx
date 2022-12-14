@@ -32,7 +32,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -74,7 +73,15 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-  const [positionObj, setPositionObj] = useState({});
+  const [positionObj, setPositionObj] = useState({
+    accuracy: 0,
+    altitude: 0,
+    altitudeAccuracy: 0,
+    heading: 0,
+    latitude: 0,
+    longitude: 0,
+    speed: 0,
+  });
 
   const { user, login } = useContext(UserContext);
 
@@ -94,10 +101,8 @@ export default function App() {
     })();
   }, []);
 
-
-
   useEffect(() => {
-   (async () => {
+    (async () => {
       const value = await AsyncStorage.getItem(
         "WANDERLUST::AUTHSTATE_USERNAME"
       );
@@ -113,11 +118,10 @@ export default function App() {
         "WANDERLUST::AUTHSTATE_USERNAME",
         `${user.username}`
       );
-    })()
+    })();
   }, [user]);
 
   return (
-  
     <UserProvider>
       <>
         {console.log(user.username)}
@@ -125,7 +129,7 @@ export default function App() {
           <NativeBaseProvider>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {user.username==="" ? (
+                {user.username === "" ? (
                   <>
                     <Stack.Screen name="Home" component={RegisterScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
