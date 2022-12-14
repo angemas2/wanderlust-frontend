@@ -2,7 +2,7 @@ import React from 'react'
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import { useContext } from 'react';
-import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { SafeAreaView, Text, StyleSheet, View } from "react-native";
 import PositionContext from '../utils/context'
 
 function ExploreMap() {
@@ -13,7 +13,7 @@ function ExploreMap() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
         <MapView
             initialRegion={{
             latitude: positionContext.latitude,
@@ -25,7 +25,7 @@ function ExploreMap() {
             >
                 <Marker coordinate={{ latitude: positionContext.latitude, longitude: positionContext.longitude }} />
         </MapView>
-    </SafeAreaView>
+    </View>
   )
 }
 
