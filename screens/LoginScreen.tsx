@@ -1,4 +1,3 @@
-
 import React, { useState, useContext, useEffect, Component } from "react";
 
 import {
@@ -14,6 +13,9 @@ import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Box, Input, Button, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { UserContext } from "../utils/logincontext";
+import * as Google from "expo-auth-session/providers/google";
+import * as Facebook from "expo-auth-session/providers/facebook";
+import { ResponseType } from "expo-auth-session";
 
 type LoginScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -31,6 +33,31 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     error: string;
   };
 
+  const fetchGoogleUserInfo = async (token: any) => {
+    const response = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return await response.json();
+  };
+
+  const fbtoken: string =
+    "EAAOBZBh7WaYwBACgvdCUy9qy9QrSeDnqmkK654ex0Am5DUWYKJZBL42FJJLN3qwgXdREzSAVqN1keFS13GWO78dTEW9fT2KyuPuCflMliIxCY1J8DyzHMMvRoZCgUuDb77847B6Mcsm9516yDBPtFWBO2RJADRZBLLZBo2lwSZB7FxlrE3sDI7hKLbJLZCflCREMKHlrRpG3QZDZD";
+
+  const facebookUserInfo = async (token: string) => {
+    const response = await fetch(
+      `https://graph.facebook.com/v15.0/me?fields=email%2Cfirst_name%2Clast_name%2Cpicture&access_token=${token}`
+    );
+    return await response.json();
+  };
+
   const { user, login } = useContext(UserContext);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -42,7 +69,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     clientId: "987336189307276",
     responseType: ResponseType.Code,
   });
-
 
   useEffect(() => {
     (async () => {
@@ -86,13 +112,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     })();
   }, [response]);
 
-  type dataProps = {
-    result: boolean;
-    error: string;
-  }
-
-  const { user, login } = useContext(UserContext);
-
 
   const handleSubmit = () => {
     fetch("http://192.168.1.9:3000/users/signin", {
@@ -102,30 +121,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     })
       .then((response) => response.json())
       .then((data: dataProps) => {
-
         if (!data.result) {
           // error returned from the backend if fields are empty or user's details incorrect
           setError(data.error);
         } else {
           // if user's details are correct, rerouting to ExploreScreen
-
-        if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
-          setError(data.error);
-        } else { // if user's details are correct, rerouting to ExploreScreen
-
           navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
   };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>Connexion</Text>
-          <Text style={styles.subtitle}>Connexion avec adresse e-mail</Text>
-
-          <Box alignItems="center" style={styles.boxStyle}>
 
   return (
     <SafeAreaView style={styles.container}>
@@ -248,5 +252,3 @@ const styles = StyleSheet.create({
     color: "red",
   },
 });
-
- 

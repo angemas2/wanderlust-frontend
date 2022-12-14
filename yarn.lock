@@ -6673,8 +6673,7 @@ prompts@^2.3.2, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-
-prop-types@*, prop-types@^15.7.2:
+prop-types@*, prop-types@^15.6.0, prop-types@^15.7.2:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6818,6 +6817,13 @@ react-native-codegen@^0.70.6:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-deck-swiper@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/react-native-deck-swiper/-/react-native-deck-swiper-2.0.12.tgz#941ebfdd7e4e0cff316640dbe795a4a13714ddb5"
+  integrity sha512-fphojlLDMkg5ppHqoAh/9ZuDzsdxR/HTKGFhAkEOlNe08r/MRUpyYJHLxKS83CnPQLJvvY7ol9pHvTm9D+DSRg==
+  dependencies:
+    prop-types "15.5.10"
+
 react-native-fbsdk@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-3.0.0.tgz#07ef41758bb17a0acaff744008af625a45ef9a01"
@@ -6827,13 +6833,6 @@ react-native-google-signin@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-native-google-signin/-/react-native-google-signin-2.1.1.tgz#4281940eee88602b0181dd49affdf8c92980c85c"
   integrity sha512-6l3fiLdX/bfhh0BoxGq+jGkagFsO+mrE/eRV4+3/0k8+FDxO90vdPpQdDiwlM5vWXRxWthTzMM09/jHw+4cvNw==
-
-react-native-deck-swiper@^2.0.12:
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/react-native-deck-swiper/-/react-native-deck-swiper-2.0.12.tgz#941ebfdd7e4e0cff316640dbe795a4a13714ddb5"
-  integrity sha512-fphojlLDMkg5ppHqoAh/9ZuDzsdxR/HTKGFhAkEOlNe08r/MRUpyYJHLxKS83CnPQLJvvY7ol9pHvTm9D+DSRg==
-  dependencies:
-    prop-types "15.5.10"
 
 react-native-gradle-plugin@^0.70.3:
   version "0.70.3"
