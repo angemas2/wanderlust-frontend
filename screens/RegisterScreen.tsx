@@ -25,7 +25,7 @@ type RegisterScreenProps = {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [registrationMethod, setRegistrationMethod] = useState("")
+    const [registrationBy, setRegistrationBy] = useState("")
     const [error, setError] = useState("")
     const [show, setShow] = useState(false);
     
@@ -37,7 +37,7 @@ type RegisterScreenProps = {
     }
 
     const handleSubmit = () => { //props de la réponse data
-      setRegistrationMethod("email");
+      setRegistrationBy("email");
 
       fetch("http://192.168.1.9:3000/users/signup", {
         method: "POST",
@@ -46,18 +46,20 @@ type RegisterScreenProps = {
             username: username, 
             email: email, 
             password: password,
-            registrationBy: registrationMethod,
+            registrationBy: registrationBy,
          }),
       }).then(response => response.json())
           .then((data: dataProps) => {
+            console.log(registrationBy);
         if (!data.result) {  // error message displayed if both fields are empty
           setError(data.error);
         } else if(data.result) {
-          login(username);
           navigation.navigate("TabNavigator", { screen: "Explore" });
         }
+        
       });
     }
+
     const [request, response, promptAsync] = Google.useAuthRequest({
       expoClientId:
         "917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com",
@@ -101,14 +103,14 @@ type RegisterScreenProps = {
           console.log(user);
           setUsername(user.first_name);
           setEmail(user.email);
-          setRegistrationMethod("facebook");
+          setRegistrationBy("facebook");
           fetch("http://localhost:3000/facebook", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
               username: username, 
               email: email,
-              registrationBy: registrationMethod
+              registrationby: registrationBy
             }),
           })
           .then((response) => response.json())
@@ -129,6 +131,7 @@ type RegisterScreenProps = {
           navigation.navigate("TabNavigator", { screen: "Explore" });
           setUsername(user.name);
           setEmail(user.email);
+          setRegistrationBy("google");
           let avatar = user.picture;
           fetch("http://localhost:3000/facebook", {
             method: "POST",
@@ -136,7 +139,7 @@ type RegisterScreenProps = {
             body: JSON.stringify({ 
               username: username, 
               email: email,
-              registrationBy: registrationMethod
+              registrationBy: registrationBy
             }),
           })
           .then((response) => response.json())
