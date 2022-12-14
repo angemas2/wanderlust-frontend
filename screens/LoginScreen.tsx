@@ -1,6 +1,4 @@
-
 import React, { useState, useContext } from "react";
-
 import {
   SafeAreaView,
   View,
@@ -19,44 +17,44 @@ type LoginScreenProps = {
   navigation: NavigationProp<ParamListBase>;
 };
 
-  export default function LoginScreen({ navigation }: LoginScreenProps) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("")
-    const [show, setShow] = useState(false);
-   
-    
-      type dataProps = { 
-        result: boolean;
-        error: string;
-      }
+export default function LoginScreen({ navigation }: LoginScreenProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("")
+  const [show, setShow] = useState(false);
+
+
+  type dataProps = {
+    result: boolean;
+    error: string;
+  }
 
   const { user, login } = useContext(UserContext);
 
   const handleSubmit = () => {
-      fetch("http://192.168.1.9:3000/users/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, password: password }),
-      })
-        .then((response) => response.json())
-        .then((data: dataProps) => {
-          if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
+    fetch("http://192.168.1.9:3000/users/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: password }),
+    })
+      .then((response) => response.json())
+      .then((data: dataProps) => {
+        if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
           setError(data.error);
-          } else { // if user's details are correct, rerouting to ExploreScreen
-            navigation.navigate("TabNavigator", { screen: "Explore" }); 
-          }
-        });
-    };
+        } else { // if user's details are correct, rerouting to ExploreScreen
+          navigation.navigate("TabNavigator", { screen: "Explore" });
+        }
+      });
+  };
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
-          <View style={styles.contentContainer}>
-            <Text style={styles.title}>Connexion</Text>
-            <Text style={styles.subtitle}>Connexion avec adresse e-mail</Text>
-            
-            <Box alignItems="center" style={styles.boxStyle}>
+  return (
+    <SafeAreaView style={styles.container}>
+      <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>Connexion</Text>
+          <Text style={styles.subtitle}>Connexion avec adresse e-mail</Text>
+
+          <Box alignItems="center" style={styles.boxStyle}>
 
             <Input
               color="white"
@@ -67,20 +65,20 @@ type LoginScreenProps = {
               value={email}
               mx="3"
               w="100%"
-              />
-            <Input 
+            />
+            <Input
               color="white"
-              placeholder="Password" 
+              placeholder="Password"
               w="100%"
               type={show ? "text" : "password"}
               onChangeText={(value) => setPassword(value)}
-              value={password}  
+              value={password}
               InputRightElement={<Pressable onPress={() => setShow(!show)}>
-              <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
+                <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
               </Pressable>} />
-            </Box>
+          </Box>
 
-            {error && <Text style={styles.error}>{error}</Text>}
+          {error && <Text style={styles.error}>{error}</Text>}
             
             <Button onPress={handleSubmit}>Se connecter</Button>
 
@@ -136,4 +134,3 @@ type LoginScreenProps = {
       color: 'red',
     },
   });
-

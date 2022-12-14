@@ -22,7 +22,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
 
@@ -74,7 +75,14 @@ const TabNavigator = () => {
   );
 };
 
+
+const store = configureStore({
+  reducer: { places },
+});
+
+
 export default function App() {
+
   const [positionObj, setPositionObj] = useState({});
 
   const { user, login } = useContext(UserContext);
@@ -98,7 +106,7 @@ export default function App() {
 
 
   useEffect(() => {
-   (async () => {
+    (async () => {
       const value = await AsyncStorage.getItem(
         "WANDERLUST::AUTHSTATE_USERNAME"
       );
@@ -118,7 +126,7 @@ export default function App() {
   }, [user]);
 
   return (
-  
+
     <UserProvider>
       <>
         {console.log(user.username)}
@@ -126,7 +134,7 @@ export default function App() {
           <NativeBaseProvider>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {user.username==="" ? (
+                {user.username === "" ? (
                   <>
                     <Stack.Screen name="Home" component={RegisterScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
