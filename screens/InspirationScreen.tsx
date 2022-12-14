@@ -3,8 +3,8 @@ import { SafeAreaView, Text, StyleSheet } from "react-native";
 
 export default function InspirationScreen() {
   return (
-    <SafeAreaView>
-      <Text style={styles.container}>Inspiration screen</Text>
+    <SafeAreaView style={styles.container}>
+      <Text>Inspiration screen</Text>
     </SafeAreaView>
   );
 }
