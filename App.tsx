@@ -12,12 +12,14 @@ import InspirationScreen from "./screens/InspirationScreen";
 import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faMap ,faMapLocationDot, faLightbulb, faCompass, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faMap, faMapLocationDot, faLightbulb, faCompass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { extendTheme, NativeBaseProvider } from "native-base";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
+import places from './reducers/places'
 
 
 const Stack = createNativeStackNavigator();
@@ -31,31 +33,31 @@ const TabNavigator = () => {
         tabBarIcon: ({ color, size }) => {
           let iconName: IconDefinition;
 
-          switch(route.name) {
+          switch (route.name) {
             case "MyTrips":
               iconName = faMap;
               break;
             case "Explore":
               iconName = faMapLocationDot;
               break;
-              case "Inspiration":
+            case "Inspiration":
               iconName = faLightbulb;
               break;
-              case "Nav":
+            case "Nav":
               iconName = faCompass;
               break;
-              default:
+            default:
               iconName = faXmark;
               break;
-            }
-          
+          }
+
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
 
         },
         tabBarActiveTintColor: "#FFB703",
         tabBarInactiveTintColor: "#023047",
         headerShown: false,
-        
+
       })}
     >
       <Tab.Screen name="MyTrips" component={MyTripsScreen} />
@@ -66,15 +68,20 @@ const TabNavigator = () => {
   );
 };
 
+
+const store = configureStore({
+  reducer: { places },
+});
+
+
 export default function App() {
+
   const [positionObj, setPositionObj] = useState({});
 
   //Get user position
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
-
       if (status === "granted") {
         Location.watchPositionAsync(
           { distanceInterval: 10 },
@@ -87,26 +94,28 @@ export default function App() {
   }, []);
 
   return (
-    <PositionContext.Provider value={positionObj}>
-      <NativeBaseProvider>
-        <NavigationContainer>
+    <Provider store={store}>
+      <PositionContext.Provider value={positionObj}>
+        <NativeBaseProvider>
+          <NavigationContainer>
 
-          <Stack.Navigator
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="Home" component={RegisterScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Navigator
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="Home" component={RegisterScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
 
-            <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </NativeBaseProvider>
-    </PositionContext.Provider>
+              <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </PositionContext.Provider>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
   navbar: {
-    height:300,
+    height: 300,
   },
 });
