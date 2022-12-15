@@ -27,7 +27,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
-import places from "./reducers/places";
+import places from './reducers/places'
 
 import UserProvider, { UserContext } from "./utils/logincontext";
 
@@ -101,7 +101,6 @@ export default function App() {
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
       if (status === "granted") {
         Location.watchPositionAsync(
           { distanceInterval: 10 },
@@ -134,32 +133,33 @@ export default function App() {
   }, [user]);
 
   return (
-
-    <UserProvider>
-      <>
-        {console.log(user.username)}
-        <PositionContext.Provider value={positionObj}>
-          <NativeBaseProvider>
-            <NavigationContainer>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {user.username === "" ? (
-                  <>
-                    <Stack.Screen name="Home" component={RegisterScreen} />
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen
-                      name="TabNavigator"
-                      component={TabNavigator}
-                    />
-                  </>
-                ) : (
-                  <Stack.Screen name="TabNavigator" component={TabNavigator} />
-                )}
-              </Stack.Navigator>
-            </NavigationContainer>
-          </NativeBaseProvider>
-        </PositionContext.Provider>
-      </>
-    </UserProvider>
+    <Provider store={store}>
+      <UserProvider>
+        <>
+          {console.log(user.username)}
+          <PositionContext.Provider value={positionObj}>
+            <NativeBaseProvider>
+              <NavigationContainer>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  {user.username === "" ? (
+                    <>
+                      <Stack.Screen name="Home" component={RegisterScreen} />
+                      <Stack.Screen name="Login" component={LoginScreen} />
+                      <Stack.Screen
+                        name="TabNavigator"
+                        component={TabNavigator}
+                      />
+                    </>
+                  ) : (
+                    <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                  )}
+                </Stack.Navigator>
+              </NavigationContainer>
+            </NativeBaseProvider>
+          </PositionContext.Provider>
+        </>
+      </UserProvider>
+    </Provider>
   );
 }
 

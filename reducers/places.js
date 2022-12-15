@@ -2,7 +2,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
- value: [],
+ proximity: [],
+ liked: [],
 };
 
 export const placesSlice = createSlice({
@@ -10,12 +11,22 @@ export const placesSlice = createSlice({
 
   initialState,
  reducers: {
-   addNewPlace: (state, action) => {
-     state.value.push(action.payload);
+   addNewLike: (state, action) => {
+     state.liked.push(action.payload);
     //  state.value = []
    },
+   getDefaultPlaces: (state, action) => {
+    state.proximity.push(action.payload);
+   },
+   updateAndLikePlaces: (state, action) => {
+    state.liked.push(action.payload);
+    state.proximity.shift()
+   },
+   onDisLike: (state, action) => {
+    state.proximity.shift()
+   }
  },
 });
 
-export const { addNewPlace } = placesSlice.actions;
+export const { addNewLike, getDefaultPlaces, updateAndLikePlaces, onDisLike} = placesSlice.actions;
 export default placesSlice.reducer;
