@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -81,7 +80,6 @@ const TabNavigator = () => {
 const store = configureStore({
   reducer: { places },
 });
-
 
 export default function App() {
 
