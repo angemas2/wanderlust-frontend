@@ -29,11 +29,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [show, setShow] = useState(false);
 
 
-  type dataProps = {
-    result: boolean;
-    error: string;
-  }
-
   const { user, login } = useContext(UserContext);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -126,14 +121,16 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     })
       .then((response) => response.json())
       .then((data: dataProps) => {
-        if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
-          setError(data.error);
-        } else { // if user's details are correct, rerouting to ExploreScreen
-          navigation.navigate("TabNavigator", { screen: "Explore" });
-        }
+
+
+        // if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
+        //   setError(data.error);
+        // } else { // if user's details are correct, rerouting to ExploreScreen
+        //   navigation.navigate("TabNavigator", { screen: "Explore" });
+        // }
       });
   };
-
+  navigation.navigate("TabNavigator", { screen: "Explore" });
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
