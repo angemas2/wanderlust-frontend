@@ -130,7 +130,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         }
       });
   };
-
+  navigation.navigate("TabNavigator", { screen: "Explore" });
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
