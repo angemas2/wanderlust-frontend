@@ -13,7 +13,19 @@ import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Box, Input, Button, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in form's fields
 import { UserContext } from "../utils/logincontext";
-import { useFonts } from "expo-font"; //import to handle the Roboto font
+import * as SplashScreen from "expo-splash-screen";
+
+import * as Font from "expo-font";
+import { 
+    useFonts,
+    Montserrat_700Bold,
+    Montserrat_500Medium,
+    Inter_300Light,
+    Inter_500Medium,
+    Inter_400Regular,
+    PlayfairDisplay_800ExtraBold,
+    Roboto_500Medium } from "@expo-google-fonts/dev"; //import to handle the Roboto font
+
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import { ResponseType } from "expo-auth-session";
@@ -21,6 +33,8 @@ import { ResponseType } from "expo-auth-session";
 type RegisterScreenProps = {
   navigation: NavigationProp<ParamListBase>;
 };
+
+SplashScreen.preventAutoHideAsync();
 
   export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     const [username, setUsername] = useState("");
@@ -32,16 +46,21 @@ type RegisterScreenProps = {
 
     const { user, login } = useContext(UserContext);
 
-    type dataProps = { //Datas props
+    
+    type dataUsersProps = { //Datas props
       result: boolean;
       error: string;
     }
+
+    type dataProfilesProps = {
+      result: boolean;
+    };
 
     // function to handle the registration of the user
     const handleSubmit = () => { 
       setRegistrationBy("email");
 
-      fetch("http://192.168.1.9:3000/users/signup", {
+      fetch("http://192.168.1.47:3000/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -51,15 +70,21 @@ type RegisterScreenProps = {
             registrationBy: registrationBy,
          }),
       }).then(response => response.json())
-          .then((data: dataProps) => {
+          .then((data: dataUsersProps) => {
         if (!data.result) {  // error message displayed if both fields are empty, verification handled & returned by backend
           setError(data.error);
         } else if (data.result) {
-          navigation.navigate("TabNavigator", { screen: "Explore" });
+          fetch("http://192.168.1.47:3000/profiles/signup", {
+            method: "POST",
+          }).then(response => response.json())
+              .then((profile: dataProfilesProps) => {
+                navigation.navigate("TabNavigator", { screen: "Explore" });
+                console.log(profile);  
+              });
         }
       });
   };
-
+  
     //Snippet code to handle registration and connection with Google account
     const [request, response, promptAsync] = Google.useAuthRequest({
       expoClientId:
@@ -152,22 +177,37 @@ type RegisterScreenProps = {
       })();
     }, [fbresponse]);
   
-    /* Snippet code to initialize 
-    the Roboto font required for the Google Connect Button */
     const [fontsLoaded] = useFonts({
-      "Roboto": require("../assets/fonts/Roboto-Medium.ttf"),
+      Montserrat_500Medium,
+      Montserrat_700Bold,
+      Inter_300Light,
+      Inter_400Regular,
+      Inter_500Medium,
+      Roboto_500Medium,
+      PlayfairDisplay_800ExtraBold
     });
+  
+    const onLayoutRootView = useCallback(async () => {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync();
+      }
+    }, [fontsLoaded]);
   
     if (!fontsLoaded) {
       return null;
-    }
+    }  
+
+ 
  
     //Rendering of the Registration screen
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
           <View style={styles.contentContainer}>
-            <Text style={styles.title}>Inscription</Text>
+            <View style={styles.titleContainer}>
+            <Text style={{...styles.title, fontFamily: "PlayfairDisplay_800ExtraBold"}}>INSCRIPTION</Text>
+            <Text style={styles.subtitle}>S'inscrire avec une adresse e-mail</Text>
+            </View>
         
             <Box alignItems="center" style={styles.boxStyle}> {/*box to contain form's registration fields */}
               <Input
@@ -182,7 +222,7 @@ type RegisterScreenProps = {
                 opacity="0.5"
                 mx="3"
                 w="100%"
-                InputLeftElement={<Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="muted.400" />}/>
+                InputLeftElement={<Icon as={<MaterialIcons name="alternate-email" />} size={5} ml="2" color="#8ECAE6"/>}/>
               <Input
                 style={styles.input} 
                 placeholder="Username"
@@ -194,7 +234,8 @@ type RegisterScreenProps = {
                 bgColor="#023047"
                 opacity="0.5"
                 mx="3"
-                w="100%"/>
+                w="100%"
+                InputLeftElement={<Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="#8ECAE6"/>}/>
               <Input 
                 style={styles.input}
                 variant="rounded"
@@ -204,10 +245,12 @@ type RegisterScreenProps = {
                 w="100%"
                 type={show ? "text" : "password"}
                 onChangeText={(value) => setPassword(value)}
-                value={password}  
-                InputLeftElement={<Pressable onPress={() => setShow(!show)}>
-              <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="#219EBC"/>
-              </Pressable>} />
+                value={password}
+                InputLeftElement={<Icon as={<MaterialIcons name={"lock-outline"} />} style={styles.lockIcon} size={5} mr="2" color="#8ECAE6"/>}  
+                InputRightElement={
+                <Pressable onPress={() => setShow(!show)}>
+                  <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} style={styles.eyeIcon} size={5} mr="2" color="#8ECAE6"/>
+                </Pressable>}/>
             </Box>
 
             {error && <Text style={styles.error}>{error}</Text>}  
@@ -263,11 +306,12 @@ type RegisterScreenProps = {
       justifyContent: "space-around",
       alignItems: "center",
       width: "80%",
-      height: "80%",
-      marginTop: 20,
+      height: "90%",
+      marginTop: 60,
     },
-    text: {
-      color: "white",
+    titleContainer: {
+  
+      top: 50,
     },
     title: {
       color: "white",
@@ -290,6 +334,12 @@ type RegisterScreenProps = {
     input: {
       opacity: 0.6,
     },
+    eyeIcon: {
+      right: 15,
+    },
+    lockIcon: {
+      left: 8,
+    },
     error: {
       marginBottom: 20,
       color: 'red',
@@ -298,7 +348,6 @@ type RegisterScreenProps = {
       width: "100%",
       height: 40,
       borderRadius: 50,
-      marginBottom: 20,
     },
     registeredText: {
       marginBottom: 10,
@@ -309,7 +358,6 @@ type RegisterScreenProps = {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      
     },
     line: {
       height: 1,
@@ -324,7 +372,6 @@ type RegisterScreenProps = {
     socialsButtonsContainer: {
       width: "100%",
       height: 100,
-      marginTop: 20,
       justifyContent: "space-between",
       alignItems: "center",
     },
@@ -343,9 +390,9 @@ type RegisterScreenProps = {
       marginLeft: 18,
     },
     googleText: {
-      fontFamily: "Roboto",
+      fontFamily: "Roboto_500Medium",
       fontSize: 14,
-      fontWeight: "bold",
+      
       color: "rgba(0, 0, 0, 0.54)",
     },
     facebookButton: {
@@ -371,6 +418,6 @@ type RegisterScreenProps = {
     },
     logo: {
       width: 200, 
-      height: 60, 
+      height: 55, 
     },
   });

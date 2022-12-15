@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -82,7 +81,6 @@ const store = configureStore({
   reducer: { places },
 });
 
-
 export default function App() {
 
   const [positionObj, setPositionObj] = useState({
@@ -95,7 +93,7 @@ export default function App() {
     speed: 0,
   });
 
- 
+
 
   const { user, login } = useContext(UserContext);
 
