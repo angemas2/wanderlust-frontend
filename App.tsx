@@ -37,7 +37,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -86,7 +85,17 @@ const store = configureStore({
 
 export default function App() {
 
-  const [positionObj, setPositionObj] = useState({});
+  const [positionObj, setPositionObj] = useState({
+    accuracy: 0,
+    altitude: 0,
+    altitudeAccuracy: 0,
+    heading: 0,
+    latitude: 0,
+    longitude: 0,
+    speed: 0,
+  });
+
+ 
 
   const { user, login } = useContext(UserContext);
 
@@ -106,8 +115,6 @@ export default function App() {
     })();
   }, []);
 
-
-
   useEffect(() => {
     (async () => {
       const value = await AsyncStorage.getItem(
@@ -125,7 +132,7 @@ export default function App() {
         "WANDERLUST::AUTHSTATE_USERNAME",
         `${user.username}`
       );
-    })()
+    })();
   }, [user]);
 
   return (

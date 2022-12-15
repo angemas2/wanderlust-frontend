@@ -19,8 +19,8 @@ import * as Facebook from "expo-auth-session/providers/facebook";
 import { ResponseType } from "expo-auth-session";
 
 type RegisterScreenProps = {
-    navigation: NavigationProp<ParamListBase>;
-  };
+  navigation: NavigationProp<ParamListBase>;
+};
 
   export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     const [username, setUsername] = useState("");
@@ -54,11 +54,11 @@ type RegisterScreenProps = {
           .then((data: dataProps) => {
         if (!data.result) {  // error message displayed if both fields are empty, verification handled & returned by backend
           setError(data.error);
-        } else if(data.result) {
+        } else if (data.result) {
           navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
-    }
+  };
 
     //Snippet code to handle registration and connection with Google account
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -103,8 +103,8 @@ type RegisterScreenProps = {
           })
           .then((response) => response.json())
           .then(() => {
-              login(username);
-              navigation.navigate("TabNavigator", { screen: "Explore" }); 
+            login(username);
+            navigation.navigate("TabNavigator", { screen: "Explore" });
           });
         }
       })();
@@ -145,8 +145,8 @@ type RegisterScreenProps = {
           })
           .then((response) => response.json())
           .then(() => {
-              login(username);
-              navigation.navigate("TabNavigator", { screen: "Explore" }); 
+            login(username);
+            navigation.navigate("TabNavigator", { screen: "Explore" });
           });
         }
       })();
