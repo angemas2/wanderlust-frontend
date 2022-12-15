@@ -3,14 +3,16 @@ import { useEffect, useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+
+import WelcomeScreen from "./screens/WelcomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ExploreScreen from "./screens/ExploreScreen";
 import InspirationScreen from "./screens/InspirationScreen";
 import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
+
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faMap,
@@ -19,8 +21,9 @@ import {
   faCompass,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { extendTheme, NativeBaseProvider } from "native-base";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
+import { extendTheme, NativeBaseProvider } from "native-base";
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import * as Location from "expo-location";
@@ -33,7 +36,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 const TabNavigator = () => {
   return (
@@ -83,7 +85,17 @@ const store = configureStore({
 
 export default function App() {
 
-  const [positionObj, setPositionObj] = useState({});
+  const [positionObj, setPositionObj] = useState({
+    accuracy: 0,
+    altitude: 0,
+    altitudeAccuracy: 0,
+    heading: 0,
+    latitude: 0,
+    longitude: 0,
+    speed: 0,
+  });
+
+
 
   const { user, login } = useContext(UserContext);
 
@@ -102,8 +114,6 @@ export default function App() {
     })();
   }, []);
 
-
-
   useEffect(() => {
     (async () => {
       const value = await AsyncStorage.getItem(
@@ -121,7 +131,7 @@ export default function App() {
         "WANDERLUST::AUTHSTATE_USERNAME",
         `${user.username}`
       );
-    })()
+    })();
   }, [user]);
 
   return (

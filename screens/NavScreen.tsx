@@ -1,32 +1,170 @@
-import React from "react";
-import { SafeAreaView, Text, StyleSheet } from "react-native";
-import ExploreMap from "../components/ExploreMap";
-import ExploreSwipe from "../components/ExploreSwipe";
+import React, { useContext, useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
+import getDistance from "../modules/getDistance";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
+import PositionContext from "../utils/context";
+import MapView from "react-native-maps";
+import { Marker, Polyline } from "react-native-maps";
+import { Text } from "native-base";
+import MapViewDirections from "react-native-maps-alternatives-directions";
 
 export default function NavScreen() {
-  function calcCrow(lat1: number, lon1: number, lat2: number, lon2: number) {
-    var R = 6371; // km
-    var dLat = toRad(lat2 - lat1);
-    var dLon = toRad(lon2 - lon1);
-    var lat1 = toRad(lat1);
-    var lat2 = toRad(lat2);
+  const positionContext = useContext(PositionContext);
 
-    var a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d.toFixed(2);
-  }
+  const [places, setPlaces] = useState([]);
+  const [destinationCoord, setDestinationCoord] = useState<{
+    latitude: number;
+    longitude: number;
+  }>();
 
-  // Converts numeric degrees to radians
-  function toRad(Value: number) {
-    return (Value * Math.PI) / 180;
-  }
+  const [origin, setOrigin] = useState<{
+    latitude: number;
+    longitude: number;
+  }>({
+    latitude: positionContext?.latitude,
+    longitude: positionContext?.longitude,
+  });
+
+  const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
+
+  const destination = destinationCoord?.latitude ? (
+    <Marker coordinate={destinationCoord} />
+  ) : (
+    ""
+  );
+
+  // const url = `http://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="attraction"](around:10000,${positionContext?.latitude},${positionContext?.longitude});out body;`;
+
+  const googleurl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.latitude},${origin.longitude}&types=tourist_attraction&radius=5000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
+
+  useEffect(() => {
+    (async () => {
+      fetch(googleurl)
+        .then((response) => response.json())
+        .then((data: any) => {
+          setPlaces(data.results);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })();
+  }, [origin]);
+
+  const handleNavigateToPlace = (lat: number, lon: number) => {
+    setDestinationCoord({ latitude: lat, longitude: lon });
+  };
+
+  const placestosee = places?.map((data: any, i) => {
+    let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photo_reference=${data.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
+    return (
+      <View style={styles.place} key={i}>
+        <Image style={styles.placeimg} source={{ uri: photo }}></Image>
+        <View style={styles.placeinfos}>
+          <Text
+            isTruncated
+            maxW="300"
+            style={{ fontSize: 10, fontWeight: "bold", marginLeft: 5 }}
+          >
+            {data.name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: "#FFB703",
+              marginLeft: 5,
+              marginRight: 15,
+            }}
+          >
+            {positionContext &&
+              getDistance(
+                positionContext?.latitude,
+                data.geometry.location.lat,
+                positionContext?.longitude,
+                data.geometry.location.lng
+              )}
+            {"km  "}
+            <Pressable
+              onPress={() => {
+                handleNavigateToPlace(
+                  data.geometry.location.lat,
+                  data.geometry.location.lng
+                );
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faCirclePlay}
+                style={{ marginLeft: 30, color: "#FFB703" }}
+              />
+            </Pressable>
+          </Text>
+        </View>
+      </View>
+    );
+  });
 
   return (
     <SafeAreaView style={styles.container}>
-     <ExploreMap/>
+      <Text style={styles.title}>Let's Explore</Text>
+      <MapView
+        initialRegion={{
+          latitude: positionContext?.latitude,
+          longitude: positionContext?.longitude,
+          latitudeDelta: 0.0522,
+          longitudeDelta: 0.0421,
+        }}
+        style={styles.map}
+      >
+        <Marker
+          draggable
+          coordinate={{
+            latitude: origin.latitude,
+            longitude: origin.longitude,
+          }}
+          pinColor={"#FFB703"}
+          onDragEnd={(e) =>
+            setOrigin({
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+            })
+          }
+        />
+        {destination}
+
+        <MapViewDirections
+          origin={origin}
+          destination={destinationCoord}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={4}
+          strokeColor="#219EBC"
+          precision="high"
+          mode="WALKING"
+          onStart={(params) => {
+            console.log(
+              `Started routing between "${params.origin}" and "${params.destination}"`
+            );
+          }}
+        />
+      </MapView>
+      <View>
+        <View style={styles.aroundContainer}>
+          <Text style={styles.subtitle}>Around Me</Text>
+          <Text style={styles.desc}>
+            Let yourself be guided by our travel buddy & discover the hidden
+            gems around you
+          </Text>
+          <ScrollView horizontal={true} style={styles.placesCont}>
+            {placestosee}
+          </ScrollView>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -35,6 +173,51 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
+  },
+  title: {
+    paddingTop: 60,
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 30,
+    color: "#023047",
+    textAlign: "center",
+  },
+  map: {
+    height: "48%",
+    width: "95%",
+    alignSelf: "center",
+  },
+  desc: {
+    fontSize: 14,
+    opacity: 0.6,
+    marginBottom: 15,
+  },
+  aroundContainer: {
+    marginTop: 20,
+    marginLeft: 15,
+  },
+  subtitle: {
+    color: "#023047",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  placesCont: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  place: {
+    width: 150,
+    marginRight: 20,
+  },
+  placeimg: {
+    width: 150,
+    height: 130,
+    borderRadius: 10,
+  },
+  placeinfos: {
+    marginTop: 5,
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
 });

@@ -1,4 +1,3 @@
-
 import React, { useState, useContext, useEffect, Component } from "react";
 
 import {
@@ -8,7 +7,7 @@ import {
   StyleSheet,
   Pressable,
   ImageBackground,
-  Image
+  Image,
 } from "react-native";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Box, Input, Button, Icon } from "native-base";
@@ -25,21 +24,14 @@ type LoginScreenProps = {
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("")
+
+  const [error, setError] = useState("");
   const [show, setShow] = useState(false);
 
-
-  const { user, login } = useContext(UserContext);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId:
-      "917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com",
-  });
-
-  const [fbrequest, fbresponse, fbpromptAsync] = Facebook.useAuthRequest({
-    clientId: "987336189307276",
-    responseType: ResponseType.Code,
-  });
+  type dataProps = {
+    result: boolean;
+    error: string;
+  };
 
   const fetchGoogleUserInfo = async (token: any) => {
     const response = await fetch(
@@ -66,11 +58,17 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     return await response.json();
   };
 
-  type dataProps = {
-    //props de la réponse data
-    result: boolean;
-    error: string;
-  };
+  const { user, login } = useContext(UserContext);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId:
+      "917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com",
+  });
+
+  const [fbrequest, fbresponse, fbpromptAsync] = Facebook.useAuthRequest({
+    clientId: "987336189307276",
+    responseType: ResponseType.Code,
+  });
 
   useEffect(() => {
     (async () => {
@@ -95,6 +93,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         let username = user.name;
         let email = user.email;
         let avatar = user.picture;
+        console.log(user);
         login(user.name);
         /*fetch("http://192.168.242.131:19000/users/signin", {
           method: "POST",
@@ -113,6 +112,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     })();
   }, [response]);
 
+
   const handleSubmit = () => {
     fetch("http://192.168.1.9:3000/users/signin", {
       method: "POST",
@@ -121,31 +121,33 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     })
       .then((response) => response.json())
       .then((data: dataProps) => {
-
-
-        // if (!data.result) { // error returned from the backend if fields are empty or user's details incorrect
-        //   setError(data.error);
-        // } else { // if user's details are correct, rerouting to ExploreScreen
-        //   navigation.navigate("TabNavigator", { screen: "Explore" });
-        // }
+        if (!data.result) {
+          // error returned from the backend if fields are empty or user's details incorrect
+          setError(data.error);
+        } else {
+          // if user's details are correct, rerouting to ExploreScreen
+          navigation.navigate("TabNavigator", { screen: "Explore" });
+        }
       });
   };
   navigation.navigate("TabNavigator", { screen: "Explore" });
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={require("../assets/images/background.png")} style={styles.imageBackground}>
+      <ImageBackground
+        source={require("../assets/images/background.png")}
+        style={styles.imageBackground}
+      >
         <View style={styles.contentContainer}>
           <Text style={styles.title}>Connexion</Text>
           <Text style={styles.subtitle}>Connexion avec adresse e-mail</Text>
 
           <Box alignItems="center" style={styles.boxStyle}>
-
             <Input
               color="white"
               placeholder="E-mail"
               keyboardType="email-address"
               autoCapitalize="none"
-              onChangeText={(value) => setEmail(value)}
+              onChangeText={(value: string) => setEmail(value)}
               value={email}
               mx="3"
               w="100%"
@@ -155,11 +157,23 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               placeholder="Password"
               w="100%"
               type={show ? "text" : "password"}
-              onChangeText={(value) => setPassword(value)}
+              onChangeText={(value: string) => setPassword(value)}
               value={password}
-              InputRightElement={<Pressable onPress={() => setShow(!show)}>
-                <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
-              </Pressable>} />
+              InputRightElement={
+                <Pressable onPress={() => setShow(!show)}>
+                  <Icon
+                    as={
+                      <MaterialIcons
+                        name={show ? "visibility" : "visibility-off"}
+                      />
+                    }
+                    size={5}
+                    mr="2"
+                    color="muted.400"
+                  />
+                </Pressable>
+              }
+            />
           </Box>
 
           {error && <Text style={styles.error}>{error}</Text>}
@@ -181,8 +195,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           >
             Facebook
           </Button>
-          <Text onPress={() => navigation.navigate("Home")}>Pas encore inscrit ? Appuyez ici</Text>
-          <Image source={require("../assets/images/logowithtext.png")} style={{ width: 250, height: 50, top: 270 }} />
+          <Text onPress={() => navigation.navigate("Home")}>
+            Pas encore inscrit ? Appuyez ici
+          </Text>
+          <Image
+            source={require("../assets/images/logowithtext.png")}
+            style={{ width: 250, height: 50, top: 270 }}
+          />
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -230,7 +249,6 @@ const styles = StyleSheet.create({
   },
   error: {
     marginBottom: 10,
-    color: 'red',
+    color: "red",
   },
 });
-
