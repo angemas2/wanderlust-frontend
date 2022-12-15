@@ -40,8 +40,9 @@ SplashScreen.preventAutoHideAsync();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [registrationBy, setRegistrationBy] = useState("")
-    const [error, setError] = useState("") //display error return by backend on email registration
+    const [profile_id, setProfile_id] = useState("");
+    const [registrationBy, setRegistrationBy] = useState("");
+    const [error, setError] = useState(""); //display error return by backend on email registration
     const [show, setShow] = useState(false); //allow user to show/hide password when typing it in form's field
 
     const { user, login } = useContext(UserContext);
@@ -54,12 +55,14 @@ SplashScreen.preventAutoHideAsync();
 
     type dataProfilesProps = {
       result: boolean;
+      profile_id: string;
     };
 
     // function to handle the registration of the user
     const handleSubmit = () => { 
       setRegistrationBy("email");
 
+      
       fetch("http://192.168.1.47:3000/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,13 +80,22 @@ SplashScreen.preventAutoHideAsync();
           fetch("http://192.168.1.47:3000/profiles/signup", {
             method: "POST",
           }).then(response => response.json())
-              .then((profile: dataProfilesProps) => {
+              .then((profile_id: dataProfilesProps) => {
+                fetch(`http://192.168.1.47:3000/users/${email}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    profile_id: profile_id
+                  }), 
+                }).then(response => response.json())
+                    .then((: ))
                 navigation.navigate("TabNavigator", { screen: "Explore" });
-                console.log(profile);  
+                console.log(profile_id);  
               });
         }
       });
-  };
+ 
+}
   
     //Snippet code to handle registration and connection with Google account
     const [request, response, promptAsync] = Google.useAuthRequest({
