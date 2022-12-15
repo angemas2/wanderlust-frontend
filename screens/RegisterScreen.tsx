@@ -118,6 +118,7 @@ SplashScreen.preventAutoHideAsync();
       return await response.json();
     };
 
+
     useEffect(() => {
       (async () => {
         if (response?.type === "success") {
@@ -152,6 +153,7 @@ SplashScreen.preventAutoHideAsync();
       clientId: "987336189307276",
       responseType: ResponseType.Code,
     });
+
 
     const fbtoken: string =
       "EAAOBZBh7WaYwBACgvdCUy9qy9QrSeDnqmkK654ex0Am5DUWYKJZBL42FJJLN3qwgXdREzSAVqN1keFS13GWO78dTEW9fT2KyuPuCflMliIxCY1J8DyzHMMvRoZCgUuDb77847B6Mcsm9516yDBPtFWBO2RJADRZBLLZBo2lwSZB7FxlrE3sDI7hKLbJLZCflCREMKHlrRpG3QZDZD";

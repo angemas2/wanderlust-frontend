@@ -23,8 +23,9 @@ import {
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 import { extendTheme, NativeBaseProvider } from "native-base";
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
 import places from './reducers/places'
@@ -76,13 +77,11 @@ const TabNavigator = () => {
   );
 };
 
-
 const store = configureStore({
   reducer: { places },
 });
 
 export default function App() {
-
   const [positionObj, setPositionObj] = useState({
     accuracy: 0,
     altitude: 0,
@@ -92,7 +91,6 @@ export default function App() {
     longitude: 0,
     speed: 0,
   });
-
 
 
   const { user, login } = useContext(UserContext);
@@ -134,31 +132,29 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <UserProvider>
-        <>
-          {console.log(user.username)}
-          <PositionContext.Provider value={positionObj}>
-            <NativeBaseProvider>
-              <NavigationContainer>
-                <Stack.Navigator screenOptions={{ headerShown: false }}>
-                  {user.username === "" ? (
-                    <>
-                      <Stack.Screen name="Home" component={RegisterScreen} />
-                      <Stack.Screen name="Login" component={LoginScreen} />
-                      <Stack.Screen
-                        name="TabNavigator"
-                        component={TabNavigator}
-                      />
-                    </>
-                  ) : (
-                    <Stack.Screen name="TabNavigator" component={TabNavigator} />
-                  )}
-                </Stack.Navigator>
-              </NavigationContainer>
-            </NativeBaseProvider>
-          </PositionContext.Provider>
-        </>
-      </UserProvider>
+      <>
+        {console.log(user.username)}
+        <PositionContext.Provider value={positionObj}>
+          <NativeBaseProvider>
+            <NavigationContainer>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                {user.username === "" ? (
+                  <>
+                    <Stack.Screen name="Home" component={RegisterScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen
+                      name="TabNavigator"
+                      component={TabNavigator}
+                    />
+                  </>
+                ) : (
+                  <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                )}
+              </Stack.Navigator>
+            </NavigationContainer>
+          </NativeBaseProvider>
+        </PositionContext.Provider>
+      </>
     </Provider>
   );
 }
