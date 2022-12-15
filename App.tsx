@@ -24,8 +24,9 @@ import {
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 import { extendTheme, NativeBaseProvider } from "native-base";
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
 import places from "./reducers/places";
@@ -77,14 +78,11 @@ const TabNavigator = () => {
   );
 };
 
-
 const store = configureStore({
   reducer: { places },
 });
 
-
 export default function App() {
-
   const [positionObj, setPositionObj] = useState({
     accuracy: 0,
     altitude: 0,
@@ -94,8 +92,6 @@ export default function App() {
     longitude: 0,
     speed: 0,
   });
-
- 
 
   const { user, login } = useContext(UserContext);
 
@@ -136,8 +132,7 @@ export default function App() {
   }, [user]);
 
   return (
-
-    <UserProvider>
+    <Provider store={store}>
       <>
         {console.log(user.username)}
         <PositionContext.Provider value={positionObj}>
@@ -161,7 +156,7 @@ export default function App() {
           </NativeBaseProvider>
         </PositionContext.Provider>
       </>
-    </UserProvider>
+    </Provider>
   );
 }
 

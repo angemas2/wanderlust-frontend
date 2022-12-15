@@ -106,7 +106,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         setUsername(user.first_name);
         setEmail(user.email);
         setRegistrationBy("facebook");
-        fetch("http://localhost:3000/facebook", {
+        fetch("http://localhost:3000/users/facebook", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -135,7 +135,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         setEmail(user.email);
         setRegistrationBy("google");
         let avatar = user.picture;
-        fetch("http://localhost:3000/facebook", {
+        fetch("http://192.168.0.103:19000/users/google", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
