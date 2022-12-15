@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -29,7 +28,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
-import places from "./reducers/places";
+import places from './reducers/places'
 
 import UserProvider, { UserContext } from "./utils/logincontext";
 
@@ -93,13 +92,13 @@ export default function App() {
     speed: 0,
   });
 
+
   const { user, login } = useContext(UserContext);
 
   //Get user position
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
       if (status === "granted") {
         Location.watchPositionAsync(
           { distanceInterval: 10 },
