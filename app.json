@@ -26,6 +26,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "owner":"angemas",
+    "scheme":"com.angemas.wanderlust"
   }
 }

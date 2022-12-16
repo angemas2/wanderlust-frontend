@@ -88,7 +88,7 @@ SplashScreen.preventAutoHideAsync();
                     profile_id: profile_id
                   }), 
                 }).then(response => response.json())
-                    .then((: ))
+                    .then()
                 navigation.navigate("TabNavigator", { screen: "Explore" });
                 console.log(profile_id);  
               });
@@ -229,7 +229,7 @@ SplashScreen.preventAutoHideAsync();
                 placeholder="E-mail"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                onChangeText={(value) => setEmail(value)}
+                onChangeText={(value:string) => setEmail(value)}
                 value={email}
                 variant="rounded"
                 bgColor="#023047"
@@ -242,7 +242,7 @@ SplashScreen.preventAutoHideAsync();
                 placeholder="Username"
                 autoCorrect={false}
                 autoCapitalize="none"
-                onChangeText={(value) => setUsername(value)}
+                onChangeText={(value:string) => setUsername(value)}
                 value={username}
                 variant="rounded"
                 bgColor="#023047"
@@ -258,7 +258,7 @@ SplashScreen.preventAutoHideAsync();
                 opacity="0.5"
                 w="100%"
                 type={show ? "text" : "password"}
-                onChangeText={(value) => setPassword(value)}
+                onChangeText={(value:string) => setPassword(value)}
                 value={password}
                 InputLeftElement={<Icon as={<MaterialIcons name={"lock-outline"} />} style={styles.lockIcon} size={5} mr="2" color="#8ECAE6"/>}  
                 InputRightElement={

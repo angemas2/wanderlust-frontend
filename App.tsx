@@ -9,6 +9,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ExploreScreen from "./screens/ExploreScreen";
 import InspirationScreen from "./screens/InspirationScreen";
+import ItineraryDetailsScreen from "./screens/ItineraryDetailsScreen";
 import MyTripsScreen from "./screens/MyTripsScreen";
 import NavScreen from "./screens/NavScreen";
 
@@ -28,7 +29,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
-import places from './reducers/places'
+import places from "./reducers/places";
 
 import UserProvider, { UserContext } from "./utils/logincontext";
 
@@ -92,7 +93,6 @@ export default function App() {
     speed: 0,
   });
 
-
   const { user, login } = useContext(UserContext);
 
   //Get user position
@@ -143,12 +143,25 @@ export default function App() {
                     <Stack.Screen name="Home" component={RegisterScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
                     <Stack.Screen
+                      name="ItineraryDetails"
+                      component={ItineraryDetailsScreen}
+                    />
+                    <Stack.Screen
                       name="TabNavigator"
                       component={TabNavigator}
                     />
                   </>
                 ) : (
-                  <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                  <>
+                    <Stack.Screen
+                      name="ItineraryDetails"
+                      component={ItineraryDetailsScreen}
+                    />
+                    <Stack.Screen
+                      name="TabNavigator"
+                      component={TabNavigator}
+                    />
+                  </>
                 )}
               </Stack.Navigator>
             </NavigationContainer>
