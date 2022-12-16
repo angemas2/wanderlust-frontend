@@ -15,7 +15,6 @@ import { MaterialIcons } from '@expo/vector-icons'; //import icons displayed in 
 import { UserContext } from '../utils/logincontext';
 import * as SplashScreen from 'expo-splash-screen';
 
-import * as Font from 'expo-font';
 import {
   useFonts,
   Montserrat_700Bold,
@@ -204,7 +203,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           </View>
 
           <Box alignItems="center" style={styles.boxStyle}>
-            {' '}
             {/*box to contain form's registration fields */}
             <Input
               style={styles.input}
