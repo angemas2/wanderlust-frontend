@@ -11,6 +11,9 @@ import PositionContext from '../utils/context'
 function ExploreSwipe() {
 
 
+    const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
+
+
     //Variable for calling useDispatch
     const dispatch = useDispatch()
 
@@ -26,11 +29,11 @@ function ExploreSwipe() {
 
     //Request to get places in a certain perimeter
     useEffect(() => {
-        const url = `http://overpass-api.de/api/interpreter?data=[out:json];node["historic"="monument"](around:5000,${positionContext.latitude},${positionContext.longitude});out body;`;
+        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${positionContext.latitude},${positionContext.longitude}&types=tourist_attraction&radius=5000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
         fetch(url)
         .then(response => response.json()) 
         .then(data => {
-            setPlacesData(data.elements.filter(e => e.tags.name != null))
+            setPlacesData(data.results)
         })
         .catch((error) => {
                 console.log(error)
@@ -39,11 +42,12 @@ function ExploreSwipe() {
 
 
     //UseEffet listening to update on placesData, just to make sure that places state will not be empty
-    useEffect(() => {
-            placesData.map((e, i) => {
-                dispatch(getDefaultPlaces({ key: i , name: e.tags.name, latitude: e.lat, longitude: e.lon}))
+    useEffect(() => { placesData.length > 0 ?
+            placesData.map((e, i) => {  
+                let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
+                dispatch(getDefaultPlaces({ key: i , name: e.name, latitude: e.geometry.location.lat, longitude: e.geometry.location.lng, photo: photo}))
     })
-
+:""
     },[placesData])
     
 

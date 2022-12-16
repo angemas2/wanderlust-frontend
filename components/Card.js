@@ -6,17 +6,17 @@ import { useDispatch } from 'react-redux';
 import { updateAndLikePlaces } from '../reducers/places';
 import { onDisLike } from '../reducers/places';
 import monument from '../assets/images/monument.png'
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faLocationDot,faPlay,faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function Card(props) {
-
-
-        
+console.log(props.card.photo)
     //Variable for calling useDispatch
     const dispatch = useDispatch()
 
 
     const onLike = (obj) => {
-        dispatch(updateAndLikePlaces(obj))
+        dispatch(updateAndLikePlaces(obj.card))
     }
     const disLike = () => {
         dispatch(onDisLike())
@@ -27,40 +27,49 @@ function Card(props) {
 
 
     return (
-            <View style={styles.container}>
-                  <ImageBackground source={monument} resizeMode="cover" style={styles.image}>
-                {props.card && <Text style={styles.text}>{props.card.name}</Text>}
+        <View style={styles.container}>
+            <ImageBackground 
+             source={{ uri: props.card.photo }} 
+            resizeMode="cover" 
+            imageStyle={{opacity:0.7}}
+            style={styles.image} >
+                {props.card && 
+                <Text style={styles.text}>{props.card.name}</Text>
+                }
                 <View style={styles.btnContainer}>
-                <Button 
-                style={styles.button}
-                onPress={() => onLike(props)}
-                >
-                    ❤️ </Button>
                     <Button 
-                style={styles.button}
-                onPress={() => onGo()}
-                >
-                    ⬆️</Button>
-                <Button 
-                style={styles.button}
-                onPress={() => disLike()}
-                >
-                    ❌</Button>
+                    style={styles.button}
+                    onPress={() => onLike(props)}
+                    >
+                    <FontAwesomeIcon icon={faLocationDot} style={{color: "#FFB703" }} />
+                    </Button>
+                    <Button 
+                    style={styles.button}
+                    onPress={() => onGo()}
+                    >
+                    <FontAwesomeIcon icon={faPlay} style={{color: "#FFB703" }} />
+                    </Button>
+                    <Button 
+                    style={styles.button}
+                    onPress={() => disLike()}
+                    >
+                     <FontAwesomeIcon icon={faXmark} style={{color: "#FFB703" }} />
+                    </Button>
                 </View>
-                </ImageBackground>
-            </View>
+            </ImageBackground>
+        </View>
   )
 }
 const styles = StyleSheet.create({
-    container: {
+    container: { 
         height: '40%',
         shadowRadius: 25,
         shadowColor: '#000',
         shadowOpacity: 0.08,
         shadowOffset: {width: 0, height: 0},
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: "red"
+        backgroundColor: "#000"
     },  
     image: {
         justifyContent: 'space-around',
@@ -70,17 +79,20 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        color: '#000'
-    },
-    button: {
-        borderRadius: 100,        
+        color: '#fff'
     },
     btnContainer: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: "space-around",
         width: "100%",
-    }
+    },
+    button: {
+        backgroundColor: 'transparent',   
+        borderRadius: 100,
+        borderWidth: 3,
+        borderColor: "#FBBF13"  
+    },
 })
 
 export default Card
