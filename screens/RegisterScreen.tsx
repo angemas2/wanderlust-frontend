@@ -41,7 +41,6 @@ SplashScreen.preventAutoHideAsync();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [profile_id, setProfile_id] = useState("");
-    const [registrationBy, setRegistrationBy] = useState("");
     const [error, setError] = useState(""); //display error return by backend on email registration
     const [show, setShow] = useState(false); //allow user to show/hide password when typing it in form's field
 
@@ -60,42 +59,24 @@ SplashScreen.preventAutoHideAsync();
 
     // function to handle the registration of the user
     const handleSubmit = () => { 
-      setRegistrationBy("email");
-
-      
-      fetch("http://192.168.1.47:3000/users/signup", {
+      fetch("http://192.168.1.9:3000/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
             username: username, 
             email: email, 
             password: password,
-            registrationBy: registrationBy,
          }),
       }).then(response => response.json())
           .then((data: dataUsersProps) => {
         if (!data.result) {  // error message displayed if both fields are empty, verification handled & returned by backend
           setError(data.error);
-        } else if (data.result) {
-          fetch("http://192.168.1.47:3000/profiles/signup", {
-            method: "POST",
-          }).then(response => response.json())
-              .then((profile_id: dataProfilesProps) => {
-                fetch(`http://192.168.1.47:3000/users/${email}`, {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    profile_id: profile_id
-                  }), 
-                }).then(response => response.json())
-                    .then((: ))
-                navigation.navigate("TabNavigator", { screen: "Explore" });
-                console.log(profile_id);  
-              });
+        } else {
+          navigation.navigate("TabNavigator", { screen: "Explore" });
+          console.log(profile_id);  
         }
       });
- 
-}
+    };
   
     //Snippet code to handle registration and connection with Google account
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -127,7 +108,6 @@ SplashScreen.preventAutoHideAsync();
           navigation.navigate("TabNavigator", { screen: "Explore" });
           setUsername(user.name);
           setEmail(user.email);
-          setRegistrationBy("google");
           let avatar = user.picture;
           fetch("http://localhost:3000/facebook", {
             method: "POST",
@@ -135,7 +115,6 @@ SplashScreen.preventAutoHideAsync();
             body: JSON.stringify({ 
               username: username, 
               email: email,
-              registrationBy: registrationBy
             }),
           })
           .then((response) => response.json())
@@ -170,14 +149,12 @@ SplashScreen.preventAutoHideAsync();
           const user = await facebookUserInfo(fbtoken);
           setUsername(user.first_name);
           setEmail(user.email);
-          setRegistrationBy("facebook");
           fetch("http://localhost:3000/facebook", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
               username: username, 
               email: email,
-              registrationby: registrationBy
             }),
           })
           .then((response) => response.json())
@@ -303,6 +280,7 @@ SplashScreen.preventAutoHideAsync();
     );
   }
   
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
