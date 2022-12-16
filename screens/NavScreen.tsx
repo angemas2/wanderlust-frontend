@@ -219,10 +219,24 @@ export default function NavScreen() {
           onStart={(x) => console.log("started", x)}
         />
       </MapView>
-      <Text>
-        Distance:{distance} km | Duration: {duration.toFixed(0)} min |
-        Direction: {direction}
-      </Text>
+      {distance === 0 ? (
+        ""
+      ) : (
+        <Text
+          style={{
+            position: "relative",
+            top: -40,
+            textAlign: "center",
+            backgroundColor: "white",
+            color: "black",
+            padding: 6,
+          }}
+        >
+          Distance:{distance} km | Duration: {duration.toFixed(0)} min |
+          Direction: {direction}
+        </Text>
+      )}
+
       <View>
         <View style={styles.aroundContainer}>
           <Text style={styles.subtitle}>Around Me</Text>
@@ -285,19 +299,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   placeinfos: {
-    marginTop: 5,
     display: "flex",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "flex-start",
   },
   rating: {
     color: "white",
     fontWeight: "bold",
+    position: "relative",
     top: -120,
     left: 10,
     backgroundColor: "#023047",
     fontSize: 10,
-    padding: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
     width: 50,
     textAlign: "center",
     borderRadius: 8,
