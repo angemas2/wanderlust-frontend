@@ -31,6 +31,7 @@ export default function NavScreen() {
     longitude: number;
   }>();
 
+  //Position of user or new position if marker get dragged
   const [origin, setOrigin] = useState<{
     latitude: number;
     longitude: number;
@@ -41,6 +42,7 @@ export default function NavScreen() {
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
+  //Check if coord destination is empty if not show Marker
   const destination = destinationCoord?.latitude ? (
     <Marker coordinate={destinationCoord} />
   ) : (
@@ -50,7 +52,7 @@ export default function NavScreen() {
   // const url = `http://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="attraction"](around:10000,${positionContext?.latitude},${positionContext?.longitude});out body;`;
 
   const googleurl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.latitude},${origin.longitude}&types=tourist_attraction&radius=5000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
-
+  //Request to api / depend of user location
   useEffect(() => {
     setLoading(true);
     (async () => {
@@ -68,6 +70,8 @@ export default function NavScreen() {
     })();
   }, [origin]);
 
+
+  //
   const handleNavigateToPlace = (lat: number, lon: number) => {
     setDestinationCoord({ latitude: lat, longitude: lon });
   };
@@ -219,10 +223,24 @@ export default function NavScreen() {
           onStart={(x) => console.log("started", x)}
         />
       </MapView>
-      <Text>
-        Distance:{distance} km | Duration: {duration.toFixed(0)} min |
-        Direction: {direction}
-      </Text>
+      {distance === 0 ? (
+        ""
+      ) : (
+        <Text
+          style={{
+            position: "relative",
+            top: -40,
+            textAlign: "center",
+            backgroundColor: "white",
+            color: "black",
+            padding: 6,
+          }}
+        >
+          Distance:{distance} km | Duration: {duration.toFixed(0)} min |
+          Direction: {direction}
+        </Text>
+      )}
+
       <View>
         <View style={styles.aroundContainer}>
           <Text style={styles.subtitle}>Around Me</Text>
@@ -285,19 +303,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   placeinfos: {
-    marginTop: 5,
     display: "flex",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "flex-start",
   },
   rating: {
     color: "white",
     fontWeight: "bold",
+    position: "relative",
     top: -120,
     left: 10,
     backgroundColor: "#023047",
     fontSize: 10,
-    padding: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
     width: 50,
     textAlign: "center",
     borderRadius: 8,
