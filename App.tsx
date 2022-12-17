@@ -1,39 +1,39 @@
-import React, { useEffect, useState, useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState, useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet, Text, View } from 'react-native';
 
-import WelcomeScreen from "./screens/WelcomeScreen";
-import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisterScreen";
-import ExploreScreen from "./screens/ExploreScreen";
-import InspirationScreen from "./screens/InspirationScreen";
-import ItineraryDetailsScreen from "./screens/ItineraryDetailsScreen";
-import MyTripsScreen from "./screens/MyTripsScreen";
-import NavScreen from "./screens/NavScreen";
+import WelcomeScreen from './screens/WelcomeScreen';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import ExploreScreen from './screens/ExploreScreen';
+import InspirationScreen from './screens/InspirationScreen';
+import ItineraryDetailsScreen from './screens/ItineraryDetailsScreen';
+import MyTripsScreen from './screens/MyTripsScreen';
+import NavScreen from './screens/NavScreen';
 
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faMap,
   faMapLocationDot,
   faLightbulb,
   faCompass,
   faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+} from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-import { extendTheme, NativeBaseProvider } from "native-base";
+import { extendTheme, NativeBaseProvider } from 'native-base';
 
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import * as Location from "expo-location";
-import PositionContext from "./utils/context";
-import places from "./reducers/places";
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import * as Location from 'expo-location';
+import PositionContext from './utils/context';
+import places from './reducers/places';
 
-import UserProvider, { UserContext } from "./utils/logincontext";
+import UserProvider, { UserContext } from './utils/logincontext';
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,16 +46,16 @@ const TabNavigator = () => {
           let iconName: IconDefinition;
 
           switch (route.name) {
-            case "MyTrips":
+            case 'MyTrips':
               iconName = faMap;
               break;
-            case "Explore":
+            case 'Explore':
               iconName = faMapLocationDot;
               break;
-            case "Inspiration":
+            case 'Inspiration':
               iconName = faLightbulb;
               break;
-            case "Nav":
+            case 'Nav':
               iconName = faCompass;
               break;
             default:
@@ -65,11 +65,10 @@ const TabNavigator = () => {
 
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#FFB703",
-        tabBarInactiveTintColor: "#023047",
+        tabBarActiveTintColor: '#FFB703',
+        tabBarInactiveTintColor: '#023047',
         headerShown: false,
-      })}
-    >
+      })}>
       <Tab.Screen name="MyTrips" component={MyTripsScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Inspiration" component={InspirationScreen} />
@@ -99,23 +98,18 @@ export default function App() {
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        Location.watchPositionAsync(
-          { distanceInterval: 10 },
-          (location: any) => {
-            setPositionObj(location.coords);
-          }
-        );
+      if (status === 'granted') {
+        Location.watchPositionAsync({ distanceInterval: 10 }, (location: any) => {
+          setPositionObj(location.coords);
+        });
       }
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      const value = await AsyncStorage.getItem(
-        "WANDERLUST::AUTHSTATE_USERNAME"
-      );
-      if (value !== "") {
+      const value = await AsyncStorage.getItem('WANDERLUST::AUTHSTATE_USERNAME');
+      if (value !== '') {
         console.log(value);
       }
     })();
@@ -123,10 +117,7 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      await AsyncStorage.setItem(
-        "WANDERLUST::AUTHSTATE_USERNAME",
-        `${user.username}`
-      );
+      await AsyncStorage.setItem('WANDERLUST::AUTHSTATE_USERNAME', `${user.username}`);
     })();
   }, [user]);
 
@@ -138,29 +129,19 @@ export default function App() {
           <NativeBaseProvider>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {user.username === "" ? (
+                {user.username === '' ? (
                   <>
-                    <Stack.Screen name="Home" component={RegisterScreen} />
+                    <Stack.Screen name="Home" component={WelcomeScreen} />
+                    <Stack.Screen name="Register" component={RegisterScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen
-                      name="ItineraryDetails"
-                      component={ItineraryDetailsScreen}
-                    />
-                    <Stack.Screen
-                      name="TabNavigator"
-                      component={TabNavigator}
-                    />
+                    <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
+                    <Stack.Screen name="TabNavigator" component={TabNavigator} />
                   </>
                 ) : (
                   <>
-                    <Stack.Screen
-                      name="ItineraryDetails"
-                      component={ItineraryDetailsScreen}
-                    />
-                    <Stack.Screen
-                      name="TabNavigator"
-                      component={TabNavigator}
-                    />
+                    <Stack.Screen name="Home" component={WelcomeScreen} />
+                    <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
+                    <Stack.Screen name="TabNavigator" component={TabNavigator} />
                   </>
                 )}
               </Stack.Navigator>
