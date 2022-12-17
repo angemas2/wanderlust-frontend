@@ -30,6 +30,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
 import places from "./reducers/places";
+import user from "./reducers/user";
 
 import UserProvider, { UserContext } from "./utils/logincontext";
 
@@ -79,7 +80,7 @@ const TabNavigator = () => {
 };
 
 const store = configureStore({
-  reducer: { places },
+  reducer: { places,user },
 });
 
 export default function App() {

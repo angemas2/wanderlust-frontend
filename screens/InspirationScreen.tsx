@@ -45,11 +45,12 @@ export default function InspirationScreen({
   };
 
   const itinerariesList = itineraries.map((data: any, i) => {
+    console.log(data)
     return (
       <View style={styles.routeCont} key={i}>
         <ImageBackground
           style={styles.bg}
-          source={require("../assets/images/background.png")}
+          source={{uri:data.viewpoints_id[0].photos}}
         >
           <View style={styles.desc}>
             <View style={styles.infos}>
