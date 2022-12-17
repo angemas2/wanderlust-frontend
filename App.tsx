@@ -26,12 +26,16 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { extendTheme, NativeBaseProvider } from 'native-base';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c4fc8aff87a6a395c562dd3e76326a392d43728f
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Location from "expo-location";
 import PositionContext from "./utils/context";
 import places from "./reducers/places";
 import user from "./reducers/user";
+<<<<<<< HEAD
 =======
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -39,6 +43,9 @@ import * as Location from 'expo-location';
 import PositionContext from './utils/context';
 import places from './reducers/places';
 >>>>>>> 77df91b1c77e0d894630a282a77f95cbc73fa7a9
+=======
+
+>>>>>>> c4fc8aff87a6a395c562dd3e76326a392d43728f
 
 import UserProvider, { UserContext } from './utils/logincontext';
 
