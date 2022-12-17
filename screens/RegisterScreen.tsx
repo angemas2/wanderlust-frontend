@@ -16,8 +16,6 @@ import { Box, Input, Button, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in form's fields
 import { UserContext } from "../utils/logincontext";
 import * as SplashScreen from "expo-splash-screen";
-
-import * as Font from "expo-font";
 import {
   useFonts,
   Montserrat_700Bold,
@@ -26,6 +24,7 @@ import {
   Inter_500Medium,
   Inter_400Regular,
   PlayfairDisplay_800ExtraBold,
+  PlayfairDisplay_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/dev"; //import to handle the Roboto font
 
@@ -92,22 +91,19 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   //Snippet code to handle registration and connection with Google account
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId:
-      "917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com",
+
+    expoClientId: '917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com',
   });
 
   const fetchGoogleUserInfo = async (token: any) => {
-    const response = await fetch(
-      "https://www.googleapis.com/oauth2/v3/userinfo",
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
     return await response.json();
   };
 
@@ -191,6 +187,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     Inter_400Regular,
     Inter_500Medium,
     Roboto_500Medium,
+    PlayfairDisplay_400Regular,
     PlayfairDisplay_800ExtraBold,
   });
 
@@ -213,21 +210,13 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       >
         <View style={styles.contentContainer}>
           <View style={styles.titleContainer}>
-            <Text
-              style={{
-                ...styles.title,
-                fontFamily: "PlayfairDisplay_800ExtraBold",
-              }}
-            >
-              INSCRIPTION
-            </Text>
-            <Text style={styles.subtitle}>
-              S'inscrire avec une adresse e-mail
-            </Text>
+
+            <Text style={styles.title}>INSCRIPTION</Text>
+            <Text style={styles.subtitle}>S'inscrire avec une adresse e-mail</Text>
           </View>
 
           <Box alignItems="center" style={styles.boxStyle}>
-            {" "}
+
             {/*box to contain form's registration fields */}
             <Input
               style={styles.input}
@@ -238,7 +227,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               value={email}
               variant="rounded"
               bgColor="#023047"
-              opacity="0.5"
+              opacity="0.7"
               mx="3"
               w="100%"
               InputLeftElement={
@@ -252,31 +241,27 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             />
             <Input
               style={styles.input}
-              placeholder="Username"
+              placeholder="Nom d'utilisateur"
               autoCorrect={false}
               autoCapitalize="none"
               onChangeText={(value) => setUsername(value)}
               value={username}
               variant="rounded"
               bgColor="#023047"
-              opacity="0.5"
+              opacity="0.7"
               mx="3"
               w="100%"
               InputLeftElement={
-                <Icon
-                  as={<MaterialIcons name="person" />}
-                  size={5}
-                  ml="2"
-                  color="#8ECAE6"
-                />
+                <Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="#8ECAE6" />
               }
             />
             <Input
               style={styles.input}
               variant="rounded"
-              placeholder="Password"
+              placeholder="Mot de passe"
+              color="white"
               bgColor="#023047"
-              opacity="0.5"
+              opacity="0.7"
               w="100%"
               type={show ? "text" : "password"}
               onChangeText={(value) => setPassword(value)}
@@ -293,11 +278,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               InputRightElement={
                 <Pressable onPress={() => setShow(!show)}>
                   <Icon
-                    as={
-                      <MaterialIcons
-                        name={show ? "visibility" : "visibility-off"}
-                      />
-                    }
+                    as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
                     style={styles.eyeIcon}
                     size={5}
                     mr="2"
@@ -312,12 +293,13 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           <Button style={styles.registerButton} onPress={handleSubmit}>
             S'inscrire
           </Button>
-          <Text
-            style={styles.registeredText}
-            onPress={() => navigation.navigate("Login")}
-          >
-            Déjà inscrit ? Appuyez ici
-          </Text>
+
+          <View style={styles.registeredTextContainer}>
+            <Text style={styles.registeredText}>Déjà inscrit ?</Text>
+            <Text style={styles.pushHere} onPress={() => navigation.navigate('Login')}>
+              Appuyez ici
+            </Text>
+          </View>
 
           <View style={styles.midMenu}>
             <View style={styles.line}></View>
@@ -350,16 +332,13 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                 source={require("../assets/images/facebook_logo.png")}
                 style={styles.facebookLogo}
               />
-              <Text style={styles.facebookText}>
-                se connecter avec Facebook
-              </Text>
+              <Text style={styles.facebookText}>se connecter avec Facebook</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <Image
-          source={require("../assets/images/logowithtext.png")}
-          style={styles.logo}
-        />
+
+        <Image source={require('../assets/images/logowithtext.png')} style={styles.logo} />
+
       </ImageBackground>
     </SafeAreaView>
   );
@@ -387,14 +366,9 @@ const styles = StyleSheet.create({
     top: 50,
   },
   title: {
-    color: "white",
-    fontSize: 50,
-    fontWeight: "bold",
-  },
-  boxStyle: {
-    width: "100%",
-    height: "25%",
-    justifyContent: "space-between",
+    color: 'white',
+    fontSize: 46,
+    fontFamily: 'PlayfairDisplay_800ExtraBold',
   },
   subtitle: {
     fontSize: 16,
@@ -403,9 +377,17 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginTop: 10,
     marginBottom: 20,
+    fontFamily: 'Inter_400Regular',
+  },
+  boxStyle: {
+    width: '100%',
+    height: '23%',
+    justifyContent: 'space-between',
+    marginBottom: -40,
   },
   input: {
     opacity: 0.6,
+    fontFamily: 'Inter_300Light',
   },
   eyeIcon: {
     right: 15,
@@ -418,19 +400,32 @@ const styles = StyleSheet.create({
     color: "red",
   },
   registerButton: {
-    width: "100%",
-    height: 40,
+    width: '100%',
+    height: 45,
     borderRadius: 50,
+    fontFamily: 'Inter_500Medium',
+    marginBottom: -15,
+  },
+  registeredTextContainer: {
+    flexDirection: 'row',
+    marginBottom: -35,
   },
   registeredText: {
-    marginBottom: 10,
-    color: "white",
+    color: 'white',
+    fontFamily: 'Montserrat_500Medium',
+    marginBottom: -35,
+    marginRight: 10,
+  },
+  pushHere: {
+    fontFamily: 'Montserrat_700Bold',
+    color: 'white',
   },
   midMenu: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: -50,
   },
   line: {
     height: 1,
@@ -466,7 +461,8 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_500Medium",
     fontSize: 14,
 
-    color: "rgba(0, 0, 0, 0.54)",
+    color: 'rgba(0, 0, 0, 0.54)',
+
   },
   facebookButton: {
     backgroundColor: "#1A77F2",
@@ -480,17 +476,19 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     marginTop: 8,
-    marginRight: 14,
+    marginRight: 20,
     marginBottom: 8,
-    marginLeft: 8,
+    marginLeft: 13,
   },
   facebookText: {
     fontSize: 14,
-    fontWeight: "bold",
-    color: "white",
+    color: 'white',
+    fontFamily: 'Montserrat_500Medium',
+
   },
   logo: {
     width: 200,
     height: 55,
+    bottom: 20,
   },
 });
