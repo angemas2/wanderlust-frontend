@@ -91,19 +91,22 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   //Snippet code to handle registration and connection with Google account
   const [request, response, promptAsync] = Google.useAuthRequest({
-
-    expoClientId: '917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com',
+    expoClientId:
+      "917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com",
   });
 
   const fetchGoogleUserInfo = async (token: any) => {
-    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return await response.json();
   };
 
@@ -210,13 +213,13 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       >
         <View style={styles.contentContainer}>
           <View style={styles.titleContainer}>
-
             <Text style={styles.title}>INSCRIPTION</Text>
-            <Text style={styles.subtitle}>S'inscrire avec une adresse e-mail</Text>
+            <Text style={styles.subtitle}>
+              S'inscrire avec une adresse e-mail
+            </Text>
           </View>
 
           <Box alignItems="center" style={styles.boxStyle}>
-
             {/*box to contain form's registration fields */}
             <Input
               style={styles.input}
@@ -252,7 +255,12 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               mx="3"
               w="100%"
               InputLeftElement={
-                <Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="#8ECAE6" />
+                <Icon
+                  as={<MaterialIcons name="person" />}
+                  size={5}
+                  ml="2"
+                  color="#8ECAE6"
+                />
               }
             />
             <Input
@@ -278,7 +286,11 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               InputRightElement={
                 <Pressable onPress={() => setShow(!show)}>
                   <Icon
-                    as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
+                    as={
+                      <MaterialIcons
+                        name={show ? "visibility" : "visibility-off"}
+                      />
+                    }
                     style={styles.eyeIcon}
                     size={5}
                     mr="2"
@@ -293,14 +305,15 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           <Button style={styles.registerButton} onPress={handleSubmit}>
             S'inscrire
           </Button>
-
           <View style={styles.registeredTextContainer}>
             <Text style={styles.registeredText}>Déjà inscrit ?</Text>
-            <Text style={styles.pushHere} onPress={() => navigation.navigate('Login')}>
+            <Text
+              style={styles.pushHere}
+              onPress={() => navigation.navigate("Login")}
+            >
               Appuyez ici
             </Text>
           </View>
-
           <View style={styles.midMenu}>
             <View style={styles.line}></View>
             <Text style={styles.connectionOptionsText}>Ou</Text>
@@ -332,13 +345,17 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                 source={require("../assets/images/facebook_logo.png")}
                 style={styles.facebookLogo}
               />
-              <Text style={styles.facebookText}>se connecter avec Facebook</Text>
+              <Text style={styles.facebookText}>
+                se connecter avec Facebook
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Image source={require('../assets/images/logowithtext.png')} style={styles.logo} />
-
+        <Image
+          source={require("../assets/images/logowithtext.png")}
+          style={styles.logo}
+        />
       </ImageBackground>
     </SafeAreaView>
   );
@@ -366,9 +383,9 @@ const styles = StyleSheet.create({
     top: 50,
   },
   title: {
-    color: 'white',
+    color: "white",
     fontSize: 46,
-    fontFamily: 'PlayfairDisplay_800ExtraBold',
+    fontFamily: "PlayfairDisplay_800ExtraBold",
   },
   subtitle: {
     fontSize: 16,
@@ -377,17 +394,17 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginTop: 10,
     marginBottom: 20,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: "Inter_400Regular",
   },
   boxStyle: {
-    width: '100%',
-    height: '23%',
-    justifyContent: 'space-between',
+    width: "100%",
+    height: "23%",
+    justifyContent: "space-between",
     marginBottom: -40,
   },
   input: {
     opacity: 0.6,
-    fontFamily: 'Inter_300Light',
+    fontFamily: "Inter_300Light",
   },
   eyeIcon: {
     right: 15,
@@ -400,31 +417,31 @@ const styles = StyleSheet.create({
     color: "red",
   },
   registerButton: {
-    width: '100%',
+    width: "100%",
     height: 45,
     borderRadius: 50,
-    fontFamily: 'Inter_500Medium',
+    fontFamily: "Inter_500Medium",
     marginBottom: -15,
   },
   registeredTextContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: -35,
   },
   registeredText: {
-    color: 'white',
-    fontFamily: 'Montserrat_500Medium',
+    color: "white",
+    fontFamily: "Montserrat_500Medium",
     marginBottom: -35,
     marginRight: 10,
   },
   pushHere: {
-    fontFamily: 'Montserrat_700Bold',
-    color: 'white',
+    fontFamily: "Montserrat_700Bold",
+    color: "white",
   },
   midMenu: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: -50,
   },
   line: {
@@ -461,8 +478,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_500Medium",
     fontSize: 14,
 
-    color: 'rgba(0, 0, 0, 0.54)',
-
+    color: "rgba(0, 0, 0, 0.54)",
   },
   facebookButton: {
     backgroundColor: "#1A77F2",
@@ -482,9 +498,8 @@ const styles = StyleSheet.create({
   },
   facebookText: {
     fontSize: 14,
-    color: 'white',
-    fontFamily: 'Montserrat_500Medium',
-
+    color: "white",
+    fontFamily: "Montserrat_500Medium",
   },
   logo: {
     width: 200,

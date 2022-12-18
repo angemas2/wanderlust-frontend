@@ -20,7 +20,7 @@ export default function ItineraryDetailsScreen({ route }: any) {
 
   const positionContext = useContext(PositionContext);
 
-  let waypoints = viewpoints_id.slice(1, -1).map((e: any) => e.location);
+  let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
   console.log(viewpoints_id[0].photos);
 
@@ -63,7 +63,6 @@ export default function ItineraryDetailsScreen({ route }: any) {
           longitudeDelta: 0.0421,
         }}
         style={{ width: "100%", height: "50%" }}
-        
       >
         <MapViewDirections
           origin={{
@@ -82,8 +81,7 @@ export default function ItineraryDetailsScreen({ route }: any) {
           strokeColor="#219EBC"
           precision="high"
           mode="WALKING"
-          onReady={(result) => console.log(result.distance)
-         }
+          onReady={(result) => console.log(result.distance)}
         />
         {point}
       </MapView>
@@ -124,9 +122,9 @@ const styles = StyleSheet.create({
   },
   startBtn: {
     backgroundColor: "#FBBF13",
-    width:70,
-    height:70,
-    color:"white",
-    borderRadius:50,
+    width: 70,
+    height: 70,
+    color: "white",
+    borderRadius: 50,
   },
 });

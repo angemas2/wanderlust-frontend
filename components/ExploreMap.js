@@ -20,12 +20,12 @@ import { setSwipeVisibility } from "../reducers/places";
 import _ from "lodash";
 import { UserState } from "../reducers/user";
 
-function ExploreMap() {
-
-
+function ExploreMap({ navigation }) {
   const dispatch = useDispatch();
 
   const [idsList, setIdsList] = useState([]);
+  const [duration, setDuration] = useState(0);
+  const [distance, setDistance] = useState(0);
 
   const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
 
@@ -78,9 +78,7 @@ function ExploreMap() {
   }
 
   const likedPlace = useSelector((state) => state.places.liked);
-    const user = useSelector((state) => state.user.value);
- 
-
+  const user = useSelector((state) => state.user.value);
 
   const test = likedPlace.map((e) => {
     return { latitude: e.latitude, longitude: e.longitude };
@@ -145,14 +143,15 @@ function ExploreMap() {
         precision="high"
         mode="WALKING"
         onReady={(result) => {
-          console.log(result.duration);
+          setDuration(result.duration);
+          setDistance(result.distance);
         }}
       />
     ) : (
       ""
     );
 
-    
+    console.log("user",user)
 
   return (
     <View style={container}>
@@ -190,9 +189,6 @@ function ExploreMap() {
         style={styles.btn}
         onPress={() => {
           getIds();
-
-       
-
           fetch(
             "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
             {
@@ -201,10 +197,10 @@ function ExploreMap() {
               body: JSON.stringify({
                 profile_id: user.profile_id,
                 viewpointsList: idsList,
-                km: 10,
-                map: "",
+                km: distance,
+                map: duration,
                 photos: "",
-                name: "Fun in Bruxelles",
+                name: "Fun in Bruxelles by benjaduv 2",
                 description:
                   "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
                 public: true,
