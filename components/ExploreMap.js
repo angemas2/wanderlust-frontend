@@ -223,7 +223,7 @@ function ExploreMap({ navigation }) {
                   km: distance,
                   map: duration,
                   photos: "",
-                  name: "Fun in Bruxelle test capsule angetest 8",
+                  name: "Fun in Bruxelle test capsule angetest Demoday test5",
                   description:
                     "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
                   public: true,
