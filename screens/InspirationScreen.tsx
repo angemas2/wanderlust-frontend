@@ -51,9 +51,7 @@ export default function InspirationScreen({
           <View style={styles.desc}>
             <View style={styles.infos}>
               <Text style={styles.title}>{data.name}</Text>
-              <Text style={{ color: "white", fontSize: 10 }}>
-                by LovelyBarouder
-              </Text>
+              <Text style={{ color: "white", fontSize: 10 }}>created by</Text>
               <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
                 {data.description}
               </Text>
