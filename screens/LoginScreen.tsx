@@ -1,7 +1,9 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfile, UserState } from '../reducers/user';
 import {
-  SafeAreaView,
+  Platform,
+  KeyboardAvoidingView,
   View,
   Text,
   StyleSheet,
@@ -47,9 +49,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   const { user, login } = useContext(UserContext);
 
+  const dispatch = useDispatch();
+
   type dataProps = {
     result: boolean;
     error: string;
+    profile_id: string;
+    avatar: string;
   };
 
   //Snippet code to handle registration and connection with Google account
@@ -148,6 +154,14 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           setError(data.error);
         } else {
           // if user's details are correct, rerouting to ExploreScreen
+          dispatch(
+            updateUserProfile({
+              username,
+              email,
+              avatar: data.avatar,
+              profile_id: data.profile_id,
+            })
+          );
           navigation.navigate('TabNavigator', { screen: 'Explore' });
         }
       });
@@ -175,7 +189,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   }
   navigation.navigate('TabNavigator', { screen: 'Explore' });
   return (
-    <SafeAreaView style={styles.container} onLayout={onLayoutRootView}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      onLayout={onLayoutRootView}>
       <ImageBackground
         source={require('../assets/images/background.png')}
         style={styles.imageBackground}>
@@ -288,7 +305,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         </View>
         <Image source={require('../assets/images/logowithtext.png')} style={styles.logo} />
       </ImageBackground>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -347,7 +364,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: 'white',
     fontSize: 12,
-    fontFamily: 'Montserrat_Medium500',
+    fontFamily: 'Montserrat_500Medium',
     marginLeft: 200,
   },
   error: {
