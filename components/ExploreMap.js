@@ -151,36 +151,9 @@ function ExploreMap({ navigation }) {
       : '';
 
 
-  const intinaries =
-    positionContext != null && likedPlace.length > 0 ? (
-      <MapViewDirections
-        origin={userPosition}
-        destination={{
-          latitude: likedPlace[likedPlace.length - 1].latitude,
-          longitude: likedPlace[likedPlace.length - 1].longitude,
-        }}
-        waypoints={test}
-        optimizeWaypoints={true}
-        apikey={GOOGLE_MAPS_APIKEY}
-        strokeWidth={4}
-        strokeColor="#219EBC"
-        precision="high"
-        mode="WALKING"
-        onReady={(result) => {
-          setDuration(result.duration);
-          setDistance(result.distance);
-        }}
-      />
-    ) : (
-      ""
-    );
-
-  console.log("user", user);
-
       const wayPoints = likedPlace.map((e) => {
         return { latitude: e.latitude, longitude: e.longitude };
       });
-
 
       
   return (
