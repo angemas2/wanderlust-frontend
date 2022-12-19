@@ -70,7 +70,6 @@ export default function NavScreen() {
     })();
   }, [origin]);
 
-
   //
   const handleNavigateToPlace = (lat: number, lon: number) => {
     setDestinationCoord({ latitude: lat, longitude: lon });
@@ -226,19 +225,24 @@ export default function NavScreen() {
       {distance === 0 ? (
         ""
       ) : (
-        <Text
+        <View
           style={{
-            position: "relative",
-            top: -40,
-            textAlign: "center",
-            backgroundColor: "white",
-            color: "black",
-            padding: 6,
+            position: "absolute",
+            top: 300,
+
+            backgroundColor: "rgba(2, 48, 71, 0.8)",
+
+            padding: 10,
+            borderTopRightRadius: 15,
+            borderBottomRightRadius: 15,
           }}
         >
-          Distance:{distance} km | Duration: {duration.toFixed(0)} min |
-          Direction: {direction}
-        </Text>
+          <Text style={{ color: "white" }}>Distance:{distance} km </Text>
+          <Text style={{ color: "white" }}>
+            Duration: {duration.toFixed(0)}
+          </Text>
+          <Text style={{ color: "white" }}>Direction: {direction}</Text>
+        </View>
       )}
 
       <View>
@@ -271,14 +275,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   map: {
-    height: "40%",
+    height: "45%",
     width: "95%",
     alignSelf: "center",
   },
   desc: {
     fontSize: 14,
     opacity: 0.6,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   aroundContainer: {
     marginTop: 10,
@@ -288,6 +292,8 @@ const styles = StyleSheet.create({
     color: "#023047",
     fontSize: 16,
     fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
   },
   placesCont: {
     display: "flex",
@@ -310,8 +316,8 @@ const styles = StyleSheet.create({
   rating: {
     color: "white",
     fontWeight: "bold",
-    position: "relative",
-    top: -120,
+    position: "absolute",
+    top: 10,
     left: 10,
     backgroundColor: "#023047",
     fontSize: 10,
