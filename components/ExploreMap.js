@@ -84,9 +84,9 @@ function ExploreMap({ navigation }) {
     return { latitude: e.latitude, longitude: e.longitude };
   });
 
-  const getIds = () => {
+  const getIds = async () => {
     const ids = [];
-    likedPlace.map((data) => {
+    return likedPlace.map((data) => {
       fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
         headers: { "Content-Type": "application/json" },
@@ -103,7 +103,6 @@ function ExploreMap({ navigation }) {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data id list", data.data._id);
           ids.push(data.data._id);
           setIdsList(ids);
         });
@@ -151,7 +150,7 @@ function ExploreMap({ navigation }) {
       ""
     );
 
-    console.log("user",user)
+  console.log("user", user);
 
   return (
     <View style={container}>
@@ -187,31 +186,33 @@ function ExploreMap({ navigation }) {
       </MapView>
       <Pressable
         style={styles.btn}
-        onPress={() => {
-          getIds();
-          fetch(
-            "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                profile_id: user.profile_id,
-                viewpointsList: idsList,
-                km: distance,
-                map: duration,
-                photos: "",
-                name: "Fun in Bruxelles by benjaduv 2",
-                description:
-                  "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-                public: true,
-                custom: true,
-                isSponsor: false,
-                city: "Bruxelles",
-              }),
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => console.log(data));
+        onPress={async () => {
+          getIds().then(() => {
+            console.log("fetch", idsList);
+            fetch(
+              "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  profile_id: user.profile_id,
+                  viewpointsList: idsList,
+                  km: distance,
+                  map: duration,
+                  photos: "",
+                  name: "Fun in Bruxelle test capsule angetest 8",
+                  description:
+                    "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
+                  public: true,
+                  custom: true,
+                  isSponsor: false,
+                  city: "Bruxelles",
+                }),
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => console.log(data));
+          });
         }}
       >
         <Text>Start exploring</Text>
