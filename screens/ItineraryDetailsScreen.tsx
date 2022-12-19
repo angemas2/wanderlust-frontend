@@ -14,15 +14,18 @@ import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
 import { Box, Input, Button, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in form's fields
+import user from "../reducers/user";
+import { useSelector } from "react-redux";
 
 export default function ItineraryDetailsScreen({ route }: any) {
-  const { profile_id, name, viewpoints_id, description } = route.params;
+  const { _id,profile_id, name, viewpoints_id, description } = route.params;
 
   const positionContext = useContext(PositionContext);
+  const user = useSelector((state: { user: any }) => state.user.value);
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
-  console.log(viewpoints_id[0].photos);
+ console.log(_id)
 
   const point =
     viewpoints_id.length > 0
@@ -50,6 +53,19 @@ export default function ItineraryDetailsScreen({ route }: any) {
   });
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
+
+  const handleFollow = () => {
+    fetch("https://wanderlust-backend.vercel.app/itineraries/followers", {
+      method: "Put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user.profile_id._id,
+        id:_id
+      }),
+    });
+    console.log("followed")
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,7 +102,14 @@ export default function ItineraryDetailsScreen({ route }: any) {
         {point}
       </MapView>
       <Pressable>
-        <Button style={styles.startBtn}>Start</Button>
+        <Button
+          style={styles.startBtn}
+          onPress={() => {
+            handleFollow();
+          }}
+        >
+          Start
+        </Button>
       </Pressable>
 
       <Text>Itinerary Steps</Text>

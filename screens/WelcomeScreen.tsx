@@ -38,29 +38,37 @@ export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
   return (
     <SafeAreaView onLayout={onLayoutRootView} style={styles.container}>
       <ImageBackground
-        source={require('../assets/images/background.png')}
-        style={styles.imageBackground}>
+        source={require("../assets/images/background.png")}
+        style={styles.imageBackground}
+      >
         <ImageBackground
           style={styles.topPart}
-          source={require('../assets/images/welcome-top-part.png')}
+          source={require("../assets/images/welcome-top-part.png")}
         />
-        <Image style={styles.logo} source={require('../assets/images/logo.png')} />
+        <Image
+          style={styles.logo}
+          source={require("../assets/images/logo.png")}
+        />
         <View style={styles.center}>
           <View style={styles.titleContainer}>
-            <Text style={{ ...styles.title, color: 'white' }}>Wander</Text>
-            <Text style={{ ...styles.title, color: '#FFB703' }}>Lust</Text>
+            <Text style={{ ...styles.title, color: "white" }}>Wander</Text>
+            <Text style={{ ...styles.title, color: "#FFB703" }}>Lust</Text>
           </View>
           <Text style={styles.description}>
-            Laissez-vous guider par notre compagnon de voyage et découvrez les pépites cachées
-            autour de vous
+            Laissez-vous guider par notre compagnon de voyage et découvrez les
+            pépites cachées autour de vous
           </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Register")}
+          >
+            <Text style={styles.textButton}>Commencer à explorer</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.textButton}>Commencer à explorer</Text>
-        </TouchableOpacity>
+
         <Image
           style={styles.bottomPart}
-          source={require('../assets/images/welcome-bottom-part.png')}
+          source={require("../assets/images/welcome-bottom-part.png")}
         />
       </ImageBackground>
     </SafeAreaView>
@@ -118,8 +126,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderRadius: 5,
-    marginLeft: 110,
-    marginTop: 20
+    marginTop: 30
   },
   textButton: {
     fontFamily: 'Inter_400Regular',
