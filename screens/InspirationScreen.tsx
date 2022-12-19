@@ -21,6 +21,7 @@ export default function InspirationScreen({
   const [city, setCity] = useState("Bruxelles");
   const [itineraries, setItineraries] = useState([]);
 
+
   useEffect(() => {
     fetch(
       `https://wanderlust-backend.vercel.app/itineraries/${city.toLocaleLowerCase()}`
