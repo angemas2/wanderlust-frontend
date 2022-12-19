@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import {
   SafeAreaView,
   Text,
@@ -55,6 +55,19 @@ export default function ItineraryDetailsScreen({ route }: any) {
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
+  let map: any = useRef(null);
+
+  async function fitMapToMarkers() {
+    map.fitToCoordinates(waypoints, {
+      edgePadding: {
+        top: 30,
+        right: 30,
+        bottom: 30,
+        left: 30,
+      },
+    });
+  }
+
   const handleFollow = () => {
     fetch("https://wanderlust-backend.vercel.app/itineraries/followers", {
       method: "Put",
@@ -69,16 +82,36 @@ export default function ItineraryDetailsScreen({ route }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{name}</Text>
-      <Text>{description}</Text>
+      <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 18,
+          textAlign: "center",
+          width: "80%",
+        }}
+      >
+        {name}
+      </Text>
+      <Text
+        style={{
+          textAlign: "center",
+          width: "80%",
+          marginTop: 15,
+          marginBottom: 20,
+        }}
+      >
+        {description}
+      </Text>
       <MapView
+        ref={(ref) => (map = ref)}
         initialRegion={{
           latitude: positionContext.latitude,
           longitude: positionContext.longitude,
           latitudeDelta: 0.0522,
           longitudeDelta: 0.0421,
         }}
-        style={{ width: "100%", height: "50%" }}
+        style={{ width: "95%", height: "40%" }}
+        onMapReady={fitMapToMarkers}
       >
         <MapViewDirections
           origin={{
@@ -112,7 +145,9 @@ export default function ItineraryDetailsScreen({ route }: any) {
         </Button>
       </Pressable>
 
-      <Text>Itinerary Steps</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: 60 }}>
+        Itinerary Steps
+      </Text>
       <ScrollView horizontal={true} style={styles.placesCont}>
         {steps}
       </ScrollView>
@@ -141,13 +176,24 @@ const styles = StyleSheet.create({
   place: {
     width: 150,
     marginRight: 20,
-    marginTop: 50,
+    marginTop: 30,
   },
   startBtn: {
     backgroundColor: "#FBBF13",
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     color: "white",
     borderRadius: 50,
+    top: -35,
+    alignSelf: "center",
+    position: "absolute",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

@@ -141,9 +141,9 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const renderTabBar = (props: any) => (
     <TabBar
       {...props}
-      activeColor={"#FFB703"}
+      activeColor={"white"}
       inactiveColor={"#023047"}
-      style={{ paddingTop: 55, backgroundColor: "white" }}
+      style={{ paddingTop: 55, backgroundColor: "#FFB703" }}
     />
   );
 

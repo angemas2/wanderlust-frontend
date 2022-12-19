@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import {
   SafeAreaView,
   Text,
@@ -42,6 +42,19 @@ export default function ItinerarySummaryScreen({ route }: any) {
         })
       : "";
 
+  let map: any = useRef(null);
+
+  async function fitMapToMarkers() {
+    map.fitToCoordinates(waypoints, {
+      edgePadding: {
+        top: 30,
+        right: 30,
+        bottom: 30,
+        left: 30,
+      },
+    });
+  }
+
   const steps = viewpoints_id.map((data: any, i: number) => {
     return (
       <View style={styles.place} key={i}>
@@ -71,6 +84,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
         {description}{" "}
       </Text>
       <MapView
+        ref={(ref) => (map = ref)}
         initialRegion={{
           latitude: viewpoints_id[0].location.latitude,
           longitude: viewpoints_id[0].location.longitude,
@@ -78,6 +92,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
           longitudeDelta: 0.0421,
         }}
         style={{ width: "95%", height: "40%" }}
+        onMapReady={fitMapToMarkers}
       >
         <MapViewDirections
           origin={{
