@@ -1,25 +1,35 @@
-import React from 'react';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
-import { useContext, useState, useCallback } from 'react';
-import { SafeAreaView, Text, StyleSheet, View, Pressable, Button } from 'react-native';
-import PositionContext from '../utils/context';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import MapViewDirections from 'react-native-maps-alternatives-directions';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCircleArrowUp, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { setSwipeVisibility } from '../reducers/places';
-import _ from 'lodash';
-import { UserState } from '../reducers/user';
+import React from "react";
+import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
+import { useContext, useState, useCallback } from "react";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  Pressable,
+  Button,
+} from "react-native";
+import PositionContext from "../utils/context";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import MapViewDirections from "react-native-maps-alternatives-directions";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCircleArrowUp, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { setSwipeVisibility } from "../reducers/places";
+import _ from "lodash";
+import { UserState } from "../reducers/user";
 
-import { useFonts, Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/dev'; //import to handle the Roboto font
-import * as SplashScreen from 'expo-splash-screen';
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_500Medium,
+} from "@expo-google-fonts/dev"; //import to handle the Roboto font
+import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
 function ExploreMap({ navigation }) {
-
   const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
   const dispatch = useDispatch();
   const visible = useSelector((state) => state.places.isSwipeVisible);
@@ -32,34 +42,32 @@ function ExploreMap({ navigation }) {
     longitude: positionContext.longitude,
   };
 
-
   const [idsList, setIdsList] = useState([]);
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
 
-
   let container = {};
   if (visible) {
     container = {
-      display: 'flex',
-      height: '50%',
-      width: '100%',
-      alignItems: 'center',
+      display: "flex",
+      height: "50%",
+      width: "100%",
+      alignItems: "center",
     };
   } else {
     container = {
-      display: 'flex',
-      height: '100%',
-      width: '100%',
-      alignItems: 'center',
+      display: "flex",
+      height: "100%",
+      width: "100%",
+      alignItems: "center",
     };
   }
 
   let map = {};
   if (visible) {
     map = {
-      height: '60%',
-      width: '95%',
+      height: "60%",
+      width: "95%",
       borderRadius: 10,
       marginLeft: 10,
       marginRight: 10,
@@ -67,15 +75,14 @@ function ExploreMap({ navigation }) {
     };
   } else {
     map = {
-      height: '80%',
-      width: '95%',
+      height: "80%",
+      width: "95%",
       borderRadius: 10,
       marginLeft: 10,
       marginRight: 10,
       marginTop: 10,
     };
   }
-
 
   const getIds = async () => {
     const ids = [];
@@ -91,65 +98,25 @@ function ExploreMap({ navigation }) {
             latitude: data.latitude,
             longitude: data.longitude,
           },
-          tags_id: '',
+          tags_id: "",
         }),
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log('data id list', data.data._id);
+          console.log("data id list", data.data._id);
           ids.push(data.data._id);
           setIdsList(ids);
         });
     });
   };
 
-
   const handleVisible = () => {
     dispatch(setSwipeVisibility());
   };
 
-
   // if(likedPlace.length === 0) {
   //   dispatch(setSwipeVisibility());
   // }
-
-
-  const intinaries = positionContext != null && likedPlace.length > 0 ? (
-    <MapViewDirections
-      origin={userPosition}
-      destination={{
-        latitude: likedPlace[likedPlace.length - 1].latitude,
-        longitude: likedPlace[likedPlace.length - 1].longitude,
-      }}
-      waypoints={wayPoints}
-      optimizeWaypoints={true}
-      apikey={GOOGLE_MAPS_APIKEY}
-      strokeWidth={4}
-      strokeColor="#219EBC"
-      precision="high"
-      mode="WALKING"
-      onReady={(result) => {
-        setDuration(result.duration);
-        setDistance(result.distance);
-      }}
-    />
-  ) : (
-    ""
-  );
-
-
-  const point = likedPlace.length > 0
-      ? likedPlace.map((e, i) => {
-          return (
-            <Marker
-              key={i}
-              title={e.name}
-              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-            />
-          );
-        })
-      : '';
-
 
   const intinaries =
     positionContext != null && likedPlace.length > 0 ? (
@@ -159,7 +126,7 @@ function ExploreMap({ navigation }) {
           latitude: likedPlace[likedPlace.length - 1].latitude,
           longitude: likedPlace[likedPlace.length - 1].longitude,
         }}
-        waypoints={test}
+        waypoints={wayPoints}
         optimizeWaypoints={true}
         apikey={GOOGLE_MAPS_APIKEY}
         strokeWidth={4}
@@ -175,14 +142,40 @@ function ExploreMap({ navigation }) {
       ""
     );
 
+  const point =
+    likedPlace.length > 0
+      ? likedPlace.map((e, i) => {
+          return (
+            <Marker
+              key={i}
+              title={e.name}
+              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+            />
+          );
+        })
+      : "";
+
   console.log("user", user);
 
-      const wayPoints = likedPlace.map((e) => {
-        return { latitude: e.latitude, longitude: e.longitude };
-      });
+  const wayPoints = likedPlace.map((e) => {
+    return { latitude: e.latitude, longitude: e.longitude };
+  });
 
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+  });
 
-      
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={container} onLayout={onLayoutRootView}>
       <View style={styles.topContainer}>
@@ -202,21 +195,21 @@ function ExploreMap({ navigation }) {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        style={map}>
+        style={map}
+      >
         <Marker
           draggable
           coordinate={{
             latitude: positionContext.latitude,
             longitude: positionContext.longitude,
           }}
-          pinColor={'#FFB703'}
+          pinColor={"#FFB703"}
         />
         {point}
         {intinaries}
       </MapView>
       <Pressable
         style={styles.btn}
-
         onPress={async () => {
           getIds().then(() => {
             console.log("fetch", idsList);
@@ -247,7 +240,6 @@ function ExploreMap({ navigation }) {
         }}
       >
         <Text>Start exploring</Text>
-
       </Pressable>
     </View>
   );
@@ -255,33 +247,33 @@ function ExploreMap({ navigation }) {
 
 const styles = StyleSheet.create({
   topContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   title: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginTop: 0,
     marginLeft: 10,
     fontSize: 14,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: "Inter_400Regular",
   },
   btn: {
-    backgroundColor: '#FFB703',
-    width: '95%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '10%',
+    backgroundColor: "#FFB703",
+    width: "95%",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "10%",
     borderRadius: 20,
     marginTop: 25,
   },
   icon: {
-    color: '#219EBC',
+    color: "#219EBC",
     marginRight: 10,
   },
   startExploring: {
-    fontFamily: 'Inter_500Medium',
-    color: 'white',
+    fontFamily: "Inter_500Medium",
+    color: "white",
     fontSize: 16,
   },
 });
