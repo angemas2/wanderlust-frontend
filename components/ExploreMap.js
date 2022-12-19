@@ -104,6 +104,7 @@ function ExploreMap({ navigation }) {
           console.log("data id list", data.data._id);
           ids.push(data.data._id);
           setIdsList(ids);
+          return ids
         });
     });
   };

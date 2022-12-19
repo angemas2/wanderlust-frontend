@@ -11,7 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+
 
 type NavigationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
