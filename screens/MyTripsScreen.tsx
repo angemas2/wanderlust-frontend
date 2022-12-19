@@ -46,7 +46,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   const tripList = trips.map((data: any, i) => {
     return (
-      <View style={styles.tripCont}>
+      <View style={styles.tripCont} key={i}>
         <Pressable
           onPress={() => {
             navigation.navigate("ItinerarySummary", { ...data });

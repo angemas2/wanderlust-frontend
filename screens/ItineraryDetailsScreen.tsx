@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -16,13 +16,15 @@ import { Box, Input, Button, Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in form's fields
 import user from "../reducers/user";
 import { useSelector } from "react-redux";
+import { TheNautigal_400Regular } from "@expo-google-fonts/dev";
 
-export default function ItineraryDetailsScreen({ route }: any) {
+export default function ItineraryDetailsScreen({ route, navigation }: any) {
   const { _id, profile_id, name, viewpoints_id, description, followers } =
     route.params;
 
   const positionContext = useContext(PositionContext);
   const user = useSelector((state: { user: any }) => state.user.value);
+  const [started, setStarted] = useState(false);
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
@@ -58,14 +60,17 @@ export default function ItineraryDetailsScreen({ route }: any) {
   let map: any = useRef(null);
 
   async function fitMapToMarkers() {
-    map.fitToCoordinates(waypoints, {
-      edgePadding: {
-        top: 30,
-        right: 30,
-        bottom: 30,
-        left: 30,
-      },
-    });
+    map.fitToCoordinates(
+      viewpoints_id.map((e: any) => e.location),
+      {
+        edgePadding: {
+          top: 10,
+          right: 10,
+          bottom: 10,
+          left: 10,
+        },
+      }
+    );
   }
 
   const handleFollow = () => {
@@ -76,8 +81,9 @@ export default function ItineraryDetailsScreen({ route }: any) {
         userId: user.profile_id._id,
         id: _id,
       }),
+    }).then(() => {
+      navigation.navigate("MyTrips");
     });
-    console.log("followed");
   };
 
   return (
@@ -110,6 +116,8 @@ export default function ItineraryDetailsScreen({ route }: any) {
           latitudeDelta: 0.0522,
           longitudeDelta: 0.0421,
         }}
+        showsUserLocation={true}
+        followsUserLocation={true}
         style={{ width: "95%", height: "40%" }}
         onMapReady={fitMapToMarkers}
       >
@@ -138,10 +146,11 @@ export default function ItineraryDetailsScreen({ route }: any) {
         <Button
           style={styles.startBtn}
           onPress={() => {
-            handleFollow();
+            setStarted(!started);
+            started && handleFollow();
           }}
         >
-          Start
+          {started ? "Stop" : "Start"}
         </Button>
       </Pressable>
 
