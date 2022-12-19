@@ -53,6 +53,7 @@ function ExploreMap({ navigation }) {
       height: "50%",
       width: "100%",
       alignItems: "center",
+      marginTop: "7%"
     };
   } else {
     container = {
@@ -60,6 +61,7 @@ function ExploreMap({ navigation }) {
       height: "100%",
       width: "100%",
       alignItems: "center",
+      marginTop: "7%"
     };
   }
 
@@ -69,18 +71,14 @@ function ExploreMap({ navigation }) {
       height: "60%",
       width: "95%",
       borderRadius: 10,
-      marginLeft: 10,
-      marginRight: 10,
-      marginTop: 10,
+      marginTop: "3%"
+
     };
   } else {
     map = {
       height: "80%",
       width: "95%",
       borderRadius: 10,
-      marginLeft: 10,
-      marginRight: 10,
-      marginTop: 10,
     };
   }
 
@@ -117,6 +115,12 @@ function ExploreMap({ navigation }) {
   // if(likedPlace.length === 0) {
   //   dispatch(setSwipeVisibility());
   // }
+
+
+  const wayPoints = likedPlace.map((e) => {
+    return { latitude: e.latitude, longitude: e.longitude };
+  });
+
 
   const intinaries =
     positionContext != null && likedPlace.length > 0 ? (
@@ -155,11 +159,6 @@ function ExploreMap({ navigation }) {
         })
       : "";
 
-  console.log("user", user);
-
-  const wayPoints = likedPlace.map((e) => {
-    return { latitude: e.latitude, longitude: e.longitude };
-  });
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -253,7 +252,7 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: "flex-start",
-    marginTop: 0,
+    
     marginLeft: 10,
     fontSize: 14,
     fontFamily: "Inter_400Regular",
@@ -263,9 +262,9 @@ const styles = StyleSheet.create({
     width: "95%",
     alignItems: "center",
     justifyContent: "center",
-    height: "10%",
+    height: 40,
     borderRadius: 20,
-    marginTop: 25,
+    marginTop: "5%",
   },
   icon: {
     color: "#219EBC",
