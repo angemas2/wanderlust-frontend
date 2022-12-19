@@ -1,6 +1,9 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateUserProfile, UserState } from "../reducers/user";
+
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfile, UserState } from '../reducers/user';
+import { ObjectId } from 'mongoose';
+
 import {
   Platform,
   KeyboardAvoidingView,
@@ -56,8 +59,11 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     error: string;
     username: string;
     email: string;
-    profile_id: string;
-    picture: string;
+    profile_id: {
+      _id: string;
+      picture: string;
+    };
+    ID_PROFIL: string;
   };
 
   //Snippet code to handle registration and connection with Google account
@@ -160,13 +166,12 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           setError(data.error);
         } else {
           // if user's details are correct, rerouting to ExploreScreen
-          console.log(data);
           dispatch(
             updateUserProfile({
               email: data.email,
               username: data.username,
-              picture: data.picture,
-              profile_id: data.profile_id,
+              picture: data.profile_id.picture,
+              profile_id: data.profile_id._id,
             })
           );
           navigation.navigate("TabNavigator", { screen: "Explore" });

@@ -3,7 +3,7 @@ import { Image, SafeAreaView, Text, StyleSheet } from 'react-native';
 import { Box, Input, Button } from 'native-base';
 
 import { useSelector } from 'react-redux';
-import { UserState } from '../reducers/user';
+import user, { UserState } from '../reducers/user';
 
 export default function ProfileScreen() {
   const [username, setUsername] = useState('');
@@ -12,10 +12,11 @@ export default function ProfileScreen() {
   const [newPassword, setNewPassword] = useState('');
   const [testNewPassword, setTestNewPassword] = useState('');
 
+  const user = useSelector((state: { user: UserState }) => state.user.value);
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('../assets/images/default.jpg')} />
-      <Text>Pâtàcrêpe</Text>
+      <Image source={require('../assets/images/default.jpg')} style={styles.avatar} />
+      <Text>{user.username}</Text>
 
       <Box>
         <Input placeholder="Username"></Input>
@@ -31,5 +32,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatar: {
+    width: '60%',
+    height: '30%',
   },
 });
