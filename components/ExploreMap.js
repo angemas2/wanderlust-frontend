@@ -53,7 +53,7 @@ function ExploreMap({ navigation }) {
       height: "50%",
       width: "100%",
       alignItems: "center",
-      marginTop: "7%",
+      marginTop: "2%",
     };
   } else {
     container = {
@@ -207,8 +207,7 @@ function ExploreMap({ navigation }) {
       <Pressable
         style={styles.btn}
         onPress={async () => {
-          getIds().then(() => {
-            console.log("fetch", idsList);
+          await getIds().then(() => {
             fetch(
               "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
               {
@@ -220,10 +219,10 @@ function ExploreMap({ navigation }) {
                   km: distance,
                   map: duration,
                   photos: "",
-                  name: "La capsule à Brubru test",
+                  name: "La capsuletest await est",
                   description:
                     "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-                  public: true,
+                  public: false,
                   custom: true,
                   isSponsor: false,
                   city: "Bruxelles",
@@ -249,7 +248,6 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: "flex-start",
-
     marginLeft: 10,
     fontSize: 14,
     fontFamily: "Inter_400Regular",

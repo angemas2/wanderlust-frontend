@@ -126,11 +126,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderRadius: 5,
-    marginTop: 30
+    marginTop: 45
   },
   textButton: {
     fontFamily: 'Inter_400Regular',
     color: '#023047',
+    
   },
   bottomPart: {
     width: horizontalScale(400),
