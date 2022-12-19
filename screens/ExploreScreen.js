@@ -25,7 +25,7 @@ export default function ExploreScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    marginTop: 20,
     flex: 1,
   },
 });
