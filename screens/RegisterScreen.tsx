@@ -109,6 +109,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     return await response.json();
   };
 
+ 
   useEffect(() => {
     (async () => {
       if (response?.type === 'success') {
@@ -129,7 +130,9 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
+
             navigation.navigate('TabNavigator', { screen: 'Explore' });
+
             dispatch(
               updateUserProfile({
                 username,

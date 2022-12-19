@@ -77,12 +77,12 @@ function ExploreMap({ navigation }) {
   }
 
 
-  const getIds = () => {
+  const getIds = async () => {
     const ids = [];
-    likedPlace.map((data) => {
-      fetch('https://wanderlust-backend.vercel.app/viewpoints/addPoint', {
-        method: 'Post',
-        headers: { 'Content-Type': 'application/json' },
+    return likedPlace.map((data) => {
+      fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
+        method: "Post",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.name,
           description: data.description,
@@ -151,9 +151,36 @@ function ExploreMap({ navigation }) {
       : '';
 
 
+  const intinaries =
+    positionContext != null && likedPlace.length > 0 ? (
+      <MapViewDirections
+        origin={userPosition}
+        destination={{
+          latitude: likedPlace[likedPlace.length - 1].latitude,
+          longitude: likedPlace[likedPlace.length - 1].longitude,
+        }}
+        waypoints={test}
+        optimizeWaypoints={true}
+        apikey={GOOGLE_MAPS_APIKEY}
+        strokeWidth={4}
+        strokeColor="#219EBC"
+        precision="high"
+        mode="WALKING"
+        onReady={(result) => {
+          setDuration(result.duration);
+          setDistance(result.distance);
+        }}
+      />
+    ) : (
+      ""
+    );
+
+  console.log("user", user);
+
       const wayPoints = likedPlace.map((e) => {
         return { latitude: e.latitude, longitude: e.longitude };
       });
+
 
       
   return (
@@ -189,30 +216,38 @@ function ExploreMap({ navigation }) {
       </MapView>
       <Pressable
         style={styles.btn}
-        onPress={() => {
-          getIds();
-          fetch('https://wanderlust-backend.vercel.app/itineraries/addItinerary', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              profile_id: user.profile_id,
-              viewpointsList: idsList,
-              km: distance,
-              map: duration,
-              photos: '',
-              name: 'Fun in Bruxelles by benjaduv 2',
-              description:
-                "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-              public: true,
-              custom: true,
-              isSponsor: false,
-              city: 'Bruxelles',
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => console.log(data));
-        }}>
-        <Text style={styles.startExploring}>Start exploring</Text>
+
+        onPress={async () => {
+          getIds().then(() => {
+            console.log("fetch", idsList);
+            fetch(
+              "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  profile_id: user.profile_id,
+                  viewpointsList: idsList,
+                  km: distance,
+                  map: duration,
+                  photos: "",
+                  name: "Fun in Bruxelle test capsule angetest 8",
+                  description:
+                    "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
+                  public: true,
+                  custom: true,
+                  isSponsor: false,
+                  city: "Bruxelles",
+                }),
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => console.log(data));
+          });
+        }}
+      >
+        <Text>Start exploring</Text>
+
       </Pressable>
     </View>
   );
