@@ -118,8 +118,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderRadius: 5,
-    marginLeft: 100,
-    top: 50,
+    marginLeft: 110,
+    marginTop: 20
   },
   textButton: {
     fontFamily: 'Inter_400Regular',

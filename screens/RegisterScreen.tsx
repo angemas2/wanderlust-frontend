@@ -129,6 +129,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           .then((response) => response.json())
           .then((data) => {
             navigation.navigate('TabNavigator', { screen: 'Explore' });
+
             dispatch(
               updateUserProfile({
                 username,

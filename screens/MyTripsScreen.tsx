@@ -5,11 +5,13 @@ import {
   StyleSheet,
   Pressable,
   View,
+  useWindowDimensions,
   ImageBackground,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
+
 
 type NavigationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -19,15 +21,12 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const user = useSelector((state: { user: UserState }) => state.user.value);
   const [trips, setTrips] = useState([]);
 
-  console.log(user.profile_id);
-
   useEffect(() => {
     fetch(
       `https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data.data);
         setTrips(data.data);
       });
   }, [trips]);
@@ -37,13 +36,24 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
       <View style={styles.tripCont} key={i}>
         <Pressable>
           <ImageBackground
-            source={require("../assets/images/background.png")}
+            imageStyle={{ opacity: 0.3 }}
+            source={{ uri: data.viewpoints_id[0]?.photos }}
             style={styles.imgBg}
           >
-            <Text style={styles.tripTitle}>{data.name}</Text>
-            <View style={styles.itineraryDatas}>
-              <Text>{data.km.toFixed(2)}</Text>
-              <Text>{data.viewpoints_id.length}</Text>
+            <View
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.tripTitle}>{data.name}</Text>
+              <View style={styles.itineraryDatas}>
+                <Text style={{ color: "white" }}>
+                  {data.km.toFixed(2)} km | {data.viewpoints_id.length} spots
+                </Text>
+              </View>
             </View>
           </ImageBackground>
         </Pressable>
@@ -53,15 +63,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{user.username} Trips</Text>
-      <View style={styles.tripCont}>
-        <ImageBackground
-          source={require("../assets/images/background.png")}
-          style={styles.imgBg}
-        >
-          <Text style={styles.tripTitle}>Trip Name</Text>
-        </ImageBackground>
-      </View>
+      <Text>{user.profile_id} Trips</Text>
       {tripList}
     </SafeAreaView>
   );
@@ -82,6 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "rgba(2, 48, 71, 0.8)",
   },
   imgBg: {
     display: "flex",
@@ -92,10 +95,15 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   tripTitle: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
+    width: "90%",
+    color: "white",
   },
-  itineraryDatas:{
-
-  }
+  itineraryDatas: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 40,
+  },
 });

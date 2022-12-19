@@ -156,6 +156,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           setError(data.error);
         } else {
           // if user's details are correct, rerouting to ExploreScreen
+          console.log(data)
           dispatch(
             updateUserProfile({
               email: data.email,

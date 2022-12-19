@@ -22,6 +22,9 @@ export const placesSlice = createSlice({
    updateAndLikePlaces: (state, action) => {
     state.liked.push(action.payload);
     state.proximity.shift()
+    if(state.proximity.length === 0) {
+      state.isSwipeVisible =  false
+    }
    },
    onDisLike: (state, action) => {
     state.proximity.shift()

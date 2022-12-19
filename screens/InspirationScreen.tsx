@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -27,30 +27,26 @@ export default function InspirationScreen({
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.data);
         setItineraries(data.data);
       });
-  }, []);
+  }, [itineraries]);
 
   const handleSearch = () => {
-    console.log(city);
     fetch(
       `https://wanderlust-backend.vercel.app/itineraries/${city.toLocaleLowerCase()}`
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.data);
         setItineraries(data.data);
       });
   };
 
   const itinerariesList = itineraries.map((data: any, i) => {
-    console.log(data)
     return (
       <View style={styles.routeCont} key={i}>
         <ImageBackground
           style={styles.bg}
-          source={{uri:data.viewpoints_id[0].photos}}
+          source={{ uri: data.viewpoints_id[0].photos }}
         >
           <View style={styles.desc}>
             <View style={styles.infos}>
