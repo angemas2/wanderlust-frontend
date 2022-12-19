@@ -7,6 +7,7 @@ import {
   View,
   useWindowDimensions,
   ImageBackground,
+  ScrollView,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/user";
@@ -83,7 +84,6 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
         <Pressable
           onPress={() => {
             navigation.navigate("ItinerarySummary", { ...data });
-         
           }}
         >
           <ImageBackground
@@ -113,16 +113,20 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   });
 
   const FirstRoute = () => (
-    <SafeAreaView style={styles.container}>
-      <Text> My custom Trips</Text>
-      <View>{tripList}</View>
-    </SafeAreaView>
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <Text> My custom Trips</Text>
+        <View>{tripList}</View>
+      </SafeAreaView>
+    </ScrollView>
   );
   const SecondRoute = () => (
-    <SafeAreaView style={styles.container}>
-      <Text> Followed Trips</Text>
-      <View>{followedTripList}</View>
-    </SafeAreaView>
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <Text> Followed Trips</Text>
+        <View>{followedTripList}</View>
+      </SafeAreaView>
+    </ScrollView>
   );
 
   const layout = useWindowDimensions();
@@ -141,9 +145,9 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const renderTabBar = (props: any) => (
     <TabBar
       {...props}
-      activeColor={"white"}
+      activeColor={"#FFB703"}
       inactiveColor={"#023047"}
-      style={{ paddingTop: 55, backgroundColor: "#FFB703" }}
+      style={{ paddingTop: 55, backgroundColor: "white" }}
     />
   );
 
