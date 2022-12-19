@@ -31,7 +31,7 @@ import {
   PlayfairDisplay_800ExtraBold,
   PlayfairDisplay_400Regular,
   Roboto_500Medium,
-} from '@expo-google-fonts/dev'; //import to handle the Roboto font
+} from '@expo-google-fonts/dev'; //import fonts
 
 type LoginScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -54,6 +54,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   type dataProps = {
     result: boolean;
     error: string;
+    username: string;
+    email: string;
     profile_id: string;
     avatar: string;
   };
@@ -156,8 +158,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           // if user's details are correct, rerouting to ExploreScreen
           dispatch(
             updateUserProfile({
-              username,
-              email,
+              email: data.email,
+              username: data.username,
               avatar: data.avatar,
               profile_id: data.profile_id,
             })
@@ -187,7 +189,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   if (!fontsLoaded) {
     return null;
   }
-  navigation.navigate('TabNavigator', { screen: 'Explore' });
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -262,7 +264,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
           {error && <Text style={styles.error}>{error}</Text>}
           <Button style={styles.registerButton} onPress={handleSubmit}>
-            S'inscrire
+            Se connecter
           </Button>
           <View style={styles.registeredTextContainer}>
             <Text style={styles.registeredText}>Pas encore inscrit?</Text>
