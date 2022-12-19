@@ -135,10 +135,9 @@ function ExploreSwipe() {
 
 const styles = StyleSheet.create({
   container: {
-    height: '50%',
+    height: '48%',
   },
   title: {
-    marginTop: 0,
     marginLeft: 10,
     fontSize: 14,
     fontFamily: 'Inter_400Regular',
