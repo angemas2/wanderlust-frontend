@@ -53,7 +53,7 @@ function ExploreMap({ navigation }) {
       height: "50%",
       width: "100%",
       alignItems: "center",
-      marginTop: "7%"
+      marginTop: "7%",
     };
   } else {
     container = {
@@ -61,7 +61,7 @@ function ExploreMap({ navigation }) {
       height: "100%",
       width: "100%",
       alignItems: "center",
-      marginTop: "7%"
+      marginTop: "7%",
     };
   }
 
@@ -71,8 +71,7 @@ function ExploreMap({ navigation }) {
       height: "60%",
       width: "95%",
       borderRadius: 10,
-      marginTop: "3%"
-
+      marginTop: "3%",
     };
   } else {
     map = {
@@ -104,7 +103,7 @@ function ExploreMap({ navigation }) {
           console.log("data id list", data.data._id);
           ids.push(data.data._id);
           setIdsList(ids);
-          return ids
+          return ids;
         });
     });
   };
@@ -117,11 +116,9 @@ function ExploreMap({ navigation }) {
   //   dispatch(setSwipeVisibility());
   // }
 
-
   const wayPoints = likedPlace.map((e) => {
     return { latitude: e.latitude, longitude: e.longitude };
   });
-
 
   const intinaries =
     positionContext != null && likedPlace.length > 0 ? (
@@ -159,7 +156,6 @@ function ExploreMap({ navigation }) {
           );
         })
       : "";
-
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -224,7 +220,7 @@ function ExploreMap({ navigation }) {
                   km: distance,
                   map: duration,
                   photos: "",
-                  name: "Fun in Bruxelle test capsule angetest Demoday test5",
+                  name: "La capsule à Brubru test",
                   description:
                     "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
                   public: true,
@@ -253,7 +249,7 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: "flex-start",
-    
+
     marginLeft: 10,
     fontSize: 14,
     fontFamily: "Inter_400Regular",

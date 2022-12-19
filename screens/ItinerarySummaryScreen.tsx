@@ -17,7 +17,7 @@ import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in 
 import user from "../reducers/user";
 import { useSelector } from "react-redux";
 
-export default function ItineraryDetailsScreen({ route }: any) {
+export default function ItinerarySummaryScreen({ route }: any) {
   const { _id, profile_id, name, viewpoints_id, description, followers } =
     route.params;
 
@@ -25,8 +25,6 @@ export default function ItineraryDetailsScreen({ route }: any) {
   const user = useSelector((state: { user: any }) => state.user.value);
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
-
-  console.log(_id);
 
   const point =
     viewpoints_id.length > 0
@@ -44,17 +42,6 @@ export default function ItineraryDetailsScreen({ route }: any) {
         })
       : "";
 
-  const steps = viewpoints_id.map((data: any, i: number) => {
-    return (
-      <View style={styles.place} key={i}>
-        <Image source={{ uri: data.photos }} style={styles.placeimg}></Image>
-        <Text style={{ width: 150 }}>{data.name}</Text>
-      </View>
-    );
-  });
-
-  const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
-
   let map: any = useRef(null);
 
   async function fitMapToMarkers() {
@@ -68,45 +55,39 @@ export default function ItineraryDetailsScreen({ route }: any) {
     });
   }
 
-  const handleFollow = () => {
-    fetch("https://wanderlust-backend.vercel.app/itineraries/followers", {
-      method: "Put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.profile_id._id,
-        id: _id,
-      }),
-    });
-    console.log("followed");
-  };
+  const steps = viewpoints_id.map((data: any, i: number) => {
+    return (
+      <View style={styles.place} key={i}>
+        <Image source={{ uri: data.photos }} style={styles.placeimg}></Image>
+        <Text style={{ width: 150 }}>{data.name}</Text>
+      </View>
+    );
+  });
+
+  const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
   return (
     <SafeAreaView style={styles.container}>
       <Text
         style={{
+          fontSize: 20,
           fontWeight: "bold",
-          fontSize: 18,
           textAlign: "center",
-          width: "80%",
+          marginBottom: 30,
         }}
       >
-        {name}
+        {" "}
+        {name}{" "}
       </Text>
-      <Text
-        style={{
-          textAlign: "center",
-          width: "80%",
-          marginTop: 15,
-          marginBottom: 20,
-        }}
-      >
-        {description}
+      <Text style={{ textAlign: "center", marginBottom: 30, width: 350 }}>
+        {" "}
+        {description}{" "}
       </Text>
       <MapView
         ref={(ref) => (map = ref)}
         initialRegion={{
-          latitude: positionContext.latitude,
-          longitude: positionContext.longitude,
+          latitude: viewpoints_id[0].location.latitude,
+          longitude: viewpoints_id[0].location.longitude,
           latitudeDelta: 0.0522,
           longitudeDelta: 0.0421,
         }}
@@ -115,8 +96,8 @@ export default function ItineraryDetailsScreen({ route }: any) {
       >
         <MapViewDirections
           origin={{
-            latitude: positionContext.latitude,
-            longitude: positionContext.longitude,
+            latitude: viewpoints_id[0].location.latitude,
+            longitude: viewpoints_id[0].location.longitude,
           }}
           destination={{
             latitude: viewpoints_id[viewpoints_id.length - 1].location.latitude,
@@ -134,18 +115,7 @@ export default function ItineraryDetailsScreen({ route }: any) {
         />
         {point}
       </MapView>
-      <Pressable>
-        <Button
-          style={styles.startBtn}
-          onPress={() => {
-            handleFollow();
-          }}
-        >
-          Start
-        </Button>
-      </Pressable>
-
-      <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: 60 }}>
+      <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 15 }}>
         Itinerary Steps
       </Text>
       <ScrollView horizontal={true} style={styles.placesCont}>
@@ -160,7 +130,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    paddingTop: 80,
+    justifyContent: "center",
+    paddingTop: "20%",
   },
   placesCont: {
     display: "flex",
@@ -177,23 +148,5 @@ const styles = StyleSheet.create({
     width: 150,
     marginRight: 20,
     marginTop: 30,
-  },
-  startBtn: {
-    backgroundColor: "#FBBF13",
-    width: 80,
-    height: 80,
-    color: "white",
-    borderRadius: 50,
-    top: -35,
-    alignSelf: "center",
-    position: "absolute",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });
