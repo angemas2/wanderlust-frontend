@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
-
+import { horizontalScale, moderateScale, verticalScale } from '../modules/metrics';
 import { useFonts, Inter_400Regular, PlayfairDisplay_800ExtraBold } from '@expo-google-fonts/dev'; //import to handle the Roboto font
 
 type WelcomeScreenProps = {
@@ -40,7 +40,10 @@ export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
       <ImageBackground
         source={require('../assets/images/background.png')}
         style={styles.imageBackground}>
-        <Image style={styles.topPart} source={require('../assets/images/welcome-top-part.png')} />
+        <ImageBackground
+          style={styles.topPart}
+          source={require('../assets/images/welcome-top-part.png')}
+        />
         <Image style={styles.logo} source={require('../assets/images/logo.png')} />
         <View style={styles.center}>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
@@ -72,20 +75,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#182535',
   },
   imageBackground: {
-    width: '100%',
-    height: '95%',
+    width: horizontalScale(400),
+    height: verticalScale(720),
   },
   topPart: {
-    width: '100%',
+    width: horizontalScale(400),
+    height: verticalScale(330),
     bottom: 50,
     margin: 0,
   },
   logo: {
-    position: 'relative',
+    width: horizontalScale(200),
+    height: verticalScale(250),
     zIndex: 2,
     bottom: 240,
-    left: 105,
-    margin: 0,
+    marginLeft: 115,
   },
   center: {
     width: '90%',
@@ -108,7 +112,8 @@ const styles = StyleSheet.create({
   },
   button: {
     zIndex: 2,
-    width: '50%',
+    height: verticalScale(55),
+    width: horizontalScale(200),
     backgroundColor: '#FFB703',
     alignItems: 'center',
     padding: 15,
@@ -121,8 +126,9 @@ const styles = StyleSheet.create({
     color: '#023047',
   },
   bottomPart: {
-    width: '100%',
-    bottom: 80,
+    width: horizontalScale(400),
+    height: verticalScale(330),
+    bottom: 110,
     color: '#023047',
   },
 });
