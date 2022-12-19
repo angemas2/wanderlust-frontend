@@ -1,8 +1,6 @@
-
-import React, { useState, useContext, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile, UserState } from '../reducers/user';
-import { ObjectId } from 'mongoose';
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile, UserState } from "../reducers/user";
 
 import {
   Platform,

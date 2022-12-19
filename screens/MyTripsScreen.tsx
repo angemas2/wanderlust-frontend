@@ -26,7 +26,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   useEffect(() => {
     fetch(
-      `https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id._id}`
+      `https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -36,7 +36,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   useEffect(() => {
     fetch(
-      `https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id._id}`
+      `https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -46,7 +46,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   const tripList = trips.map((data: any, i) => {
     return (
-      <View style={styles.tripCont} key={i}>
+      <View style={styles.tripCont}>
         <Pressable
           onPress={() => {
             navigation.navigate("ItinerarySummary", { ...data });
