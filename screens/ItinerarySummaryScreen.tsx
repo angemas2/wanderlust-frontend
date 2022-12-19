@@ -17,7 +17,7 @@ import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in 
 import user from "../reducers/user";
 import { useSelector } from "react-redux";
 
-export default function ItineraryDetailsScreen({ route }: any) {
+export default function ItinerarySummaryScreen({ route }: any) {
   const { _id, profile_id, name, viewpoints_id, description, followers } =
     route.params;
 
@@ -25,8 +25,6 @@ export default function ItineraryDetailsScreen({ route }: any) {
   const user = useSelector((state: { user: any }) => state.user.value);
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
-
-  console.log(_id);
 
   const point =
     viewpoints_id.length > 0
@@ -55,35 +53,36 @@ export default function ItineraryDetailsScreen({ route }: any) {
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
-  const handleFollow = () => {
-    fetch("https://wanderlust-backend.vercel.app/itineraries/followers", {
-      method: "Put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.profile_id._id,
-        id: _id,
-      }),
-    });
-    console.log("followed");
-  };
-
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{name}</Text>
-      <Text>{description}</Text>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 30,
+        }}
+      >
+        {" "}
+        {name}{" "}
+      </Text>
+      <Text style={{ textAlign: "center", marginBottom: 30, width: 350 }}>
+        {" "}
+        {description}{" "}
+      </Text>
       <MapView
         initialRegion={{
-          latitude: positionContext.latitude,
-          longitude: positionContext.longitude,
+          latitude: viewpoints_id[0].location.latitude,
+          longitude: viewpoints_id[0].location.longitude,
           latitudeDelta: 0.0522,
           longitudeDelta: 0.0421,
         }}
-        style={{ width: "100%", height: "50%" }}
+        style={{ width: "95%", height: "40%" }}
       >
         <MapViewDirections
           origin={{
-            latitude: positionContext.latitude,
-            longitude: positionContext.longitude,
+            latitude: viewpoints_id[0].location.latitude,
+            longitude: viewpoints_id[0].location.longitude,
           }}
           destination={{
             latitude: viewpoints_id[viewpoints_id.length - 1].location.latitude,
@@ -101,18 +100,9 @@ export default function ItineraryDetailsScreen({ route }: any) {
         />
         {point}
       </MapView>
-      <Pressable>
-        <Button
-          style={styles.startBtn}
-          onPress={() => {
-            handleFollow();
-          }}
-        >
-          Start
-        </Button>
-      </Pressable>
-
-      <Text>Itinerary Steps</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 15 }}>
+        Itinerary Steps
+      </Text>
       <ScrollView horizontal={true} style={styles.placesCont}>
         {steps}
       </ScrollView>
@@ -125,7 +115,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    paddingTop: 80,
+    justifyContent: "center",
+    paddingTop: "20%",
   },
   placesCont: {
     display: "flex",
@@ -141,13 +132,6 @@ const styles = StyleSheet.create({
   place: {
     width: 150,
     marginRight: 20,
-    marginTop: 50,
-  },
-  startBtn: {
-    backgroundColor: "#FBBF13",
-    width: 70,
-    height: 70,
-    color: "white",
-    borderRadius: 50,
+    marginTop: 30,
   },
 });

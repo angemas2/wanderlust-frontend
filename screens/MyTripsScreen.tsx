@@ -46,7 +46,11 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const tripList = trips.map((data: any, i) => {
     return (
       <View style={styles.tripCont} key={i}>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("ItinerarySummary", { ...data });
+          }}
+        >
           <ImageBackground
             imageStyle={{ opacity: 0.3 }}
             source={{ uri: data.viewpoints_id[0]?.photos }}
@@ -76,7 +80,12 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const followedTripList = followedTrips.map((data: any, i) => {
     return (
       <View style={styles.tripCont} key={i}>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("ItinerarySummary", { ...data });
+         
+          }}
+        >
           <ImageBackground
             imageStyle={{ opacity: 0.3 }}
             source={{ uri: data.viewpoints_id[0]?.photos }}
@@ -165,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(2, 48, 71, 0.8)",
-    borderRadius:15,
+    borderRadius: 15,
   },
   imgBg: {
     display: "flex",
