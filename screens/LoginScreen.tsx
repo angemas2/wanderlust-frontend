@@ -57,7 +57,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     username: string;
     email: string;
     profile_id: string;
-    avatar: string;
+    picture: string;
   };
 
   //Snippet code to handle registration and connection with Google account
@@ -161,7 +161,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             updateUserProfile({
               email: data.email,
               username: data.username,
-              avatar: data.avatar,
+              picture: data.picture,
               profile_id: data.profile_id,
             })
           );
@@ -215,8 +215,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               onChangeText={(value) => setEmail(value)}
               value={email}
               variant="rounded"
-              bgColor="#023047"
-              opacity="0.7"
+              color="white"
+              bgColor="rgba(2, 48, 71, 0.7)"
               mx="3"
               w="100%"
               InputLeftElement={
@@ -233,8 +233,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               variant="rounded"
               placeholder="Mot de passe"
               color="white"
-              bgColor="#023047"
-              opacity="0.7"
+              bgColor="rgba(2, 48, 71, 0.7)"
+              mx="3"
               w="100%"
               type={show ? 'text' : 'password'}
               onChangeText={(value) => setPassword(value)}
@@ -354,7 +354,6 @@ const styles = StyleSheet.create({
     marginBottom: -60,
   },
   input: {
-    opacity: 0.6,
     fontFamily: 'Inter_300Light',
   },
   eyeIcon: {

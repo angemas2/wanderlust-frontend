@@ -19,7 +19,7 @@ export default function Header({ navigation }: HeaderProps) {
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Image style={styles.avatar} source={require('../assets/images/default.jpg')} />
         </TouchableOpacity>
-        <Text style={styles.username}>Pâtàcrêpe</Text>
+        <Text style={styles.username}>{user.username}</Text>
       </View>
     </SafeAreaView>
   );
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: '40%',
-    height: '80%',
+    height: '90%',
     borderRadius: 50,
   },
   username: {
