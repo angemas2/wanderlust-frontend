@@ -52,9 +52,10 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
   const [show, setShow] = useState(false); //allow user to show/hide password when typing it in form's field
 
   type dataUsersProps = {
-    //Datas props
     result: boolean;
     error: string;
+    username: string;
+    email: string;
     profile_id: string;
     avatar: string;
   };
@@ -73,13 +74,14 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       .then((response) => response.json())
       .then((data: dataUsersProps) => {
         if (!data.result) {
+          console.log(data);
           // error message displayed if both fields are empty, verification handled & returned by backend
           setError(data.error);
         } else {
           dispatch(
             updateUserProfile({
-              username,
-              email,
+              username: data.username,
+              email: data.email,
               avatar: data.avatar,
               profile_id: data.profile_id,
             })
@@ -89,8 +91,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         }
       });
   };
-
-  console.log(user);
 
   //Snippet code to handle registration and connection with Google account
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -128,7 +128,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             navigation.navigate('TabNavigator', { screen: 'Explore' });
             dispatch(
               updateUserProfile({
@@ -228,8 +227,8 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               onChangeText={(value) => setEmail(value)}
               value={email}
               variant="rounded"
-              bgColor="#023047"
-              opacity="0.7"
+              color="white"
+              bgColor="rgba(2, 48, 71, 0.7)"
               mx="3"
               w="100%"
               InputLeftElement={
@@ -249,8 +248,8 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               onChangeText={(value) => setUsername(value)}
               value={username}
               variant="rounded"
-              bgColor="#023047"
-              opacity="0.7"
+              color="white"
+              bgColor="rgba(2, 48, 71, 0.7)"
               mx="3"
               w="100%"
               InputLeftElement={
@@ -262,8 +261,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               variant="rounded"
               placeholder="Mot de passe"
               color="white"
-              bgColor="#023047"
-              opacity="0.7"
+              bgColor="rgba(2, 48, 71, 0.7)"
               w="100%"
               type={show ? 'text' : 'password'}
               onChangeText={(value) => setPassword(value)}
@@ -383,7 +381,6 @@ const styles = StyleSheet.create({
     marginBottom: -40,
   },
   input: {
-    opacity: 0.6,
     fontFamily: 'Inter_300Light',
   },
   eyeIcon: {
