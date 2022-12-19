@@ -19,23 +19,24 @@ import * as SplashScreen from 'expo-splash-screen';
 SplashScreen.preventAutoHideAsync();
 
 function ExploreMap({ navigation }) {
+
+  const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
   const dispatch = useDispatch();
-
-  const [idsList, setIdsList] = useState([]);
-  const [duration, setDuration] = useState(0);
-  const [distance, setDistance] = useState(0);
-
-  const GOOGLE_MAPS_APIKEY = 'AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk';
-
+  const visible = useSelector((state) => state.places.isSwipeVisible);
+  const likedPlace = useSelector((state) => state.places.liked);
+  const user = useSelector((state) => state.user.value);
   //Get the context define in App.tsx
   const positionContext = useContext(PositionContext);
-
   const userPosition = {
     latitude: positionContext.latitude,
     longitude: positionContext.longitude,
   };
 
-  const visible = useSelector((state) => state.places.isSwipeVisible);
+
+  const [idsList, setIdsList] = useState([]);
+  const [duration, setDuration] = useState(0);
+  const [distance, setDistance] = useState(0);
+
 
   let container = {};
   if (visible) {
@@ -75,12 +76,6 @@ function ExploreMap({ navigation }) {
     };
   }
 
-  const likedPlace = useSelector((state) => state.places.liked);
-  const user = useSelector((state) => state.user.value);
-
-  const test = likedPlace.map((e) => {
-    return { latitude: e.latitude, longitude: e.longitude };
-  });
 
   const getIds = () => {
     const ids = [];
@@ -108,8 +103,42 @@ function ExploreMap({ navigation }) {
     });
   };
 
-  const point =
-    likedPlace.length > 0
+
+  const handleVisible = () => {
+    dispatch(setSwipeVisibility());
+  };
+
+
+  // if(likedPlace.length === 0) {
+  //   dispatch(setSwipeVisibility());
+  // }
+
+
+  const intinaries = positionContext != null && likedPlace.length > 0 ? (
+    <MapViewDirections
+      origin={userPosition}
+      destination={{
+        latitude: likedPlace[likedPlace.length - 1].latitude,
+        longitude: likedPlace[likedPlace.length - 1].longitude,
+      }}
+      waypoints={wayPoints}
+      optimizeWaypoints={true}
+      apikey={GOOGLE_MAPS_APIKEY}
+      strokeWidth={4}
+      strokeColor="#219EBC"
+      precision="high"
+      mode="WALKING"
+      onReady={(result) => {
+        setDuration(result.duration);
+        setDistance(result.distance);
+      }}
+    />
+  ) : (
+    ""
+  );
+
+
+  const point = likedPlace.length > 0
       ? likedPlace.map((e, i) => {
           return (
             <Marker
@@ -121,51 +150,12 @@ function ExploreMap({ navigation }) {
         })
       : '';
 
-  const handleVisible = () => {
-    dispatch(setSwipeVisibility());
-  };
 
-  const intinaries =
-    positionContext != null && likedPlace.length > 0 ? (
-      <MapViewDirections
-        origin={userPosition}
-        destination={{
-          latitude: likedPlace[likedPlace.length - 1].latitude,
-          longitude: likedPlace[likedPlace.length - 1].longitude,
-        }}
-        waypoints={test}
-        optimizeWaypoints={true}
-        apikey={GOOGLE_MAPS_APIKEY}
-        strokeWidth={4}
-        strokeColor="#219EBC"
-        precision="high"
-        mode="WALKING"
-        onReady={(result) => {
-          setDuration(result.duration);
-          setDistance(result.distance);
-        }}
-      />
-    ) : (
-      ''
-    );
+      const wayPoints = likedPlace.map((e) => {
+        return { latitude: e.latitude, longitude: e.longitude };
+      });
 
-  console.log('user', user);
-
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
+      
   return (
     <View style={container} onLayout={onLayoutRootView}>
       <View style={styles.topContainer}>

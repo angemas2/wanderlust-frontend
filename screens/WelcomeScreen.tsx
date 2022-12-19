@@ -46,6 +46,9 @@ export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
         />
         <Image style={styles.logo} source={require('../assets/images/logo.png')} />
         <View style={styles.center}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.textButton}>Commencer à explorer</Text>
+          </TouchableOpacity>
           <View style={styles.titleContainer}>
             <Text style={{ ...styles.title, color: 'white' }}>Wander</Text>
             <Text style={{ ...styles.title, color: '#FFB703' }}>Lust</Text>
@@ -55,9 +58,6 @@ export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             autour de vous
           </Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.textButton}>Commencer à explorer</Text>
-        </TouchableOpacity>
         <Image
           style={styles.bottomPart}
           source={require('../assets/images/welcome-bottom-part.png')}
@@ -118,8 +118,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderRadius: 5,
-    marginLeft: 100,
-    top: 50,
+    marginLeft: 110,
+    marginTop: 20
   },
   textButton: {
     fontFamily: 'Inter_400Regular',
