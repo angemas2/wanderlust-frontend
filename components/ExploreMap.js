@@ -20,6 +20,7 @@ import { setSwipeVisibility } from "../reducers/places";
 import _ from "lodash";
 import { UserState } from "../reducers/user";
 
+
 import {
   useFonts,
   Inter_400Regular,
@@ -34,7 +35,6 @@ function ExploreMap({ navigation }) {
   const dispatch = useDispatch();
   const visible = useSelector((state) => state.places.isSwipeVisible);
   const likedPlace = useSelector((state) => state.places.liked);
-  const user = useSelector((state) => state.user.value);
   //Get the context define in App.tsx
   const positionContext = useContext(PositionContext);
   const userPosition = {
@@ -82,6 +82,7 @@ function ExploreMap({ navigation }) {
     };
   }
 
+
   const getIds = () => {
     return likedPlace.map((data) => {
       fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
@@ -109,6 +110,7 @@ function ExploreMap({ navigation }) {
         });
     });
   };
+
 
   const createItinerary = () => {
     getIds();
@@ -201,6 +203,7 @@ function ExploreMap({ navigation }) {
     return null;
   }
 
+
   return (
     <View style={container} onLayout={onLayoutRootView}>
       <View style={styles.topContainer}>
@@ -236,13 +239,16 @@ function ExploreMap({ navigation }) {
       <Pressable
         disabled={!canAdd}
         style={styles.btn}
-        onPress={async () => createItinerary()}
+
+        onPress={() => navigation.navigate("ExploreDetails")}
+
       >
         <Text>Start exploring</Text>
       </Pressable>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   topContainer: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -8,12 +8,12 @@ import {
   useWindowDimensions,
   ImageBackground,
   ScrollView,
-} from "react-native";
-import { useSelector } from "react-redux";
-import { UserState } from "../reducers/user";
-import { NavigationProp, ParamListBase } from "@react-navigation/native";
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import { UserState } from '../reducers/user';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-import { TabView, TabBar, SceneMap } from "react-native-tab-view";
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 type NavigationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -25,9 +25,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const [followedTrips, setFollowedTrips] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`
-    )
+    fetch(`https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`)
       .then((response) => response.json())
       .then((data) => {
         setTrips(data.data);
@@ -35,9 +33,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   }, [trips]);
 
   useEffect(() => {
-    fetch(
-      `https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`
-    )
+    fetch(`https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`)
       .then((response) => response.json())
       .then((data) => {
         setFollowedTrips(data.data);
@@ -49,25 +45,22 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
       <View style={styles.tripCont} key={i}>
         <Pressable
           onPress={() => {
-            navigation.navigate("ItinerarySummary", { ...data });
-          }}
-        >
+            navigation.navigate('ItinerarySummary', { ...data });
+          }}>
           <ImageBackground
             imageStyle={{ opacity: 0.3 }}
             source={{ uri: data.viewpoints_id[0]?.photos }}
-            style={styles.imgBg}
-          >
+            style={styles.imgBg}>
             <View
               style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={styles.tripTitle}>{data.name}</Text>
               <View style={styles.itineraryDatas}>
-                <Text style={{ color: "white" }}>
+                <Text style={{ color: 'white' }}>
                   {data.km.toFixed(2)} km | {data.viewpoints_id.length} spots
                 </Text>
               </View>
@@ -83,25 +76,22 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
       <View style={styles.tripCont} key={i}>
         <Pressable
           onPress={() => {
-            navigation.navigate("ItinerarySummary", { ...data });
-          }}
-        >
+            navigation.navigate('ItinerarySummary', { ...data });
+          }}>
           <ImageBackground
             imageStyle={{ opacity: 0.3 }}
             source={{ uri: data.viewpoints_id[0]?.photos }}
-            style={styles.imgBg}
-          >
+            style={styles.imgBg}>
             <View
               style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={styles.tripTitle}>{data.name}</Text>
               <View style={styles.itineraryDatas}>
-                <Text style={{ color: "white" }}>
+                <Text style={{ color: 'white' }}>
                   {data.km.toFixed(2)} km | {data.viewpoints_id.length} spots
                 </Text>
               </View>
@@ -133,8 +123,8 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "first", title: "Custom" },
-    { key: "second", title: "Followed" },
+    { key: 'first', title: 'Custom' },
+    { key: 'second', title: 'Followed' },
   ]);
 
   const renderScene = SceneMap({
@@ -145,9 +135,9 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const renderTabBar = (props: any) => (
     <TabBar
       {...props}
-      activeColor={"#FFB703"}
-      inactiveColor={"#023047"}
-      style={{ paddingTop: 55, backgroundColor: "white" }}
+      activeColor={'#FFB703'}
+      inactiveColor={'#023047'}
+      style={{ paddingTop: 55, backgroundColor: 'white' }}
     />
   );
 
@@ -165,39 +155,39 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
     paddingTop: 50,
   },
   tripCont: {
-    width: "90%",
+    width: '90%',
     height: 200,
     marginTop: 30,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(2, 48, 71, 0.8)",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(2, 48, 71, 0.8)',
     borderRadius: 15,
   },
   imgBg: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
   tripTitle: {
     fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-    width: "90%",
-    color: "white",
+    fontWeight: 'bold',
+    textAlign: 'center',
+    width: '90%',
+    color: 'white',
   },
   itineraryDatas: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     marginTop: 40,
   },
   tabView: {
