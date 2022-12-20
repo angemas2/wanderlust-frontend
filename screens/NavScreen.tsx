@@ -146,8 +146,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} title="Nav" />
-      <Text style={styles.title}>Let's Explore</Text>
+      <Header navigation={navigation} title="Explore!" />
       <MapView
         initialRegion={{
           latitude: positionContext?.latitude,
@@ -242,18 +241,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  title: {
-    paddingTop: 60,
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginBottom: 30,
-    color: '#023047',
-    textAlign: 'center',
-  },
   map: {
-    height: '45%',
+    height: '40%',
     width: '95%',
     alignSelf: 'center',
+    marginTop:20,
   },
   desc: {
     fontSize: 14,
