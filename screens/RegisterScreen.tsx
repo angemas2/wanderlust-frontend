@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile, UserState } from '../reducers/user';
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile, UserState } from "../reducers/user";
 import {
   Platform,
   KeyboardAvoidingView,
@@ -11,12 +11,12 @@ import {
   View,
   Image,
   TouchableOpacity,
-} from 'react-native';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { Box, Input, Button, Icon } from 'native-base';
-import { MaterialIcons } from '@expo/vector-icons'; //import icons displayed in form's fields
+} from "react-native";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { Box, Input, Button, Icon } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in form's fields
 
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
   Montserrat_700Bold,
@@ -27,11 +27,11 @@ import {
   PlayfairDisplay_800ExtraBold,
   PlayfairDisplay_400Regular,
   Roboto_500Medium,
-} from '@expo-google-fonts/dev'; //import to handle the Roboto font
+} from "@expo-google-fonts/dev"; //import to handle the Roboto font
 
-import * as Google from 'expo-auth-session/providers/google';
-import * as Facebook from 'expo-auth-session/providers/facebook';
-import { ResponseType } from 'expo-auth-session';
+import * as Google from "expo-auth-session/providers/google";
+import * as Facebook from "expo-auth-session/providers/facebook";
+import { ResponseType } from "expo-auth-session";
 
 type RegisterScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -44,11 +44,11 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   const dispatch = useDispatch();
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [error, setError] = useState(''); //display error return by backend on email registration
+  const [error, setError] = useState(""); //display error return by backend on email registration
   const [show, setShow] = useState(false); //allow user to show/hide password when typing it in form's field
 
   type dataUsersProps = {
@@ -62,9 +62,9 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   // function to handle the registration of the user
   const handleSubmit = () => {
-    fetch('https://wanderlust-backend.vercel.app/users/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch("https://wanderlust-backend.vercel.app/users/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: username,
         email: email,
@@ -87,72 +87,82 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             })
           );
 
-          navigation.navigate('TabNavigator', { screen: 'Explore' });
+          navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
   };
 
   //Snippet code to handle registration and connection with Google account
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: '917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com',
+    expoClientId:
+      "917846904757-l9mj7rm5scepeh5pfil3b1r0ae5164j9.apps.googleusercontent.com",
   });
 
   const fetchGoogleUserInfo = async (token: any) => {
-    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return await response.json();
   };
 
   useEffect(() => {
     (async () => {
-      if (response?.type === 'success') {
+      if (response?.type === "success") {
         const { authentication } = response;
         const accessToken = authentication?.accessToken;
-        const user = await fetchGoogleUserInfo(accessToken);
-        setUsername(user.name);
-        setEmail(user.email);
-        let avatar = user.picture;
-        console.log(user.name)
-        fetch('https://wanderlust-backend.vercel.app/users/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: username,
-            email: email,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("data",data)
-            navigation.navigate('TabNavigator', { screen: 'Explore' });
+        fetchGoogleUserInfo(accessToken).then(async (userData) => {
+          console.log(userData);
+          setUsername(userData.name);
+          setEmail(userData.email);
+          console.log(userData.name);
+          const postData = fetch(
+            "https://wanderlust-backend.vercel.app/users/google",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: userData.name,
+                email: userData.email,
+              }),
+            }
+          );
 
-            dispatch(
-              updateUserProfile({
-                username,
-                email,
-                avatar: '',
-                profile_id: data.profile_id,
-              })
-            );
-          });
+          const data = (await postData).json();
+
+          const userDataFromAPI = await data;
+          console.log("--------", userDataFromAPI);
+
+          const { profile_id } = userDataFromAPI;
+          dispatch(
+            updateUserProfile({
+              username: userData.name,
+              email: userData.email,
+              avatar: "",
+              profile_id,
+            })
+          );
+          navigation.navigate("TabNavigator", { screen: "Explore" });
+        });
       }
     })();
   }, [response]);
 
   // Snippet code to handle registration with Facebook account
   const [fbrequest, fbresponse, fbpromptAsync] = Facebook.useAuthRequest({
-    clientId: '987336189307276',
+    clientId: "987336189307276",
     responseType: ResponseType.Code,
   });
 
   const fbtoken: string =
-    'EAAOBZBh7WaYwBACgvdCUy9qy9QrSeDnqmkK654ex0Am5DUWYKJZBL42FJJLN3qwgXdREzSAVqN1keFS13GWO78dTEW9fT2KyuPuCflMliIxCY1J8DyzHMMvRoZCgUuDb77847B6Mcsm9516yDBPtFWBO2RJADRZBLLZBo2lwSZB7FxlrE3sDI7hKLbJLZCflCREMKHlrRpG3QZDZD';
+    "EAAOBZBh7WaYwBACgvdCUy9qy9QrSeDnqmkK654ex0Am5DUWYKJZBL42FJJLN3qwgXdREzSAVqN1keFS13GWO78dTEW9fT2KyuPuCflMliIxCY1J8DyzHMMvRoZCgUuDb77847B6Mcsm9516yDBPtFWBO2RJADRZBLLZBo2lwSZB7FxlrE3sDI7hKLbJLZCflCREMKHlrRpG3QZDZD";
 
   const facebookUserInfo = async (token: string) => {
     const response = await fetch(
@@ -163,14 +173,14 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   useEffect(() => {
     (async () => {
-      if (fbresponse?.type === 'success') {
+      if (fbresponse?.type === "success") {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
         setUsername(user.first_name);
         setEmail(user.email);
-        fetch('https://wanderlust-backend.vercel.app/users/facebook', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        fetch("https://wanderlust-backend.vercel.app/users/facebook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             username: username,
             email: email,
@@ -178,7 +188,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         })
           .then((response) => response.json())
           .then(() => {
-            navigation.navigate('TabNavigator', { screen: 'Explore' });
+            navigation.navigate("TabNavigator", { screen: "Explore" });
           });
       }
     })();
@@ -209,15 +219,19 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      onLayout={onLayoutRootView}>
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      onLayout={onLayoutRootView}
+    >
       <ImageBackground
-        source={require('../assets/images/background.png')}
-        style={styles.imageBackground}>
+        source={require("../assets/images/background.png")}
+        style={styles.imageBackground}
+      >
         <View style={styles.contentContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>INSCRIPTION</Text>
-            <Text style={styles.subtitle}>S'inscrire avec une adresse e-mail</Text>
+            <Text style={styles.subtitle}>
+              S'inscrire avec une adresse e-mail
+            </Text>
           </View>
 
           <Box alignItems="center" style={styles.boxStyle}>
@@ -256,7 +270,12 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               mx="3"
               w="100%"
               InputLeftElement={
-                <Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="#8ECAE6" />
+                <Icon
+                  as={<MaterialIcons name="person" />}
+                  size={5}
+                  ml="2"
+                  color="#8ECAE6"
+                />
               }
             />
             <Input
@@ -266,12 +285,12 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               color="white"
               bgColor="rgba(2, 48, 71, 0.7)"
               w="100%"
-              type={show ? 'text' : 'password'}
+              type={show ? "text" : "password"}
               onChangeText={(value) => setPassword(value)}
               value={password}
               InputLeftElement={
                 <Icon
-                  as={<MaterialIcons name={'lock-outline'} />}
+                  as={<MaterialIcons name={"lock-outline"} />}
                   style={styles.lockIcon}
                   size={5}
                   mr="2"
@@ -281,7 +300,11 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               InputRightElement={
                 <Pressable onPress={() => setShow(!show)}>
                   <Icon
-                    as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
+                    as={
+                      <MaterialIcons
+                        name={show ? "visibility" : "visibility-off"}
+                      />
+                    }
                     style={styles.eyeIcon}
                     size={5}
                     mr="2"
@@ -298,7 +321,10 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           </Button>
           <View style={styles.registeredTextContainer}>
             <Text style={styles.registeredText}>Déjà inscrit ?</Text>
-            <Text style={styles.pushHere} onPress={() => navigation.navigate('Login')}>
+            <Text
+              style={styles.pushHere}
+              onPress={() => navigation.navigate("Login")}
+            >
               Appuyez ici
             </Text>
           </View>
@@ -314,9 +340,10 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               disabled={!request}
               onPress={() => {
                 promptAsync();
-              }}>
+              }}
+            >
               <Image
-                source={require('../assets/images/google_logo.png')}
+                source={require("../assets/images/google_logo.png")}
                 style={styles.googleLogo}
               />
               <Text style={styles.googleText}>se connecter avec Google</Text>
@@ -326,17 +353,23 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               disabled={!fbrequest}
               onPress={() => {
                 fbpromptAsync();
-              }}>
+              }}
+            >
               <Image
-                source={require('../assets/images/facebook_logo.png')}
+                source={require("../assets/images/facebook_logo.png")}
                 style={styles.facebookLogo}
               />
-              <Text style={styles.facebookText}>se connecter avec Facebook</Text>
+              <Text style={styles.facebookText}>
+                se connecter avec Facebook
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Image source={require('../assets/images/logowithtext.png')} style={styles.logo} />
+        <Image
+          source={require("../assets/images/logowithtext.png")}
+          style={styles.logo}
+        />
       </ImageBackground>
     </KeyboardAvoidingView>
   );
@@ -345,46 +378,46 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#182535',
+    backgroundColor: "#182535",
   },
   imageBackground: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
   },
   contentContainer: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '80%',
-    height: '90%',
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "80%",
+    height: "90%",
     marginTop: 60,
   },
   titleContainer: {
     top: 50,
   },
   title: {
-    color: 'white',
+    color: "white",
     fontSize: 46,
-    fontFamily: 'PlayfairDisplay_800ExtraBold',
+    fontFamily: "PlayfairDisplay_800ExtraBold",
   },
   subtitle: {
     fontSize: 16,
     lineHeight: 19,
-    color: '#9EC4DB',
+    color: "#9EC4DB",
     opacity: 0.8,
     marginTop: 10,
     marginBottom: 20,
-    fontFamily: 'Inter_400Regular',
+    fontFamily: "Inter_400Regular",
   },
   boxStyle: {
-    width: '100%',
-    height: '23%',
-    justifyContent: 'space-between',
+    width: "100%",
+    height: "23%",
+    justifyContent: "space-between",
     marginBottom: -40,
   },
   input: {
-    fontFamily: 'Inter_300Light',
+    fontFamily: "Inter_300Light",
   },
   eyeIcon: {
     right: 15,
@@ -394,59 +427,59 @@ const styles = StyleSheet.create({
   },
   error: {
     marginBottom: 20,
-    color: 'red',
+    color: "red",
   },
   registerButton: {
-    width: '100%',
+    width: "100%",
     height: 45,
     borderRadius: 50,
-    fontFamily: 'Inter_500Medium',
+    fontFamily: "Inter_500Medium",
     marginBottom: -15,
   },
   registeredTextContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: -35,
   },
   registeredText: {
-    color: 'white',
-    fontFamily: 'Montserrat_500Medium',
+    color: "white",
+    fontFamily: "Montserrat_500Medium",
     marginBottom: -35,
     marginRight: 10,
   },
   pushHere: {
-    fontFamily: 'Montserrat_700Bold',
-    color: 'white',
+    fontFamily: "Montserrat_700Bold",
+    color: "white",
   },
   midMenu: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: -50,
   },
   line: {
     height: 1,
-    width: '40%',
+    width: "40%",
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: "white",
   },
   connectionOptionsText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
   },
   socialsButtonsContainer: {
-    width: '100%',
+    width: "100%",
     height: 100,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   googleButton: {
-    backgroundColor: 'white',
-    width: '100%',
+    backgroundColor: "white",
+    width: "100%",
     height: 40,
     borderRadius: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   googleLogo: {
     marginTop: 8,
@@ -455,18 +488,18 @@ const styles = StyleSheet.create({
     marginLeft: 18,
   },
   googleText: {
-    fontFamily: 'Roboto_500Medium',
+    fontFamily: "Roboto_500Medium",
     fontSize: 14,
 
-    color: 'rgba(0, 0, 0, 0.54)',
+    color: "rgba(0, 0, 0, 0.54)",
   },
   facebookButton: {
-    backgroundColor: '#1A77F2',
-    width: '100%',
+    backgroundColor: "#1A77F2",
+    width: "100%",
     height: 40,
     borderRadius: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   facebookLogo: {
     width: 25,
@@ -478,8 +511,8 @@ const styles = StyleSheet.create({
   },
   facebookText: {
     fontSize: 14,
-    color: 'white',
-    fontFamily: 'Montserrat_500Medium',
+    color: "white",
+    fontFamily: "Montserrat_500Medium",
   },
   logo: {
     width: 200,

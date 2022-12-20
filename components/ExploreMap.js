@@ -45,6 +45,7 @@ function ExploreMap({ navigation }) {
   const [idsList, setIdsList] = useState([]);
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
+  const [canAdd, setCanAdd] = useState(false);
 
   let container = {};
   if (visible) {
@@ -81,8 +82,7 @@ function ExploreMap({ navigation }) {
     };
   }
 
-  const getIds = async () => {
-    const ids = [];
+  const getIds = () => {
     return likedPlace.map((data) => {
       fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
@@ -103,9 +103,38 @@ function ExploreMap({ navigation }) {
           console.log("data id list", data.data._id);
           ids.push(data.data._id);
           setIdsList(ids);
-          return ids;
+          if (likedPlace.length === idsList.length) {
+            setCanAdd(true);
+          }
         });
     });
+  };
+
+  const createItinerary = () => {
+    getIds();
+
+    if (idsList.length === likedPlace.length) {
+      fetch("https://wanderlust-backend.vercel.app/itineraries/addItinerary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile_id: user.profile_id,
+          viewpointsList: idsList,
+          km: distance,
+          map: duration,
+          photos: "",
+          name: "La capsuletest await fintest15",
+          description:
+            "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
+          public: false,
+          custom: true,
+          isSponsor: false,
+          city: "Bruxelles",
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
   };
 
   const handleVisible = () => {
@@ -205,35 +234,9 @@ function ExploreMap({ navigation }) {
         {intinaries}
       </MapView>
       <Pressable
+        disabled={!canAdd}
         style={styles.btn}
-        onPress={async () => {
-          await getIds().then(() => {
-            idsList.length > 0 &&
-              fetch(
-                "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    profile_id: user.profile_id,
-                    viewpointsList: idsList,
-                    km: distance,
-                    map: duration,
-                    photos: "",
-                    name: "La capsuletest await fintest15",
-                    description:
-                      "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-                    public: false,
-                    custom: true,
-                    isSponsor: false,
-                    city: "Bruxelles",
-                  }),
-                }
-              )
-                .then((response) => response.json())
-                .then((data) => console.log(data));
-          });
-        }}
+        onPress={async () => createItinerary()}
       >
         <Text>Start exploring</Text>
       </Pressable>
