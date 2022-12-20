@@ -13,9 +13,10 @@ export default function ProfileScreen() {
   const [testNewPassword, setTestNewPassword] = useState('');
 
   const user = useSelector((state: { user: UserState }) => state.user.value);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('../assets/images/default.jpg')} style={styles.avatar} />
+      <Image source={{ uri: user.picture }} style={styles.avatar} />
       <Text>{user.username}</Text>
 
       <Box>

@@ -40,7 +40,7 @@ function ExploreSwipe() {
   useEffect(() => {
     placesData.length > 0
       ? placesData.map((e, i) => {
-        console.log(e)
+          console.log(e);
           let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
           dispatch(
             getDefaultPlaces({
