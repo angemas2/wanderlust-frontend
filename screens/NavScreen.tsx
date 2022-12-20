@@ -1,16 +1,23 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, View, Image, ScrollView, Pressable } from 'react-native';
-import getDistance from '../modules/getDistance';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCirclePlay, faStar } from '@fortawesome/free-solid-svg-icons';
-import PositionContext from '../utils/context';
-import MapView from 'react-native-maps';
-import { Marker, Polyline } from 'react-native-maps';
-import { Text } from 'native-base';
-import MapViewDirections from 'react-native-maps-alternatives-directions';
-import * as Location from 'expo-location';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import Header from '../components/Header';
+import React, { useContext, useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
+import getDistance from "../modules/getDistance";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCirclePlay, faStar } from "@fortawesome/free-solid-svg-icons";
+import PositionContext from "../utils/context";
+import MapView from "react-native-maps";
+import { Marker, Polyline } from "react-native-maps";
+import { Text } from "native-base";
+import MapViewDirections from "react-native-maps-alternatives-directions";
+import * as Location from "expo-location";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import Header from "../components/Header";
 
 type NavScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -23,7 +30,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
   const [places, setPlaces] = useState([]);
   const [distance, setDistance] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
-  const [direction, setDirection] = useState<string>('');
+  const [direction, setDirection] = useState<string>("");
 
   const [destinationCoord, setDestinationCoord] = useState<{
     latitude: number;
@@ -42,7 +49,11 @@ export default function NavScreen({ navigation }: NavScreenProps) {
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
   //Check if coord destination is empty if not show Marker
-  const destination = destinationCoord?.latitude ? <Marker coordinate={destinationCoord} /> : '';
+  const destination = destinationCoord?.latitude ? (
+    <Marker coordinate={destinationCoord} />
+  ) : (
+    ""
+  );
 
   // const url = `http://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="attraction"](around:10000,${positionContext?.latitude},${positionContext?.longitude});out body;`;
 
@@ -75,7 +86,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (status === 'granted') {
+      if (status === "granted") {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           setOrigin({
             latitude: location.coords.latitude,
@@ -89,23 +100,24 @@ export default function NavScreen({ navigation }: NavScreenProps) {
   const placestosee =
     !loading &&
     places?.map((data: any, i) => {
-      let photo = '';
+      let photo = "";
       if (data.photos[0]) {
         photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photo_reference=${data.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
       }
       return (
         <View style={styles.place} key={i}>
-          {photo !== '' ? (
+          {photo !== "" ? (
             <Image style={styles.placeimg} source={{ uri: photo }}></Image>
           ) : (
             <Image
               style={styles.placeimg}
-              source={require('../assets/images/background.png')}></Image>
+              source={require("../assets/images/background.png")}
+            ></Image>
           )}
           <Text style={styles.rating}>
             <FontAwesomeIcon
               icon={faStar}
-              style={{ marginRight: 30, color: '#FFB703' }}
+              style={{ marginRight: 30, color: "#FFB703" }}
               size={11}
             />
             {data.rating}
@@ -114,17 +126,23 @@ export default function NavScreen({ navigation }: NavScreenProps) {
             <Text
               isTruncated
               maxW="300"
-              style={{ fontSize: 10, fontWeight: 'bold', marginLeft: 5,marginBottom:5 }}>
+              style={{
+                fontSize: 10,
+                fontWeight: "bold",
+                marginLeft: 5,
+                marginBottom: 5,
+              }}
+            >
               {data.name}
             </Text>
             <Text
               style={{
                 fontSize: 12,
-                color: '#FFB703',
+                color: "#FFB703",
                 marginLeft: 5,
                 marginRight: 15,
-               
-              }}>
+              }}
+            >
               {positionContext &&
                 getDistance(
                   positionContext?.latitude,
@@ -132,12 +150,20 @@ export default function NavScreen({ navigation }: NavScreenProps) {
                   positionContext?.longitude,
                   data.geometry.location.lng
                 )}
-              {'km  '}
+              {"km  "}
               <Pressable
                 onPress={() => {
-                  handleNavigateToPlace(data.geometry.location.lat, data.geometry.location.lng);
-                }}>
-                <FontAwesomeIcon icon={faCirclePlay} style={{ marginLeft: 40, color: '#FFB703' }} size={20} />
+                  handleNavigateToPlace(
+                    data.geometry.location.lat,
+                    data.geometry.location.lng
+                  );
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCirclePlay}
+                  style={{ marginLeft: 40, color: "#FFB703" }}
+                  size={20}
+                />
               </Pressable>
             </Text>
           </View>
@@ -155,14 +181,17 @@ export default function NavScreen({ navigation }: NavScreenProps) {
           latitudeDelta: 0.0522,
           longitudeDelta: 0.0421,
         }}
-        style={styles.map}>
+        style={styles.map}
+        showsUserLocation={true}
+        followsUserLocation={true}
+      >
         <Marker
           draggable
           coordinate={{
             latitude: origin.latitude,
             longitude: origin.longitude,
           }}
-          pinColor={'#FFB703'}
+          pinColor={"#FFB703"}
           onDragEnd={(e) => {
             setOrigin({
               latitude: e.nativeEvent.coordinate.latitude,
@@ -183,11 +212,16 @@ export default function NavScreen({ navigation }: NavScreenProps) {
           mode="WALKING"
           onReady={(result) => {
             let maneuver;
-            let step = result.legs[0].steps[0].distance.text.includes('km') ? 'km' : 'm';
-            if (step === 'km' && result.legs[0].steps[0].distance.value < 0.3) {
+            let step = result.legs[0].steps[0].distance.text.includes("km")
+              ? "km"
+              : "m";
+            if (step === "km" && result.legs[0].steps[0].distance.value < 0.3) {
               //@ts-ignore
               maneuver = `in ${result?.legs[0]?.steps[1].distance.text} ${result?.legs[0]?.steps[1]?.maneuver}`;
-            } else if (step === 'm' && result.legs[0].steps[0].distance.value < 30) {
+            } else if (
+              step === "m" &&
+              result.legs[0].steps[0].distance.value < 30
+            ) {
               //@ts-ignore
               maneuver = `in ${result?.legs[0]?.steps[1]?.distance.text} ${result.legs[0].steps[1].maneuver}`;
             } else {
@@ -199,26 +233,29 @@ export default function NavScreen({ navigation }: NavScreenProps) {
             setDuration(result.duration);
             setDirection(maneuver);
           }}
-          onStart={(x) => console.log('started', x)}
+          onStart={(x) => console.log("started", x)}
         />
       </MapView>
       {distance === 0 ? (
-        ''
+        ""
       ) : (
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 300,
 
-            backgroundColor: 'rgba(2, 48, 71, 0.8)',
+            backgroundColor: "rgba(2, 48, 71, 0.8)",
 
             padding: 10,
             borderTopRightRadius: 15,
             borderBottomRightRadius: 15,
-          }}>
-          <Text style={{ color: 'white' }}>Distance:{distance} km </Text>
-          <Text style={{ color: 'white' }}>Duration: {duration.toFixed(0)}</Text>
-          <Text style={{ color: 'white' }}>Direction: {direction}</Text>
+          }}
+        >
+          <Text style={{ color: "white" }}>Distance:{distance} km </Text>
+          <Text style={{ color: "white" }}>
+            Duration: {duration.toFixed(0)}
+          </Text>
+          <Text style={{ color: "white" }}>Direction: {direction}</Text>
         </View>
       )}
 
@@ -226,7 +263,8 @@ export default function NavScreen({ navigation }: NavScreenProps) {
         <View style={styles.aroundContainer}>
           <Text style={styles.subtitle}>Around Me</Text>
           <Text style={styles.desc}>
-            Let yourself be guided by our travel buddy & discover the hidden gems around you
+            Let yourself be guided by our travel buddy & discover the hidden
+            gems around you
           </Text>
           <ScrollView horizontal={true} style={styles.placesCont}>
             {!loading && placestosee}
