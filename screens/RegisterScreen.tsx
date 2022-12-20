@@ -118,6 +118,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         setUsername(user.name);
         setEmail(user.email);
         let avatar = user.picture;
+        console.log(user.name)
         fetch('https://wanderlust-backend.vercel.app/users/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -128,6 +129,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         })
           .then((response) => response.json())
           .then((data) => {
+            console.log("data",data)
             navigation.navigate('TabNavigator', { screen: 'Explore' });
 
             dispatch(
