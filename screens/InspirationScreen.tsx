@@ -3,6 +3,7 @@ import { SafeAreaView, Text, StyleSheet, View, ImageBackground, Pressable } from
 import { Box, Input, Button, Icon, ScrollView } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import Header from '../components/Header';
 
 type InspirationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
