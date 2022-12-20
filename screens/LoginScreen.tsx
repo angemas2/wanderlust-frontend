@@ -99,8 +99,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           }),
         })
           .then((response) => response.json())
-          .then(() => {
-            login(username);
+          .then((data: dataProps) => {
+            dispatch(
+              updateUserProfile({
+                email: data.email,
+                username: data.username,
+                picture: data.profile_id.picture,
+                profile_id: data.profile_id._id,
+              })
+            );
             navigation.navigate('TabNavigator', { screen: 'Explore' });
           });
       }
@@ -143,8 +150,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           }),
         })
           .then((response) => response.json())
-          .then(() => {
-            login(username);
+          .then((data: dataProps) => {
+            dispatch(
+              updateUserProfile({
+                email: data.email,
+                username: data.username,
+                picture: data.profile_id.picture,
+                profile_id: data.profile_id._id,
+              })
+            );
             navigation.navigate('TabNavigator', { screen: 'Explore' });
           });
       }
