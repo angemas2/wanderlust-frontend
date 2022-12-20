@@ -7,7 +7,7 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
 
-export default function ExploreDetailsScreen() {
+export default function ExploreDetailsScreen({navigation}) {
   const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
 
 
@@ -107,10 +107,6 @@ export default function ExploreDetailsScreen() {
             });
         });
       };
-console.log(status)
-
-
-      let test
 
 
   return (
@@ -135,40 +131,12 @@ console.log(status)
         {point}
         {intinaries}
       </MapView>
-      {test}
       <Pressable style={styles.startBtn}
       onPress= {async () => {
           setStatus(!status)
           status?
            getIds().then(() => {
-             console.log("fetch", idsList);
-             fetch(
-               "https:wanderlust-backend.vercel.app/itineraries/addItinerary",
-               {
-                 method: "POST",
-                 headers: { "Content-Type": "application/json" },
-                 body: JSON.stringify({
-                   profile_id: user.profile_id,
-                   viewpointsList: idsList,
-                   km: distance,
-                   map: duration,
-                   photos: "",
-                   name: "Fun in Bruxelle test capsule angetest Demoday test7",
-                   description:
-                     "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-                   public: true,
-                   custom: true,
-                   isSponsor: false,
-                   city: "Bruxelles",
-                 }),
-               }
-               )
-               .then((response) => response.json())
-               .then((data) => console.log(data))
-               styles.map = {display: "none"}
-               styles.startBtn = {display: "none"}
-               test = <Text>Hello</Text>
-               ;
+               navigation.navigate("ExploreSave", {idsList, distance, duration})
            }): console.log("No api call for this")
          }}
       >
