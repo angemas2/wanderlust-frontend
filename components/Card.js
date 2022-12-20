@@ -48,7 +48,7 @@ function Card(props) {
       <ImageBackground
         source={{ uri: props.card.photo }}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.7 }}
+        imageStyle={{ opacity: 0.5 }}
         style={styles.image}>
         {props.card && <Text style={styles.text}>{props.card.name}</Text>}
         <View style={styles.btnContainer}>
