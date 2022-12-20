@@ -37,6 +37,7 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
             <Marker
               key={i}
               title={e.name}
+              
               coordinate={{
                 latitude: e.location.latitude,
                 longitude: e.location.longitude,
@@ -132,13 +133,14 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
               viewpoints_id[viewpoints_id.length - 1].location.longitude,
           }}
           waypoints={waypoints}
+    
           optimizeWaypoints={true}
           apikey={GOOGLE_MAPS_APIKEY}
           strokeWidth={4}
           strokeColor="#219EBC"
           precision="high"
           mode="WALKING"
-          onReady={(result) => console.log(result.distance)}
+          onReady={(result) => console.log(result)}
         />
         {point}
       </MapView>

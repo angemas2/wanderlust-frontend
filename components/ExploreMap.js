@@ -208,29 +208,30 @@ function ExploreMap({ navigation }) {
         style={styles.btn}
         onPress={async () => {
           await getIds().then(() => {
-            fetch(
-              "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  profile_id: user.profile_id,
-                  viewpointsList: idsList,
-                  km: distance,
-                  map: duration,
-                  photos: "",
-                  name: "La capsuletest await est",
-                  description:
-                    "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-                  public: false,
-                  custom: true,
-                  isSponsor: false,
-                  city: "Bruxelles",
-                }),
-              }
-            )
-              .then((response) => response.json())
-              .then((data) => console.log(data));
+            idsList.length > 0 &&
+              fetch(
+                "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    profile_id: user.profile_id,
+                    viewpointsList: idsList,
+                    km: distance,
+                    map: duration,
+                    photos: "",
+                    name: "La capsuletest await fintest15",
+                    description:
+                      "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
+                    public: false,
+                    custom: true,
+                    isSponsor: false,
+                    city: "Bruxelles",
+                  }),
+                }
+              )
+                .then((response) => response.json())
+                .then((data) => console.log(data));
           });
         }}
       >
