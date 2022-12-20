@@ -57,7 +57,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
 
   // const url = `http://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="attraction"](around:10000,${positionContext?.latitude},${positionContext?.longitude});out body;`;
 
-  const googleurl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.latitude},${origin.longitude}&types=tourist_attraction&radius=5000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
+  const googleurl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.latitude},${origin.longitude}&types=tourist_attraction&radius=10000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
   //Request to api / depend of user location
   useEffect(() => {
     setLoading(true);
@@ -102,7 +102,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     places?.map((data: any, i) => {
       let photo = "";
       if (data.photos[0]) {
-        photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photo_reference=${data.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
+        photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${data.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
       }
       return (
         <View style={styles.place} key={i}>
@@ -123,49 +123,52 @@ export default function NavScreen({ navigation }: NavScreenProps) {
             {data.rating}
           </Text>
           <View style={styles.placeinfos}>
-            <Text
-              isTruncated
-              maxW="300"
-              style={{
-                fontSize: 10,
-                fontWeight: "bold",
-                marginLeft: 5,
-                marginBottom: 5,
-              }}
-            >
-              {data.name}
-            </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: "#FFB703",
-                marginLeft: 5,
-                marginRight: 15,
-              }}
-            >
-              {positionContext &&
-                getDistance(
-                  positionContext?.latitude,
-                  data.geometry.location.lat,
-                  positionContext?.longitude,
-                  data.geometry.location.lng
-                )}
-              {"km  "}
-              <Pressable
-                onPress={() => {
-                  handleNavigateToPlace(
-                    data.geometry.location.lat,
-                    data.geometry.location.lng
-                  );
+            <View style={{display:"flex", justifyContent:"center",width:"50%"}}>
+              <Text
+                isTruncated
+                maxW="120"
+                style={{
+                  fontSize: 10,
+                  fontWeight: "bold",
+                  marginLeft: 5,
+                  
                 }}
               >
-                <FontAwesomeIcon
-                  icon={faCirclePlay}
-                  style={{ marginLeft: 40, color: "#FFB703" }}
-                  size={20}
-                />
-              </Pressable>
-            </Text>
+                {data.name}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "#FFB703",
+                  fontWeight: "bold",
+                  marginLeft: 5,
+                  marginRight: 15,
+                }}
+              >
+                {positionContext &&
+                  getDistance(
+                    positionContext?.latitude,
+                    data.geometry.location.lat,
+                    positionContext?.longitude,
+                    data.geometry.location.lng
+                  )}
+                {"km  "}
+              </Text>
+            </View>
+            <Pressable
+              onPress={() => {
+                handleNavigateToPlace(
+                  data.geometry.location.lat,
+                  data.geometry.location.lng
+                );
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faCirclePlay}
+                style={{ marginLeft: 40, color: "#219EBC", marginRight: 10 }}
+                size={20}
+              />
+            </Pressable>
           </View>
         </View>
       );
@@ -173,7 +176,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} title="Explore!" />
+      <Header navigation={navigation} title="Let's Discover what's around!" />
       <MapView
         initialRegion={{
           latitude: positionContext?.latitude,
@@ -278,13 +281,23 @@ export default function NavScreen({ navigation }: NavScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F9F9F9",
   },
   map: {
     height: "40%",
-    width: "95%",
+    width: "90%",
     alignSelf: "center",
     marginTop: 20,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+
+    elevation: 1,
   },
   desc: {
     fontSize: 14,
@@ -307,18 +320,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   place: {
-    width: 150,
-    marginRight: 20,
+    width: 160,
+    marginRight: 18,
+    backgroundColor: "white",
+    borderRadius: 15,
+    paddingBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    marginBottom: 10,
   },
   placeimg: {
-    width: 150,
-    height: 130,
-    borderRadius: 10,
+    width: "100%",
+    height: 120,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   placeinfos: {
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "center",
   },
   rating: {
     color: "white",

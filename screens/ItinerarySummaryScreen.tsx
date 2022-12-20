@@ -66,6 +66,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
             fontWeight: "bold",
             color: "#023047",
             fontSize: 12,
+            textAlign: "center",
           }}
         >
           {data.name}
@@ -133,7 +134,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
           latitudeDelta: 0.0522,
           longitudeDelta: 0.0421,
         }}
-        style={{ width: "95%", height: "40%" }}
+        style={{ width: "90%", height: "40%" }}
         onMapReady={fitMapToMarkers}
       >
         <MapViewDirections
@@ -183,14 +184,29 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   placeimg: {
-    width: 150,
-    height: 130,
-    borderRadius: 10,
     marginBottom: 15,
+    width: "100%",
+    height: 120,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   place: {
-    width: 150,
+    width: 160,
     marginRight: 20,
     marginTop: 20,
+    height: 180,
+    backgroundColor: "white",
+    borderRadius: 15,
+    paddingBottom: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    marginBottom: 5,
   },
 });
