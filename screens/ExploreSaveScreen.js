@@ -27,6 +27,8 @@ export default function ExploreSaveScreen({ route, navigation }) {
 
   const toggleSwitch = () => setIsPublic(!isPublic);
 
+  console.log("idslist", route.params.idsList);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.name}>

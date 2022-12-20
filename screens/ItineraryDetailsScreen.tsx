@@ -28,7 +28,7 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
-  console.log(_id);
+
 
   const point =
     viewpoints_id.length > 0
