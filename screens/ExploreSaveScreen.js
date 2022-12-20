@@ -29,6 +29,7 @@ export default function ExploreSaveScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+       <Text style={styles.title}>Remember your adventure</Text>
       <View style={styles.name}>
         <Text>City</Text>
         <Input
@@ -116,20 +117,28 @@ export default function ExploreSaveScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: "60%",
-    justifyContent: "space-between",
+    height: "100%",
+    justifyContent: "center",
     alignItems: "center",
+  },
+  title:{
+    fontFamily: 'Inter_500Medium',
+    fontSize: 24,
   },
   name: {
     width: "90%",
+    marginTop: "5%",
   },
   description: {
     width: "90%",
+    marginTop: "5%",
   },
   switch: {
     width: "90%",
+    marginTop: "5%",
   },
   btnContainer: {
+    marginTop: "5%",
     flexDirection: "row",
     width: "90%",
     justifyContent: "space-between",
