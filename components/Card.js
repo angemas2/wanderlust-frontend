@@ -68,7 +68,7 @@ function Card(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    height: '35%',
+    height: '32%',
     shadowRadius: 25,
     shadowColor: '#000',
     shadowOpacity: 0.08,
