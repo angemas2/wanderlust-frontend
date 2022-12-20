@@ -86,31 +86,36 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       if (response?.type === 'success') {
         const { authentication } = response;
         const accessToken = authentication?.accessToken;
-        const user = await fetchGoogleUserInfo(accessToken);
-        console.log('google: ' + accessToken);
-        fetch('https://wanderlust-backend.vercel.app/users/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: user.name,
-            email: user.email,
-            picture: user.imageUrl,
-            google_id: user.id,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data: dataProps) => {
-            console.log(data);
-            dispatch(
-              updateUserProfile({
-                email: data.email,
-                username: data.username,
-                picture: data.profile_id.picture,
-                profile_id: data.profile_id._id,
-              })
-            );
-            navigation.navigate('TabNavigator', { screen: 'Explore' });
+        fetchGoogleUserInfo(accessToken).then(async (userData) => {
+          console.log(userData);
+          console.log(userData.name);
+          const postData = fetch('https://wanderlust-backend.vercel.app/users/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: userData.name,
+              email: userData.email,
+              picture: userData.imageUrl,
+              google_id: userData.id,
+            }),
           });
+
+          const data = (await postData).json();
+
+          const userDataFromAPI = await data;
+          console.log('--------', userDataFromAPI);
+
+          const { profile_id } = userDataFromAPI;
+          dispatch(
+            updateUserProfile({
+              username: userDataFromAPI.name,
+              email: userDataFromAPI.email,
+              picture: userDataFromAPI.profile_id.picture,
+              profile_id: userDataFromAPI.profile_id._id,
+            })
+          );
+          navigation.navigate('TabNavigator', { screen: 'Explore' });
+        });
       }
     })();
   }, [response]);
