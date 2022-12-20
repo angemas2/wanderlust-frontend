@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    fontSize: 46,
+    fontSize: 38,
     fontFamily: 'PlayfairDisplay_800ExtraBold',
   },
   subtitle: {
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   },
   boxStyle: {
     width: '100%',
-    height: '20%',
+    height: '23%',
     justifyContent: 'space-between',
     marginBottom: -60,
   },
@@ -369,7 +369,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontFamily: 'Montserrat_500Medium',
-    marginLeft: 200,
+    marginLeft: 140,
+    bottom: '15%',
   },
   error: {
     marginBottom: 20,
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: -70,
+    marginBottom: -50,
   },
   line: {
     height: 1,
