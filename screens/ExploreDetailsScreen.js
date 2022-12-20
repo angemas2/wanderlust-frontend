@@ -4,7 +4,9 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  Button,
+  ScrollView,
+  View,
+  Image
 } from "react-native";
 import { useContext, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
@@ -12,6 +14,7 @@ import MapViewDirections from "react-native-maps-alternatives-directions";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
+import { Box, Input, Icon, Button } from "native-base";
 
 export default function ExploreDetailsScreen({ navigation }) {
   const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
@@ -71,14 +74,8 @@ export default function ExploreDetailsScreen({ navigation }) {
         })
       : "";
 
-  let btnText;
-  if (status) {
-    btnText = "Stop";
-  } else {
-    btnText = "Start";
-  }
 
-  const getIds = () => {
+  const getIds = async () => {
     const ids = [];
     return likedPlace.map((data) => {
       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
@@ -105,8 +102,21 @@ export default function ExploreDetailsScreen({ navigation }) {
     });
   };
 
+
+  const steps = likedPlace.map((e, i) => {
+    console.log(e.photo)
+    return (
+      <View style={styles.place} key={i}>
+        <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
+        <Text style={{ width: 150 }}>{e.name}</Text>
+      </View>
+    );
+  });
+
+
   return (
     <SafeAreaView style={styles.container}>
+     
       <MapView
         initialRegion={{
           latitude: positionContext.latitude,
@@ -127,38 +137,74 @@ export default function ExploreDetailsScreen({ navigation }) {
         {point}
         {intinaries}
       </MapView>
-      <Pressable
+      <Pressable>
+        <Button
         style={styles.startBtn}
+        disabled={!status&&idsList.length<likedPlace.length}
         onPress={() => {
           setStatus(!status);
-          if (status) {
+          if (!status) {
             getIds();
-            navigation.navigate("ExploreSave", { idsList, distance, duration });
+          } else {
+            navigation.navigate("ExploreSave", {
+              idsList,
+              distance,
+              duration,
+            });
           }
         }}
-      >
-        <Text>{btnText}</Text>
+        >
+         {status? "Stop":"Start"}
+        </Button>
       </Pressable>
+      <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: "15%" }}>
+        Itinerary Steps
+      </Text>
+      <ScrollView horizontal={true} style={styles.placesCont}>
+        {steps}
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    height: "100%",
     alignItems: "center",
   },
   map: {
-    height: "75%",
+    height: "65%",
     width: "95%",
     borderRadius: 10,
   },
   startBtn: {
     backgroundColor: "#FBBF13",
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     color: "white",
     borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    top: -35,
+    alignSelf: "center",
+    position: "absolute",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  placesCont: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: "5%",
+    marginLeft: "5%",
+  },
+  placeimg: {
+    width: 150,
+    height: 130,
+    borderRadius: 10,
+    marginBottom: 15,
   },
 });

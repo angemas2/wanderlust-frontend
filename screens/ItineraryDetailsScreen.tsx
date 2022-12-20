@@ -25,10 +25,11 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
   const positionContext = useContext(PositionContext);
   const user = useSelector((state: { user: any }) => state.user.value);
   const [started, setStarted] = useState(false);
+  const [distance, setDistance] = useState(0);
+  const [direction, setDirection] = useState("");
+  const [duration, setDuration] = useState(0);
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
-
-  console.log(_id);
 
   const point =
     viewpoints_id.length > 0
@@ -37,7 +38,6 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
             <Marker
               key={i}
               title={e.name}
-              
               coordinate={{
                 latitude: e.location.latitude,
                 longitude: e.location.longitude,
@@ -133,17 +133,64 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
               viewpoints_id[viewpoints_id.length - 1].location.longitude,
           }}
           waypoints={waypoints}
-    
           optimizeWaypoints={true}
           apikey={GOOGLE_MAPS_APIKEY}
           strokeWidth={4}
           strokeColor="#219EBC"
           precision="high"
           mode="WALKING"
-          onReady={(result) => console.log(result)}
+          onReady={(result) => {
+            let maneuver;
+            let step = result.legs[0].steps[0].distance.text.includes("km")
+              ? "km"
+              : "m";
+            if (step === "km" && result.legs[0].steps[0].distance.value < 0.3) {
+              //@ts-ignore
+              maneuver = `in ${result?.legs[0]?.steps[1].distance.text} ${result?.legs[0]?.steps[1]?.maneuver}`;
+            } else if (
+              step === "m" &&
+              result.legs[0].steps[0].distance.value < 30
+            ) {
+              //@ts-ignore
+              maneuver = `in ${result?.legs[0]?.steps[1]?.distance.text} ${result.legs[0].steps[1].maneuver}`;
+            } else {
+              maneuver = `continue for ${result.legs[0].steps[0].distance.text}`;
+            }
+            //@ts-ignore
+            console.log(result.legs[0].steps[1]);
+            setDistance(result.distance);
+            setDuration(result.duration);
+            setDirection(maneuver);
+            console.log(result);
+          }}
         />
         {point}
       </MapView>
+      {!started ? (
+        ""
+      ) : (
+        <View
+          style={{
+            position: "absolute",
+            top: 300,
+            left: 0,
+
+            backgroundColor: "rgba(2, 48, 71, 0.8)",
+
+            padding: 10,
+            borderTopRightRadius: 15,
+            borderBottomRightRadius: 15,
+          }}
+        >
+          <Text style={{ color: "white" }}>
+            Distance:{distance.toFixed(1)} km{" "}
+          </Text>
+          <Text style={{ color: "white" }}>
+            Duration: {duration.toFixed(0)} min
+          </Text>
+          <Text style={{ color: "white" }}>Direction: {direction}</Text>
+        </View>
+      )}
       <Pressable>
         <Button
           style={styles.startBtn}

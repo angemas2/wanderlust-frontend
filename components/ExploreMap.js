@@ -206,16 +206,16 @@ function ExploreMap({ navigation }) {
 
   return (
     <View style={container} onLayout={onLayoutRootView}>
-      <View style={styles.topContainer}>
         <Text style={styles.title}>My adventure</Text>
-        <Pressable onPress={() => handleVisible()}>
+        <Pressable 
+        style={styles.pressArrow}
+        onPress={() => handleVisible()}>
           <FontAwesomeIcon
             icon={visible ? faCircleArrowUp : faXmark}
             style={styles.icon}
-            size={25}
+            size={30}
           />
         </Pressable>
-      </View>
       <MapView
         initialRegion={{
           latitude: positionContext.latitude,
@@ -237,11 +237,8 @@ function ExploreMap({ navigation }) {
         {intinaries}
       </MapView>
       <Pressable
-      
         style={styles.btn}
-
         onPress={() => navigation.navigate("ExploreDetails")}
-
       >
         <Text>Start exploring</Text>
       </Pressable>
@@ -272,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
   },
   icon: {
-    color: "#219EBC",
+    color: "#FFB703",
     marginRight: 10,
   },
   startExploring: {
@@ -280,6 +277,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
+  pressArrow: {
+    position: "absolute",
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    zIndex: 1
+  }
 });
 
 export default ExploreMap;
