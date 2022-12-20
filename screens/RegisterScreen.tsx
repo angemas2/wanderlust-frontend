@@ -89,7 +89,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
               profile_id: data.profile_id._id,
             })
           );
-          navigation.navigate('TabNavigator', { screen: 'Explore' });
+          navigation.navigate("TabNavigator", { screen: "Explore" });
         }
       });
   };
@@ -123,16 +123,19 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         fetchGoogleUserInfo(accessToken).then(async (userData) => {
           console.log(userData);
           console.log(userData.name);
-          const postData = fetch('https://wanderlust-backend.vercel.app/users/google', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              username: userData.name,
-              email: userData.email,
-              picture: userData.imageUrl,
-              google_id: userData.id,
-            }),
-          });
+          const postData = fetch(
+            "https://wanderlust-backend.vercel.app/users/google",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: userData.name,
+                email: userData.email,
+                picture: userData.picture,
+                google_id: userData.sub,
+              }),
+            }
+          );
 
           const data = (await postData).json();
 
@@ -142,7 +145,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           const { profile_id } = userDataFromAPI;
           dispatch(
             updateUserProfile({
-              username: userDataFromAPI.name,
+              username: userDataFromAPI.username,
               email: userDataFromAPI.email,
               picture: userDataFromAPI.profile_id.picture,
               profile_id: userDataFromAPI.profile_id._id,
@@ -196,7 +199,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                 profile_id: data.profile_id._id,
               })
             );
-            navigation.navigate('TabNavigator', { screen: 'Explore' });
+            navigation.navigate("TabNavigator", { screen: "Explore" });
           });
       }
     })();
