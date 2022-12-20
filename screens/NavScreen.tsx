@@ -114,7 +114,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
             <Text
               isTruncated
               maxW="300"
-              style={{ fontSize: 10, fontWeight: 'bold', marginLeft: 5 }}>
+              style={{ fontSize: 10, fontWeight: 'bold', marginLeft: 5,marginBottom:5 }}>
               {data.name}
             </Text>
             <Text
@@ -123,6 +123,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
                 color: '#FFB703',
                 marginLeft: 5,
                 marginRight: 15,
+               
               }}>
               {positionContext &&
                 getDistance(
@@ -136,7 +137,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
                 onPress={() => {
                   handleNavigateToPlace(data.geometry.location.lat, data.geometry.location.lng);
                 }}>
-                <FontAwesomeIcon icon={faCirclePlay} style={{ marginLeft: 30, color: '#FFB703' }} />
+                <FontAwesomeIcon icon={faCirclePlay} style={{ marginLeft: 40, color: '#FFB703' }} size={20} />
               </Pressable>
             </Text>
           </View>
@@ -239,13 +240,13 @@ export default function NavScreen({ navigation }: NavScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   map: {
-    height: '40%',
-    width: '95%',
-    alignSelf: 'center',
-    marginTop:20,
+    height: "40%",
+    width: "95%",
+    alignSelf: "center",
+    marginTop: 20,
   },
   desc: {
     fontSize: 14,
@@ -257,15 +258,15 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   subtitle: {
-    color: '#023047',
+    color: "#023047",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 20,
     marginBottom: 10,
   },
   placesCont: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
   },
   place: {
     width: 150,
@@ -277,22 +278,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   placeinfos: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
   rating: {
-    color: 'white',
-    fontWeight: 'bold',
-    position: 'absolute',
+    color: "white",
+    fontWeight: "bold",
+    position: "absolute",
     top: 10,
     left: 10,
-    backgroundColor: '#023047',
+    backgroundColor: "#023047",
     fontSize: 10,
     paddingTop: 5,
     paddingBottom: 5,
     width: 50,
-    textAlign: 'center',
+    textAlign: "center",
     borderRadius: 8,
   },
 });

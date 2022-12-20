@@ -36,12 +36,24 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
    
     return (
       <View style={styles.routeCont} key={i}>
-        <ImageBackground style={styles.bg} source={photo}>
+        
+        <ImageBackground style={styles.bg} source={photo} imageStyle={{borderRadius:15}}>
           <View style={styles.desc}>
             <View style={styles.infos}>
               <Text style={styles.title}>{data.name}</Text>
-              <View style={{display:"flex",flexDirection:"row",alignItems:"center",marginTop:10}}>
-                <Text style={{color:"white",fontSize:12,fontWeight:"bold"}}>{data.followers.length - 1} </Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <Text
+                  style={{ color: "white", fontSize: 12, fontWeight: "bold" }}
+                >
+                  {data.followers.length - 1}{" "}
+                </Text>
                 <Icon
                   as={<MaterialIcons name="person" />}
                   size={3}
@@ -50,7 +62,7 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
                 />
               </View>
               <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
-                {data.udescription}
+                {data.description}
               </Text>
               <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
                 {data.km}km | {data.viewpoints_id.length} spots
@@ -122,10 +134,12 @@ const styles = StyleSheet.create({
   infos: {
     display: 'flex',
     justifyContent: 'center',
-    width: '55%',
+    width: '60%',
     height: '100%',
     backgroundColor: 'rgba(2, 48, 71, 0.7)',
     paddingLeft: 10,
+    borderTopLeftRadius:15,
+    borderBottomLeftRadius:15,
   },
 
   desc: {
