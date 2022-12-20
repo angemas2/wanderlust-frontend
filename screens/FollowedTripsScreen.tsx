@@ -9,7 +9,6 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import TopTabNav from '../components/TopTabNav';
 import { useSelector } from 'react-redux';
 import { UserState } from '../reducers/user';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
@@ -18,20 +17,19 @@ type NavigationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
 };
 
-export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
+export default function FollowedTripsScreen({ navigation }: NavigationScreenProps) {
   const user = useSelector((state: { user: UserState }) => state.user.value);
-  const [trips, setTrips] = useState([]);
   const [followedTrips, setFollowedTrips] = useState([]);
 
   useEffect(() => {
-    fetch(`https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`)
+    fetch(`https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`)
       .then((response) => response.json())
       .then((data) => {
-        setTrips(data.data);
+        setFollowedTrips(data.data);
       });
-  }, [trips]);
+  }, [followedTrips]);
 
-  const tripList = trips.map((data: any, i) => {
+  const followedTripList = followedTrips.map((data: any, i) => {
     return (
       <View style={styles.tripCont} key={i}>
         <Pressable
@@ -64,15 +62,13 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TopTabNav navigation={navigation} />
-      <Text> My custom Trips</Text>
-      <ScrollView contentContainerStyle={styles.scrollviewContainer}>
-        <View style={styles.scrollview}>{tripList}</View>
+      <Text> Followed Trips</Text>
+      <ScrollView>
+        <View>{followedTripList}</View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-const layout = useWindowDimensions();
 
 const styles = StyleSheet.create({
   container: {
@@ -81,10 +77,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     flex: 1,
   },
-  scrollviewContainer: {
-    paddingBottom: 60,
-  },
-  scrollview: {},
   tripCont: {
     width: '90%',
     height: 200,
@@ -115,8 +107,5 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginTop: 40,
-  },
-  tabView: {
-    marginTop: 50,
   },
 });
