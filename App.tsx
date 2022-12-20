@@ -11,6 +11,7 @@ import ExploreScreen from './screens/ExploreScreen';
 import InspirationScreen from './screens/InspirationScreen';
 import ItineraryDetailsScreen from './screens/ItineraryDetailsScreen';
 import ExploreDetailsScreen from './screens/ExploreDetailsScreen';
+import ExploreSaveScreen from './screens/ExploreSaveScreen';
 import MyTripsScreen from './screens/MyTripsScreen';
 import NavScreen from './screens/NavScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -142,6 +143,7 @@ export default function App() {
                     <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
                     <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
                     <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
+                    <Stack.Screen name="ExploreSave" component={ExploreSaveScreen} />
                     <Stack.Screen name="TabNavigator" component={TabNavigator} />
                   </>
                 ) : (
