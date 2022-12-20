@@ -29,6 +29,7 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
       });
   };
 
+
   const itinerariesList = itineraries.map((data: any, i) => {
 
     const photo = !!data.viewpoints_id[0] ? {uri:`${data.viewpoints_id[0].photos}`} : require("../assets/images/background.png")
@@ -39,18 +40,29 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
           <View style={styles.desc}>
             <View style={styles.infos}>
               <Text style={styles.title}>{data.name}</Text>
-              <Text style={{ color: 'white', fontSize: 10 }}>created by</Text>
-              <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>{data.udescription}</Text>
-              <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>
+              <View style={{display:"flex",flexDirection:"row",alignItems:"center",marginTop:10}}>
+                <Text style={{color:"white",fontSize:12,fontWeight:"bold"}}>{data.followers.length - 1} </Text>
+                <Icon
+                  as={<MaterialIcons name="person" />}
+                  size={3}
+                  ml="1"
+                  color="white"
+                />
+              </View>
+              <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
+                {data.udescription}
+              </Text>
+              <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
                 {data.km}km | {data.viewpoints_id.length} spots
               </Text>
 
               <Button
-                size={'sm'}
+                size={"sm"}
                 style={styles.followBtn}
                 onPress={() => {
-                  navigation.navigate('ItineraryDetails', { ...data });
-                }}>
+                  navigation.navigate("ItineraryDetails", { ...data });
+                }}
+              >
                 Follow
               </Button>
             </View>

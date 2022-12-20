@@ -17,15 +17,12 @@ import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in 
 import user from "../reducers/user";
 import { useSelector } from "react-redux";
 
-
 export default function ItinerarySummaryScreen({ route }: any) {
   const { _id, profile_id, name, viewpoints_id, description, followers } =
     route.params;
 
   const positionContext = useContext(PositionContext);
   const user = useSelector((state: { user: any }) => state.user.value);
-
-
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
@@ -69,63 +66,67 @@ export default function ItinerarySummaryScreen({ route }: any) {
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
+  console.log(user.picture);
 
   return (
     <SafeAreaView style={styles.container}>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: 30,
-          }}
-        >
-          {" "}
-          {name}{" "}
-        </Text>
-        <Text style={{ textAlign: "center", marginBottom: 30, width: 350 }}>
-          {" "}
-          {description}{" "}
-        </Text>
-        <MapView
-          ref={(ref) => (map = ref)}
-          initialRegion={{
+      <Image
+        source={{ uri: user.picture }}
+        style={{ width: 70, height: 70, borderRadius: 50, marginBottom: 10 }}
+      ></Image>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 30,
+        }}
+      >
+        {" "}
+        {name}{" "}
+      </Text>
+      <Text style={{ textAlign: "center", marginBottom: 30, width: 350 }}>
+        {" "}
+        {description}{" "}
+      </Text>
+      <MapView
+        ref={(ref) => (map = ref)}
+        initialRegion={{
+          latitude: viewpoints_id[0].location.latitude,
+          longitude: viewpoints_id[0].location.longitude,
+          latitudeDelta: 0.0522,
+          longitudeDelta: 0.0421,
+        }}
+        style={{ width: "95%", height: "40%" }}
+        onMapReady={fitMapToMarkers}
+      >
+        <MapViewDirections
+          origin={{
             latitude: viewpoints_id[0].location.latitude,
             longitude: viewpoints_id[0].location.longitude,
-            latitudeDelta: 0.0522,
-            longitudeDelta: 0.0421,
           }}
-          style={{ width: "95%", height: "40%" }}
-          onMapReady={fitMapToMarkers}
-        >
-          <MapViewDirections
-            origin={{
-              latitude: viewpoints_id[0].location.latitude,
-              longitude: viewpoints_id[0].location.longitude,
-            }}
-            destination={{
-              latitude:
-                viewpoints_id[viewpoints_id.length - 1].location.latitude,
-              longitude:
-                viewpoints_id[viewpoints_id.length - 1].location.longitude,
-            }}
-            waypoints={waypoints}
-            optimizeWaypoints={true}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={4}
-            strokeColor="#219EBC"
-            precision="high"
-            mode="WALKING"
-            onReady={(result) => console.log(result.distance)}
-          />
-          {point}
-        </MapView>
-        <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 15 }}>
-          Itinerary Steps
-        </Text>
-        <ScrollView horizontal={true} style={styles.placesCont}>
-          {steps}
-        </ScrollView>
+          destination={{
+            latitude: viewpoints_id[viewpoints_id.length - 1].location.latitude,
+            longitude:
+              viewpoints_id[viewpoints_id.length - 1].location.longitude,
+          }}
+          waypoints={waypoints}
+          optimizeWaypoints={true}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={4}
+          strokeColor="#219EBC"
+          precision="high"
+          mode="WALKING"
+          onReady={(result) => console.log(result.distance)}
+        />
+        {point}
+      </MapView>
+      <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 15 }}>
+        Itinerary Steps
+      </Text>
+      <ScrollView horizontal={true} style={styles.placesCont}>
+        {steps}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: "20%",
+    paddingTop: "15%",
   },
   placesCont: {
     display: "flex",

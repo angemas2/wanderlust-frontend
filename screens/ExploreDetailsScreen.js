@@ -75,7 +75,7 @@ export default function ExploreDetailsScreen({ navigation }) {
       : "";
 
 
-  const getIds = () => {
+  const getIds = async () => {
     const ids = [];
     return likedPlace.map((data) => {
       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
@@ -140,11 +140,17 @@ export default function ExploreDetailsScreen({ navigation }) {
       <Pressable>
         <Button
         style={styles.startBtn}
+        disabled={!status&&idsList.length<likedPlace.length}
         onPress={() => {
           setStatus(!status);
-          if (status) {
+          if (!status) {
             getIds();
-            navigation.navigate("ExploreSave", { idsList, distance, duration });
+          } else {
+            navigation.navigate("ExploreSave", {
+              idsList,
+              distance,
+              duration,
+            });
           }
         }}
         >
