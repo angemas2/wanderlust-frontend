@@ -87,15 +87,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         const { authentication } = response;
         const accessToken = authentication?.accessToken;
         const user = await fetchGoogleUserInfo(accessToken);
-        setUsername(user.name);
-        setEmail(user.email);
-        let avatar = user.picture;
+        console.log('google: ' + accessToken);
         fetch('https://wanderlust-backend.vercel.app/users/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username: username,
-            email: email,
+            username: user.name,
+            email: user.email,
+            picture: user.imageUrl,
+            google_id: user.id,
           }),
         })
           .then((response) => response.json())
@@ -128,14 +128,18 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       if (fbresponse?.type === 'success') {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
-        setUsername(user.first_name);
+        console.log('facebook :' + fbtoken);
         setEmail(user.email);
         fetch('https://wanderlust-backend.vercel.app/users/facebook', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username: username,
-            email: email,
+            username: user.first_name,
+            email: user.email,
+            picture: user.picture,
+            facebook_id: user.id,
+            firstName: user.first_name,
+            lastName: user.last_name,
           }),
         })
           .then((response) => response.json())
