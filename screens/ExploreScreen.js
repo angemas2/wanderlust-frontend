@@ -5,7 +5,7 @@ import ExploreSwipe from '../components/ExploreSwipe';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 
-export default function ExploreScreen() {
+export default function ExploreScreen({navigation}) {
   const visible = useSelector((state) => state.places.isSwipeVisible);
 
   return (
@@ -14,11 +14,11 @@ export default function ExploreScreen() {
       {visible ? (
         <SafeAreaView style={styles.container}>
           <ExploreSwipe />
-          <ExploreMap />
+          <ExploreMap navigation={navigation}/>
         </SafeAreaView>
       ) : (
         <SafeAreaView style={styles.container}>
-          <ExploreMap />
+          <ExploreMap navigation={navigation}/>
         </SafeAreaView>
       )}
     </SafeAreaView>
