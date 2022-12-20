@@ -3,6 +3,7 @@ import { SafeAreaView, Text, StyleSheet, View, ImageBackground, Pressable } from
 import { Box, Input, Button, Icon, ScrollView } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import Header from '../components/Header';
 
 type InspirationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -18,7 +19,7 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
       .then((data) => {
         setItineraries(data.data);
       });
-  }, [itineraries]);
+  }, []);
 
   const handleSearch = () => {
     fetch(`https://wanderlust-backend.vercel.app/itineraries/${city.toLocaleLowerCase()}`)
@@ -29,14 +30,17 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
   };
 
   const itinerariesList = itineraries.map((data: any, i) => {
+
+    const photo = !!data.viewpoints_id[0] ? {uri:`${data.viewpoints_id[0].photos}`} : require("../assets/images/background.png")
+   
     return (
       <View style={styles.routeCont} key={i}>
-        <ImageBackground style={styles.bg} source={{ uri: data.viewpoints_id[0].photos }}>
+        <ImageBackground style={styles.bg} source={photo}>
           <View style={styles.desc}>
             <View style={styles.infos}>
               <Text style={styles.title}>{data.name}</Text>
               <Text style={{ color: 'white', fontSize: 10 }}>created by</Text>
-              <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>{data.description}</Text>
+              <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>{data.udescription}</Text>
               <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>
                 {data.km}km | {data.viewpoints_id.length} spots
               </Text>

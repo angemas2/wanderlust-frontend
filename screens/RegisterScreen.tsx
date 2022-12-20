@@ -114,33 +114,36 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       if (response?.type === 'success') {
         const { authentication } = response;
         const accessToken = authentication?.accessToken;
-        const user = await fetchGoogleUserInfo(accessToken);
-        setUsername(user.name);
-        setEmail(user.email);
-        let avatar = user.picture;
-        console.log(user.name)
-        fetch('https://wanderlust-backend.vercel.app/users/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: username,
-            email: email,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("data",data)
-            navigation.navigate('TabNavigator', { screen: 'Explore' });
-
-            dispatch(
-              updateUserProfile({
-                username,
-                email,
-                avatar: '',
-                profile_id: data.profile_id,
-              })
-            );
+        fetchGoogleUserInfo(accessToken).then(async (userData) => {
+          console.log(userData);
+          setUsername(userData.name);
+          setEmail(userData.email);
+          console.log(userData.name);
+          const postData = fetch('https://wanderlust-backend.vercel.app/users/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: userData.name,
+              email: userData.email,
+            }),
           });
+
+          const data = (await postData).json();
+
+          const userDataFromAPI = await data;
+          console.log('--------', userDataFromAPI);
+
+          const { profile_id } = userDataFromAPI;
+          dispatch(
+            updateUserProfile({
+              username: userData.name,
+              email: userData.email,
+              avatar: '',
+              profile_id,
+            })
+          );
+          navigation.navigate('TabNavigator', { screen: 'Explore' });
+        });
       }
     })();
   }, [response]);
@@ -215,7 +218,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         source={require('../assets/images/background.png')}
         style={styles.imageBackground}>
         <View style={styles.contentContainer}>
-          <View style={styles.titleContainer}>
+          <View>
             <Text style={styles.title}>INSCRIPTION</Text>
             <Text style={styles.subtitle}>S'inscrire avec une adresse e-mail</Text>
           </View>
@@ -360,12 +363,9 @@ const styles = StyleSheet.create({
     height: '90%',
     marginTop: 60,
   },
-  titleContainer: {
-    top: 50,
-  },
   title: {
     color: 'white',
-    fontSize: 46,
+    fontSize: 38,
     fontFamily: 'PlayfairDisplay_800ExtraBold',
   },
   subtitle: {
@@ -374,14 +374,14 @@ const styles = StyleSheet.create({
     color: '#9EC4DB',
     opacity: 0.8,
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: -20,
     fontFamily: 'Inter_400Regular',
   },
   boxStyle: {
     width: '100%',
-    height: '23%',
+    height: '25%',
     justifyContent: 'space-between',
-    marginBottom: -40,
+    marginBottom: -50,
   },
   input: {
     fontFamily: 'Inter_300Light',
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 50,
     fontFamily: 'Inter_500Medium',
-    marginBottom: -15,
+    marginBottom: -30,
   },
   registeredTextContainer: {
     flexDirection: 'row',

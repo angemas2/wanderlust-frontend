@@ -1,22 +1,14 @@
-import {useCallback} from "react";
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { useSelector } from "react-redux";
-import { UserState } from "../reducers/user";
-import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { useCallback } from 'react';
+import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { UserState } from '../reducers/user';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_500Medium } from '@expo-google-fonts/dev'; //import fonts
 
 type HeaderProps = {
   navigation: NavigationProp<ParamListBase>;
-  name: string;
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -60,7 +52,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 30,
+    marginTop: '10%',
   },
   logo: {
     aspectRatio: 1,
