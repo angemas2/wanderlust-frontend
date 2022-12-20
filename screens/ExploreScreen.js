@@ -10,7 +10,7 @@ export default function ExploreScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} />
+      <Header navigation={navigation} title="Explore" />
       {visible ? (
         <SafeAreaView style={styles.container}>
           <ExploreSwipe />
@@ -28,6 +28,6 @@ export default function ExploreScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:15,
+    marginTop: 15,
   },
 });
