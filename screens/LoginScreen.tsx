@@ -100,6 +100,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         })
           .then((response) => response.json())
           .then((data: dataProps) => {
+            console.log(data);
             dispatch(
               updateUserProfile({
                 email: data.email,
@@ -151,6 +152,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         })
           .then((response) => response.json())
           .then((data: dataProps) => {
+            console.log(data);
             dispatch(
               updateUserProfile({
                 email: data.email,
