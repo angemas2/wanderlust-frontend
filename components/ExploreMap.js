@@ -20,6 +20,7 @@ import { setSwipeVisibility } from "../reducers/places";
 import _ from "lodash";
 import { UserState } from "../reducers/user";
 
+
 import {
   useFonts,
   Inter_400Regular,
@@ -34,7 +35,6 @@ function ExploreMap({ navigation }) {
   const dispatch = useDispatch();
   const visible = useSelector((state) => state.places.isSwipeVisible);
   const likedPlace = useSelector((state) => state.places.liked);
-  const user = useSelector((state) => state.user.value);
   //Get the context define in App.tsx
   const positionContext = useContext(PositionContext);
   const userPosition = {
@@ -81,32 +81,6 @@ function ExploreMap({ navigation }) {
     };
   }
 
-  const getIds = async () => {
-    const ids = [];
-    return likedPlace.map((data) => {
-      fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
-        method: "Post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.name,
-          description: data.description,
-          photos: data.photo,
-          location: {
-            latitude: data.latitude,
-            longitude: data.longitude,
-          },
-          tags_id: "",
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("data id list", data.data._id);
-          ids.push(data.data._id);
-          setIdsList(ids);
-          return ids;
-        });
-    });
-  };
 
   const handleVisible = () => {
     dispatch(setSwipeVisibility());
@@ -172,6 +146,7 @@ function ExploreMap({ navigation }) {
     return null;
   }
 
+
   return (
     <View style={container} onLayout={onLayoutRootView}>
       <View style={styles.topContainer}>
@@ -206,39 +181,14 @@ function ExploreMap({ navigation }) {
       </MapView>
       <Pressable
         style={styles.btn}
-        onPress={async () => {
-          await getIds().then(() => {
-            fetch(
-              "https://wanderlust-backend.vercel.app/itineraries/addItinerary",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  profile_id: user.profile_id,
-                  viewpointsList: idsList,
-                  km: distance,
-                  map: duration,
-                  photos: "",
-                  name: "La capsuletest await est",
-                  description:
-                    "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-                  public: false,
-                  custom: true,
-                  isSponsor: false,
-                  city: "Bruxelles",
-                }),
-              }
-            )
-              .then((response) => response.json())
-              .then((data) => console.log(data));
-          });
-        }}
+        onPress={() => navigation.navigate("ExploreDetails")}
       >
         <Text>Start exploring</Text>
       </Pressable>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   topContainer: {

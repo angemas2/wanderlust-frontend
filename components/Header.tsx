@@ -1,9 +1,15 @@
-import { useCallback } from 'react';
-
-import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import { UserState } from '../reducers/user';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import {useCallback} from "react";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSelector } from "react-redux";
+import { UserState } from "../reducers/user";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_500Medium } from '@expo-google-fonts/dev'; //import fonts
