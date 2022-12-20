@@ -237,7 +237,7 @@ function ExploreMap({ navigation }) {
         {intinaries}
       </MapView>
       <Pressable
-        disabled={!canAdd}
+      
         style={styles.btn}
 
         onPress={() => navigation.navigate("ExploreDetails")}
