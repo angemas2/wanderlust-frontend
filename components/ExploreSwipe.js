@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 10,
+    marginTop:10,
     fontSize: 14,
     fontFamily: 'Inter_400Regular',
   },
