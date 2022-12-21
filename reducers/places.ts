@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type Proximity = {
   key: number;
-  name: string | null;
+  name: string | undefined;
   latitude: number;
   longitude: number;
   photo: string | null;
