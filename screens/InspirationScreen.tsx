@@ -85,7 +85,7 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} title="Inspiration" />
+      <Header navigation={navigation} title="Get Inspired !" />
       <ScrollView contentContainerStyle={styles.scrollview}>
         <View style={styles.content}>
           <Input
