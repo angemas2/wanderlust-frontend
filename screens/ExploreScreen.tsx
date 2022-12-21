@@ -4,6 +4,7 @@ import ExploreMap from '../components/ExploreMap';
 import ExploreSwipe from '../components/ExploreSwipe';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
+import { PlaceState } from '../reducers/places'
 
 
 //Interface defining the props of the component.
@@ -17,8 +18,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
 
 
   //true or false sended from reducer places, used to choose if swipe component is visble or not.
-  const visible = useSelector((state: any) => state.places.isSwipeVisible);
-
+  const visible = useSelector((state: { places: PlaceState }) => state.places.value.isSwipeVisible);
 
   return (
     <SafeAreaView style={styles.container}>

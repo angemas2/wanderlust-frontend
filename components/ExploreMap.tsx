@@ -9,9 +9,9 @@ import MapViewDirections from "react-native-maps-alternatives-directions";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowUp, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { setSwipeVisibility } from "../reducers/places";
-import _ from "lodash";
 import { useFonts, Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/dev"; //import to handle the Roboto font
 import * as SplashScreen from "expo-splash-screen";
+import { PlaceState } from '../reducers/places'
 
 interface ExploreMapProps {
   navigation: any;
@@ -24,9 +24,9 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
   //Variable for calling useDispatch
   const dispatch = useDispatch();
   //true or false sended from reducer places, used to choose a style for ExploreMap component if swipe component is visble or not.
-  const visible = useSelector((state: any) => state.places.isSwipeVisible);
+  const visible = useSelector((state: { places: PlaceState }) => state.places.value.isSwipeVisible);
   //Variable that posses all the places that have been liked by the user 
-  const likedPlace = useSelector((state: any) => state.places.liked);
+  const likedPlace = useSelector((state: { places: PlaceState }) => state.places.value.liked);
   //Get the context that contain the user position define in App.tsx
   const positionContext = useContext(PositionContext);
   const userPosition = {
