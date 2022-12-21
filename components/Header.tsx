@@ -96,7 +96,6 @@ export default function Header({
                 flexDirection: "row",
               }}
             >
-              
               <Image style={styles.avatar} source={{ uri: avatar }} />
               <View style={{ marginLeft: 10 }}>
                 <Text
@@ -106,7 +105,6 @@ export default function Header({
                 </Text>
                 <Text style={{ fontSize: 10 }}>{user.email}</Text>
               </View>
-              
             </Popover.Body>
             <Popover.Footer justifyContent="flex-end">
               <Button.Group space={2}>
