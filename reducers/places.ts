@@ -30,7 +30,6 @@ export const placesSlice = createSlice({
   reducers: {
     addNewLike: (state: PlaceState, action: PayloadAction<Proximity>) => {
       state.value.liked.push(action.payload);
-      //  state.value = []
     },
     getDefaultPlaces: (state: PlaceState, action: PayloadAction<Proximity>) => {
       state.value.proximity.push(action.payload);

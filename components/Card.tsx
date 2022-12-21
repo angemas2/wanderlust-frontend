@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { Button } from 'native-base';
 import { useDispatch } from 'react-redux';
-import { updateAndLikePlaces } from '../reducers/places';
+import { Proximity, updateAndLikePlaces } from '../reducers/places';
 import { onDisLike } from '../reducers/places';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faLocationDot, faPlay, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -11,16 +11,11 @@ import { useFonts, Inter_900Black } from '@expo-google-fonts/dev'; //import font
 
 
 SplashScreen.preventAutoHideAsync();
-interface Place {
-  key: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  photo: string;
-}
+
+
 
 interface Props {
-  card: Place;
+  card: Proximity;
 }
 
 
