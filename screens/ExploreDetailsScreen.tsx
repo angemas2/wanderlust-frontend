@@ -15,6 +15,7 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
 import { Button } from "native-base";
+import { PlaceState } from '../reducers/places'
 
 type Props = {
   navigation: any;
@@ -33,9 +34,9 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const [idsList, setIdsList] = useState<string[]>([]);
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState<boolean>(false);
 
-  const likedPlace = useSelector((state: any) => state.places.liked);
+  const likedPlace = useSelector((state: { places: PlaceState }) => state.places.value.liked);
 
   const wayPoints = likedPlace.map((e: any) => {
     return { latitude: e.latitude, longitude: e.longitude };
@@ -80,7 +81,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
 
   const getIds = async () => {
-    const ids = [];
+    const ids: string[] = [];
     return likedPlace.map((data: any) => {
       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
@@ -110,7 +111,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const steps = likedPlace.map((e, i) => {
     console.log(e.photo)
     return (
-      <View style={styles.place} key={i}>
+      <View key={i}>
         <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
         <Text style={{ width: 150 }}>{e.name}</Text>
       </View>

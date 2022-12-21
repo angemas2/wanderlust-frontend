@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type Proximity = {
   key: number;
-  name: string | null;
+  name: string | undefined;
   latitude: number;
   longitude: number;
   photo: string | null;
@@ -30,7 +30,6 @@ export const placesSlice = createSlice({
   reducers: {
     addNewLike: (state: PlaceState, action: PayloadAction<Proximity>) => {
       state.value.liked.push(action.payload);
-      //  state.value = []
     },
     getDefaultPlaces: (state: PlaceState, action: PayloadAction<Proximity>) => {
       state.value.proximity.push(action.payload);

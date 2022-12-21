@@ -8,27 +8,27 @@ import Card from './Card';
 import PositionContext from '../utils/context';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_400Regular } from '@expo-google-fonts/dev'; //import fonts
-
-interface Place {
-  key: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  photo: string;
-}
-
-interface PlacesState {
-  proximity: Place[];
-}
-
-interface RootState {
-  places: PlacesState;
-}
+import { PlaceState } from '../reducers/places'
 
 interface UserPosition {
   latitude: number;
   longitude: number;
 }
+
+type Photo = {
+  photo_reference: string;
+};
+
+type Element = {
+  name: string,
+  geometry: {
+    location: {
+      lat: number,
+      lng: number
+    }
+  },
+  photos: Photo[]
+};
 
 function ExploreSwipe() {
   //API key
@@ -42,11 +42,11 @@ function ExploreSwipe() {
   //Variable for calling useDispatch
   const dispatch = useDispatch();
   //Variable that posses all the places in a cetrain perimeter. 
-  const places: Place[] = useSelector((state: RootState) => state.places.proximity);
+  const places = useSelector((state: { places: PlaceState }) => state.places.value.proximity);
   //Array of places with all information in a certain perimeter.
-  const [placesData, setPlacesData] = useState<Place[]>([]);
+  const [placesData, setPlacesData] = useState([]);
   //Index used <Swiper/> to reference all card, still need optimisation.
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number>(0);
 
 
   //Request to get places in a certain perimeter, and give the response to placesData 
@@ -65,7 +65,7 @@ function ExploreSwipe() {
   //At the end dispatching to proxyimity array in places reducer.
   useEffect(() => {
     placesData.length > 0
-      ? placesData.map((e, i) => {
+      ? placesData.map((e: Element, i: number) => {
         let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
         if (e.photos[0] === undefined) {
           photo = '';
@@ -102,7 +102,6 @@ function ExploreSwipe() {
         <Text style={styles.title}>Browse our suggestions</Text>
         <Swiper
           cards={places}
-          index={index}
           renderCard={(card) => <Card card={card} />}
           // onSwipedRight={(i)=> console.log(i) }
           disableTopSwipe
