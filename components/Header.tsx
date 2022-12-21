@@ -3,7 +3,7 @@ import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View } from 'r
 import { useSelector, useDispatch } from 'react-redux';
 import { UserState } from '../reducers/user';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { Popover, Button, Box } from 'native-base';
+import { Popover, Button } from 'native-base';
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_500Medium } from '@expo-google-fonts/dev'; //import fonts
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     right: '80%',
     width: 150,
     color: '#023047',
+    marginTop: '5%',
   },
   userContainer: {
     display: 'flex',
