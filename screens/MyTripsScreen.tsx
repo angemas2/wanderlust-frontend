@@ -54,6 +54,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
         >
           <ImageBackground
             imageStyle={{ opacity: 0.3 }}
+            blurRadius={2}
             source={{ uri: data.viewpoints_id[0]?.photos }}
             style={styles.imgBg}
           >
@@ -87,7 +88,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
           }}
         >
           <ImageBackground
-            imageStyle={{ opacity: 0.3,borderRadius:15 }}
+            imageStyle={{ opacity: 0.3, borderRadius: 15 }}
             source={{ uri: data.viewpoints_id[0]?.photos }}
             style={styles.imgBg}
           >
@@ -113,20 +114,23 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   });
 
   const FirstRoute = () => (
-    <SafeAreaView style={styles.container}>
-      <Text> My custom Trips</Text>
-      <ScrollView>
-        <View>{tripList}</View>
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <>
+        <View style={styles.container}>
+          <Text> My custom Trips</Text>
+
+          <View>{tripList}</View>
+        </View>
+      </>
+    </ScrollView>
   );
   const SecondRoute = () => (
-    <SafeAreaView style={styles.container}>
-      <Text> Followed Trips</Text>
-      <ScrollView>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <SafeAreaView style={styles.container}>
+        <Text> Followed Trips</Text>
         <View>{followedTripList}</View>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 
   const layout = useWindowDimensions();
@@ -153,12 +157,14 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   );
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      renderTabBar={renderTabBar}
-      onIndexChange={setIndex}
-    />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        renderTabBar={renderTabBar}
+        onIndexChange={setIndex}
+      />
+    </ScrollView>
   );
 }
 

@@ -6,7 +6,7 @@ import {
   Pressable,
   ScrollView,
   View,
-  Image
+  Image,
 } from "react-native";
 import { useContext, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
@@ -30,6 +30,7 @@ export default function ExploreDetailsScreen({ navigation }) {
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
   const [status, setStatus] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const likedPlace = useSelector((state) => state.places.liked);
 
@@ -74,11 +75,11 @@ export default function ExploreDetailsScreen({ navigation }) {
         })
       : "";
 
-
   const getIds = async () => {
-    const ids = [];
-    return likedPlace.map((data) => {
-      fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
+    let ids = [];
+
+    const request = likedPlace.map((data, i) => {
+       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -94,17 +95,17 @@ export default function ExploreDetailsScreen({ navigation }) {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data id list", data.data._id);
+         
           ids.push(data.data._id);
-          setIdsList(ids);
-          return ids;
+        return ids
         });
     });
+
+    return Promise.all(request).then(() => setIdsList(ids));
   };
 
-
   const steps = likedPlace.map((e, i) => {
-    console.log(e.photo)
+    console.log(e.photo);
     return (
       <View style={styles.place} key={i}>
         <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
@@ -113,10 +114,8 @@ export default function ExploreDetailsScreen({ navigation }) {
     );
   });
 
-
   return (
     <SafeAreaView style={styles.container}>
-     
       <MapView
         initialRegion={{
           latitude: positionContext.latitude,
@@ -137,24 +136,27 @@ export default function ExploreDetailsScreen({ navigation }) {
         {point}
         {intinaries}
       </MapView>
+
       <Pressable>
         <Button
-        style={styles.startBtn}
-        disabled={!status&&idsList.length<likedPlace.length}
-        onPress={() => {
-          setStatus(!status);
-          if (!status) {
-            getIds();
-          } else {
-            navigation.navigate("ExploreSave", {
-              idsList,
-              distance,
-              duration,
-            });
-          }
-        }}
+          style={styles.startBtn}
+          //disabled={status && idsList.length < likedPlace.length}
+
+          onPress={async () => {
+            setStatus(!status);
+            if (!status) {
+             const ids= await getIds();
+              console.log(idsList)
+            } else {
+              navigation.navigate("ExploreSave", {
+                idsList,
+                distance,
+                duration,
+              });
+            }
+          }}
         >
-         {status? "Stop":"Start"}
+          {status ? "Stop" : "Start"}
         </Button>
       </Pressable>
       <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: "15%" }}>

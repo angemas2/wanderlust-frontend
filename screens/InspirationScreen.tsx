@@ -36,8 +36,12 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
    
     return (
       <View style={styles.routeCont} key={i}>
-        
-        <ImageBackground style={styles.bg} source={photo} imageStyle={{borderRadius:15}}>
+        <ImageBackground
+          style={styles.bg}
+          source={photo}
+         
+          imageStyle={{ borderRadius: 15, resizeMode: "cover" }}
+        >
           <View style={styles.desc}>
             <View style={styles.infos}>
               <Text style={styles.title}>{data.name}</Text>
@@ -125,6 +129,8 @@ const styles = StyleSheet.create({
   bg: {
     width: "100%",
     height: "100%",
+
+    
   },
   title: {
     fontSize: 18,
