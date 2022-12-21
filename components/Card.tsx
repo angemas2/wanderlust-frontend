@@ -1,46 +1,62 @@
 import React, { useCallback } from 'react';
-import { SafeAreaView, Image, View, Text, StyleSheet, ImageBackground } from 'react-native';
-import logo from '../assets/images/logowithtext.png';
-import { Box, Input, Button, Icon } from 'native-base';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { Button } from 'native-base';
 import { useDispatch } from 'react-redux';
 import { updateAndLikePlaces } from '../reducers/places';
 import { onDisLike } from '../reducers/places';
-import monument from '../assets/images/monument.png';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faLocationDot, faPlay, faXmark } from '@fortawesome/free-solid-svg-icons';
-
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/dev'; //import fonts
 
-SplashScreen.preventAutoHideAsync();
 
-function Card(props) {
+SplashScreen.preventAutoHideAsync();
+interface Place {
+  key: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  photo: string;
+}
+
+interface Props {
+  card: Place;
+}
+
+
+function Card(props: Props) {
+  //Font variable
+  const [fontsLoaded] = useFonts({
+    Inter_900Black,
+  });
   //Variable for calling useDispatch
   const dispatch = useDispatch();
 
-  const onLike = (obj) => {
+
+  //Function for the 3 buttons on the card.
+  const onLike = (obj: Props) => {
     dispatch(updateAndLikePlaces(obj.card));
   };
+
   const disLike = () => {
     dispatch(onDisLike());
   };
+
   const onGo = () => {
     console.log('start intinaries');
   };
 
-  const [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
 
+  //Snippet code to initialize fonts
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
-
   if (!fontsLoaded) {
     return null;
   }
+
 
   return (
     <View style={styles.container}>
@@ -65,6 +81,9 @@ function Card(props) {
     </View>
   );
 }
+
+
+//Variable containing style object
 const styles = StyleSheet.create({
   container: {
     height: '32%',
@@ -101,4 +120,6 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default Card;
+
