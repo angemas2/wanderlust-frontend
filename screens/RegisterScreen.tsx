@@ -177,25 +177,29 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       if (fbresponse?.type === "success") {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
-
+        console.log(user.picture.data.url);
         setUsername(user.first_name);
         setEmail(user.email);
         fetch("https://wanderlust-backend.vercel.app/users/facebook", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            username: username,
-            email: email,
+            username: user.first_name,
+            email: user.email,
+            first_name:user.first_name,
+            last_name:user.last_name,
+            picture:user.picture.data.url,
+            facebook_id:user.id
           }),
         })
           .then((response) => response.json())
           .then((data: dataUsersProps) => {
-            console.log(data);
+            console.log("fb dataaaaaaaa",data);
             dispatch(
               updateUserProfile({
-                email: data.email,
-                username: data.username,
-                picture: data.profile_id.picture,
+                email: user.email,
+                username: user.first_name,
+                picture: user.picture.data.url,
                 profile_id: data.profile_id._id,
               })
             );
