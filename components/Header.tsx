@@ -28,7 +28,7 @@ export default function Header({
 }: HeaderProps & { title: string }) {
   const user = useSelector((state: { user: UserState }) => state.user.value);
 
-  const avatar = user.picture;
+  const avatar = user.picture ? user.picture : '';
 
   const [fontsLoaded] = useFonts({
     Inter_500Medium,
