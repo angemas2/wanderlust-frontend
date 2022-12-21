@@ -52,16 +52,16 @@ const TabNavigator = () => {
           let iconName: IconDefinition;
 
           switch (route.name) {
-            case 'MyTrips':
+            case "MyTrips":
               iconName = faMap;
               break;
-            case 'Explore':
+            case "Explore":
               iconName = faMapLocationDot;
               break;
-            case 'Inspiration':
+            case "Inspiration":
               iconName = faLightbulb;
               break;
-            case 'Nav':
+            case "Nav":
               iconName = faCompass;
               break;
             default:
@@ -71,10 +71,11 @@ const TabNavigator = () => {
 
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#FFB703',
-        tabBarInactiveTintColor: '#023047',
+        tabBarActiveTintColor: "#FFB703",
+        tabBarInactiveTintColor: "#023047",
         headerShown: false,
-      })}>
+      })}
+    >
       <Tab.Screen name="MyTrips" component={MyTripsScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Inspiration" component={InspirationScreen} />

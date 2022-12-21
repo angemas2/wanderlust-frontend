@@ -6,7 +6,7 @@ import {
   Pressable,
   ScrollView,
   View,
-  Image
+  Image,
 } from "react-native";
 import { useContext, useState } from "react";
 import { useSelector } from "react-redux";
@@ -101,15 +101,15 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         .then((data: any) => {
           console.log("data id list", data.data._id);
           ids.push(data.data._id);
-          setIdsList(ids);
-          return ids;
+        return ids
         });
     });
+
+    return Promise.all(request).then(() => setIdsList(ids));
   };
 
-
   const steps = likedPlace.map((e, i) => {
-    console.log(e.photo)
+    console.log(e.photo);
     return (
       <View key={i}>
         <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
@@ -117,7 +117,6 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
       </View>
     );
   });
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -142,6 +141,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         {point}
         {intinaries}
       </MapView>
+
       <Pressable>
         <Button
           style={styles.startBtn}

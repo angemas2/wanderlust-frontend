@@ -1,11 +1,20 @@
-import { useCallback } from 'react';
-import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import { UserState } from '../reducers/user';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { useCallback } from "react";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { UserState } from "../reducers/user";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { Popover, Button, Box } from "native-base";
 
-import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Inter_500Medium } from '@expo-google-fonts/dev'; //import fonts
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts, Inter_500Medium } from "@expo-google-fonts/dev"; //import fonts
+import { updateUserProfile } from "../reducers/user";
 
 type HeaderProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -13,10 +22,13 @@ type HeaderProps = {
 
 SplashScreen.preventAutoHideAsync();
 
-export default function Header({ navigation, title }: HeaderProps & { title: string }) {
+export default function Header({
+  navigation,
+  title,
+}: HeaderProps & { title: string }) {
   const user = useSelector((state: { user: UserState }) => state.user.value);
 
-  const avatar = user.picture;
+  const avatar = user.picture ? user.picture : '';
 
   const [fontsLoaded] = useFonts({
     Inter_500Medium,
@@ -32,14 +44,85 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
     return null;
   }
 
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(
+      updateUserProfile({
+        username: null,
+        email: null,
+        picture: null,
+        profile_id: null,
+      })
+    );
+    navigation.navigate("Login");
+  };
+
   return (
     <SafeAreaView style={styles.container} onLayout={onLayoutRootView}>
-      <Image source={require('../assets/images/logo-header.png')} style={styles.logo} />
+      <Image
+        source={require("../assets/images/logo-header.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>{title}</Text>
       <View style={styles.userContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Image style={styles.avatar} source={{ uri: avatar }} />
-        </TouchableOpacity>
+        <Popover
+          trigger={(triggerProps) => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Profile")}
+                {...triggerProps}
+              >
+                <Image style={styles.avatar} source={{ uri: avatar }} />
+              </TouchableOpacity>
+            );
+          }}
+        >
+          <Popover.Content
+            accessibilityLabel="Logout"
+            w="56"
+            style={{ top: 20 }}
+          >
+            <Popover.Arrow style={{ top: 25 }} />
+            <Popover.CloseButton />
+            <Popover.Header>
+              <Text style={{ fontWeight: "bold", fontSize: 12 }}>
+                Hi! 🖐 Welcome to Wanderlust
+              </Text>
+            </Popover.Header>
+            <Popover.Body
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Image style={styles.avatar} source={{ uri: avatar }} />
+              <View style={{ marginLeft: 10 }}>
+                <Text
+                  style={{ fontWeight: "bold", fontSize: 12, color: "#FFB703" }}
+                >
+                  {user.username}
+                </Text>
+                <Text style={{ fontSize: 10 }}>{user.email}</Text>
+              </View>
+            </Popover.Body>
+            <Popover.Footer justifyContent="flex-end">
+              <Button.Group space={2}>
+                <Button colorScheme="coolGray" variant="ghost">
+                  Close
+                </Button>
+                <Button
+                  colorScheme="warning"
+                  style={{ backgroundColor: "#219EBC" }}
+                  onPress={() => logout()}
+                >
+                  Log out
+                </Button>
+              </Button.Group>
+            </Popover.Footer>
+          </Popover.Content>
+        </Popover>
+
         <Text style={styles.username}>{user.username}</Text>
       </View>
     </SafeAreaView>
@@ -84,6 +167,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: "70%",
     color: "#023047",
-    opacity:0.5,
+    opacity: 0.5,
   },
 });

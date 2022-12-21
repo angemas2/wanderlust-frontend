@@ -163,8 +163,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     responseType: ResponseType.Code,
   });
 
-  const fbtoken: string =
-    "EAAOBZBh7WaYwBACgvdCUy9qy9QrSeDnqmkK654ex0Am5DUWYKJZBL42FJJLN3qwgXdREzSAVqN1keFS13GWO78dTEW9fT2KyuPuCflMliIxCY1J8DyzHMMvRoZCgUuDb77847B6Mcsm9516yDBPtFWBO2RJADRZBLLZBo2lwSZB7FxlrE3sDI7hKLbJLZCflCREMKHlrRpG3QZDZD";
+  const fbtoken: any = process.env.FACEBOOK_TOKEN;
 
   const facebookUserInfo = async (token: string) => {
     const response = await fetch(
@@ -178,6 +177,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       if (fbresponse?.type === "success") {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
+
         setUsername(user.first_name);
         setEmail(user.email);
         fetch("https://wanderlust-backend.vercel.app/users/facebook", {
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     top: 50,
-    position:"relative"
+    position: "relative",
   },
   title: {
     color: "white",
@@ -451,7 +451,6 @@ const styles = StyleSheet.create({
   registeredTextContainer: {
     flexDirection: "row",
     marginBottom: -35,
-  
   },
   registeredText: {
     color: "white",
