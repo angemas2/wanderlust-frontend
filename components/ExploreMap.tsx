@@ -1,15 +1,7 @@
-import React from "react";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
-import { useContext, useState, useCallback } from "react";
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  View,
-  Pressable,
-  Button,
-} from "react-native";
+import React, { useContext, useState, useCallback } from "react";
+import { Text, StyleSheet, View, Pressable } from "react-native";
 import PositionContext from "../utils/context";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -18,36 +10,36 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowUp, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { setSwipeVisibility } from "../reducers/places";
 import _ from "lodash";
-import { UserState } from "../reducers/user";
-
-
-import {
-  useFonts,
-  Inter_400Regular,
-  Inter_500Medium,
-} from "@expo-google-fonts/dev"; //import to handle the Roboto font
+import { useFonts, Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/dev"; //import to handle the Roboto font
 import * as SplashScreen from "expo-splash-screen";
 
-SplashScreen.preventAutoHideAsync();
+interface ExploreMapProps {
+  navigation: any;
+}
 
-function ExploreMap({ navigation }) {
+const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
+  SplashScreen.preventAutoHideAsync();
+  //API key
   const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
+  //Variable for calling useDispatch
   const dispatch = useDispatch();
-  const visible = useSelector((state) => state.places.isSwipeVisible);
-  const likedPlace = useSelector((state) => state.places.liked);
-  //Get the context define in App.tsx
+  //true or false sended from reducer places, used to choose a style for ExploreMap component if swipe component is visble or not.
+  const visible = useSelector((state: any) => state.places.isSwipeVisible);
+  //Variable that posses all the places that have been liked by the user 
+  const likedPlace = useSelector((state: any) => state.places.liked);
+  //Get the context that contain the user position define in App.tsx
   const positionContext = useContext(PositionContext);
   const userPosition = {
     latitude: positionContext.latitude,
     longitude: positionContext.longitude,
   };
 
-  const [idsList, setIdsList] = useState([]);
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [canAdd, setCanAdd] = useState(false);
 
+  //Style object
   let container = {};
+  //Setting diferent style to container if visible is true
   if (visible) {
     container = {
       display: "flex",
@@ -56,7 +48,9 @@ function ExploreMap({ navigation }) {
       alignItems: "center",
       marginTop: "2%",
     };
-  } else {
+  }
+  //Setting diferent style to container if visible is false 
+  else {
     container = {
       display: "flex",
       height: "100%",
@@ -65,8 +59,9 @@ function ExploreMap({ navigation }) {
       marginTop: "7%",
     };
   }
-
+  //Style object
   let map = {};
+  //Setting diferent style to map if visible is true
   if (visible) {
     map = {
       height: "60%",
@@ -74,7 +69,9 @@ function ExploreMap({ navigation }) {
       borderRadius: 10,
       marginTop: "3%",
     };
-  } else {
+  }
+  //Setting diferent style to map if visible is false
+  else {
     map = {
       height: "80%",
       width: "95%",
@@ -82,70 +79,67 @@ function ExploreMap({ navigation }) {
     };
   }
 
+  //Maping on likedPlace to get all the places that the user liked.
+  //Adding the likedPlaces to the db
+  // const getIds = () => {
+  //   return likedPlace.map((data) => {
+  //     fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
+  //       method: "Post",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         name: data.name,
+  //         description: data.description,
+  //         photos: data.photo,
+  //         location: {
+  //           latitude: data.latitude,
+  //           longitude: data.longitude,
+  //         },
+  //         tags_id: "",
+  //       }),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         console.log("data id list", data.data._id);
+  //         ids.push(data.data._id);
+  //         setIdsList(ids);
+  //         if (likedPlace.length === idsList.length) {
+  //           setCanAdd(true);
+  //         }
+  //       });
+  //   });
+  // };
 
-  const getIds = () => {
-    return likedPlace.map((data) => {
-      fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
-        method: "Post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.name,
-          description: data.description,
-          photos: data.photo,
-          location: {
-            latitude: data.latitude,
-            longitude: data.longitude,
-          },
-          tags_id: "",
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("data id list", data.data._id);
-          ids.push(data.data._id);
-          setIdsList(ids);
-          if (likedPlace.length === idsList.length) {
-            setCanAdd(true);
-          }
-        });
-    });
-  };
+  // const createItinerary = () => {
+  //   getIds();
 
-
-  const createItinerary = () => {
-    getIds();
-
-    if (idsList.length === likedPlace.length) {
-      fetch("https://wanderlust-backend.vercel.app/itineraries/addItinerary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          profile_id: user.profile_id,
-          viewpointsList: idsList,
-          km: distance,
-          map: duration,
-          photos: "",
-          name: "La capsuletest await fintest15",
-          description:
-            "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-          public: false,
-          custom: true,
-          isSponsor: false,
-          city: "Bruxelles",
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-    }
-  };
+  //   if (idsList.length === likedPlace.length) {
+  //     fetch("https://wanderlust-backend.vercel.app/itineraries/addItinerary", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         profile_id: user.profile_id,
+  //         viewpointsList: idsList,
+  //         km: distance,
+  //         map: duration,
+  //         photos: "",
+  //         name: "La capsuletest await fintest15",
+  //         description:
+  //           "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
+  //         public: false,
+  //         custom: true,
+  //         isSponsor: false,
+  //         city: "Bruxelles",
+  //       }),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => console.log(data));
+  //   }
+  // };
 
   const handleVisible = () => {
     dispatch(setSwipeVisibility());
   };
 
-  // if(likedPlace.length === 0) {
-  //   dispatch(setSwipeVisibility());
-  // }
 
   const wayPoints = likedPlace.map((e) => {
     return { latitude: e.latitude, longitude: e.longitude };
@@ -178,14 +172,14 @@ function ExploreMap({ navigation }) {
   const point =
     likedPlace.length > 0
       ? likedPlace.map((e, i) => {
-          return (
-            <Marker
-              key={i}
-              title={e.name}
-              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-            />
-          );
-        })
+        return (
+          <Marker
+            key={i}
+            title={e.name}
+            coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+          />
+        );
+      })
       : "";
 
   const [fontsLoaded] = useFonts({
@@ -206,16 +200,16 @@ function ExploreMap({ navigation }) {
 
   return (
     <View style={container} onLayout={onLayoutRootView}>
-        <Text style={styles.title}>My adventure</Text>
-        <Pressable 
+      <Text style={styles.title}>My adventure</Text>
+      <Pressable
         style={styles.pressArrow}
         onPress={() => handleVisible()}>
-          <FontAwesomeIcon
-            icon={visible ? faCircleArrowUp : faXmark}
-            style={styles.icon}
-            size={30}
-          />
-        </Pressable>
+        <FontAwesomeIcon
+          icon={visible ? faCircleArrowUp : faXmark}
+          style={styles.icon}
+          size={30}
+        />
+      </Pressable>
       <MapView
         initialRegion={{
           latitude: positionContext.latitude,
