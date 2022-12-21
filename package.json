@@ -21,6 +21,7 @@
     "@react-navigation/native": "6",
     "@react-navigation/native-stack": "^6.9.5",
     "@reduxjs/toolkit": "^1.9.1",
+    "@types/google.maps": "^3.51.0",
     "expo": "~47.0.8",
     "expo-auth-session": "^3.7.3",
     "expo-font": "^11.0.1",
