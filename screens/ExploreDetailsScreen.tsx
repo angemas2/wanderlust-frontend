@@ -15,7 +15,7 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
 import { Button } from "native-base";
-import { PlaceState } from '../reducers/places'
+import { PlaceState } from "../reducers/places";
 
 type Props = {
   navigation: any;
@@ -36,7 +36,9 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const [distance, setDistance] = useState(0);
   const [status, setStatus] = useState<boolean>(false);
 
-  const likedPlace = useSelector((state: { places: PlaceState }) => state.places.value.liked);
+  const likedPlace = useSelector(
+    (state: { places: PlaceState }) => state.places.value.liked
+  );
 
   const wayPoints = likedPlace.map((e: any) => {
     return { latitude: e.latitude, longitude: e.longitude };
@@ -69,16 +71,15 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const point =
     likedPlace.length > 0
       ? likedPlace.map((e: any, i: number) => {
-        return (
-          <Marker
-            key={i}
-            title={e.name}
-            coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-          />
-        );
-      })
-      : ""
-
+          return (
+            <Marker
+              key={i}
+              title={e.name}
+              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+            />
+          );
+        })
+      : "";
 
   const getIds = async () => {
     const ids: string[] = [];
@@ -101,11 +102,10 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         .then((data: any) => {
           console.log("data id list", data.data._id);
           ids.push(data.data._id);
-        return ids
+          setIdsList(ids);
+          return ids;
         });
     });
-
-    return Promise.all(request).then(() => setIdsList(ids));
   };
 
   const steps = likedPlace.map((e, i) => {
@@ -120,7 +120,6 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView style={styles.container}>
-
       <MapView
         initialRegion={{
           latitude: positionContext.latitude,
@@ -141,14 +140,13 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         {point}
         {intinaries}
       </MapView>
-
       <Pressable>
         <Button
           style={styles.startBtn}
           // disabled={!status && idsList.length < likedPlace.length}
           onPress={async () => {
             if (!status) {
-              await getIds().then(setStatus(!status))
+              await getIds().then(setStatus(!status));
             } else {
               navigation.navigate("ExploreSave", {
                 idsList,
