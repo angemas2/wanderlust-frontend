@@ -8,15 +8,20 @@ import {
   View,
   Image,
 } from "react-native";
-import { useContext, useState, useCallback } from "react";
+import { useContext, useState } from "react";
 import { useSelector } from "react-redux";
 import MapViewDirections from "react-native-maps-alternatives-directions";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
-import { Box, Input, Icon, Button } from "native-base";
+import { Button } from "native-base";
+import { PlaceState } from '../reducers/places'
 
-export default function ExploreDetailsScreen({ navigation }) {
+type Props = {
+  navigation: any;
+};
+
+export default function ExploreDetailsScreen({ navigation }: Props) {
   const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
 
   const positionContext = useContext(PositionContext);
@@ -24,17 +29,16 @@ export default function ExploreDetailsScreen({ navigation }) {
     latitude: positionContext.latitude,
     longitude: positionContext.longitude,
   };
-  const user = useSelector((state) => state.user.value);
+  const user = useSelector((state: any) => state.user.value);
 
-  const [idsList, setIdsList] = useState([]);
+  const [idsList, setIdsList] = useState<string[]>([]);
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [status, setStatus] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [status, setStatus] = useState<boolean>(false);
 
-  const likedPlace = useSelector((state) => state.places.liked);
+  const likedPlace = useSelector((state: { places: PlaceState }) => state.places.value.liked);
 
-  const wayPoints = likedPlace.map((e) => {
+  const wayPoints = likedPlace.map((e: any) => {
     return { latitude: e.latitude, longitude: e.longitude };
   });
 
@@ -64,22 +68,22 @@ export default function ExploreDetailsScreen({ navigation }) {
 
   const point =
     likedPlace.length > 0
-      ? likedPlace.map((e, i) => {
-          return (
-            <Marker
-              key={i}
-              title={e.name}
-              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-            />
-          );
-        })
-      : "";
+      ? likedPlace.map((e: any, i: number) => {
+        return (
+          <Marker
+            key={i}
+            title={e.name}
+            coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+          />
+        );
+      })
+      : ""
+
 
   const getIds = async () => {
-    let ids = [];
-
-    const request = likedPlace.map((data, i) => {
-       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
+    const ids: string[] = [];
+    return likedPlace.map((data: any) => {
+      fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -93,9 +97,9 @@ export default function ExploreDetailsScreen({ navigation }) {
           tags_id: "",
         }),
       })
-        .then((res) => res.json())
-        .then((data) => {
-         
+        .then((res: any) => res.json())
+        .then((data: any) => {
+          console.log("data id list", data.data._id);
           ids.push(data.data._id);
         return ids
         });
@@ -107,7 +111,7 @@ export default function ExploreDetailsScreen({ navigation }) {
   const steps = likedPlace.map((e, i) => {
     console.log(e.photo);
     return (
-      <View style={styles.place} key={i}>
+      <View key={i}>
         <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
         <Text style={{ width: 150 }}>{e.name}</Text>
       </View>
@@ -116,6 +120,7 @@ export default function ExploreDetailsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <MapView
         initialRegion={{
           latitude: positionContext.latitude,
@@ -140,13 +145,10 @@ export default function ExploreDetailsScreen({ navigation }) {
       <Pressable>
         <Button
           style={styles.startBtn}
-          //disabled={status && idsList.length < likedPlace.length}
-
+          // disabled={!status && idsList.length < likedPlace.length}
           onPress={async () => {
-            setStatus(!status);
             if (!status) {
-             const ids= await getIds();
-              console.log(idsList)
+              await getIds().then(setStatus(!status))
             } else {
               navigation.navigate("ExploreSave", {
                 idsList,

@@ -1,29 +1,20 @@
-import React from "react";
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  Pressable,
-  View,
-  Switch,
-} from "react-native";
-import { useContext, useState, useCallback } from "react";
+import React, { useState } from "react";
+import { SafeAreaView, Text, StyleSheet, View, Switch } from "react-native";
 import { useSelector } from "react-redux";
-import MapViewDirections from "react-native-maps-alternatives-directions";
-import MapView from "react-native-maps";
-import { Marker } from "react-native-maps";
-import PositionContext from "../utils/context";
-import { Box, Input, Icon, Button } from "native-base";
+import { Input, Button } from "native-base";
 
-export default function ExploreSaveScreen({ route, navigation }) {
-  const user = useSelector((state) => state.user.value);
+interface ExploreSaveScreenProps {
+  route: any;
+  navigation: any;
+}
 
+const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation }) => {
+  const user = useSelector((state: any) => state.user.value);
+  console.log(route.params.idsList)
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [distance, setDistance] = useState(0);
 
   const toggleSwitch = () => setIsPublic(!isPublic);
 
@@ -31,12 +22,12 @@ export default function ExploreSaveScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-       <Text style={styles.title}>Remember your adventure</Text>
+      <Text style={styles.title}>Remember your adventure</Text>
       <View style={styles.name}>
         <Text>City</Text>
         <Input
-          onChangeText={(value) => setCity(value)}
-          vlaue={city}
+          onChangeText={(value: string) => setCity(value)}
+          value={city}
           keyboardType="email-address"
           autoCapitalize="none"
           borderRadius={10}
@@ -48,8 +39,8 @@ export default function ExploreSaveScreen({ route, navigation }) {
       <View style={styles.name}>
         <Text>Name your road</Text>
         <Input
-          onChangeText={(value) => setName(value)}
-          vlaue={name}
+          onChangeText={(value: string) => setName(value)}
+          value={name}
           keyboardType="email-address"
           autoCapitalize="none"
           borderRadius={10}
@@ -61,8 +52,8 @@ export default function ExploreSaveScreen({ route, navigation }) {
       <View style={styles.description}>
         <Text>Say a litlle more</Text>
         <Input
-          onChangeText={(value) => setDescription(value)}
-          vlaue={description}
+          onChangeText={(value: string) => setDescription(value)}
+          value={description}
           keyboardType="email-address"
           autoCapitalize="none"
           borderRadius={10}
@@ -75,7 +66,7 @@ export default function ExploreSaveScreen({ route, navigation }) {
       <View style={styles.switch}>
         <Text>Private</Text>
         <Switch
-          onValueChange={(e) => {
+          onValueChange={(e: any) => {
             toggleSwitch(e);
           }}
           value={isPublic}
@@ -88,7 +79,7 @@ export default function ExploreSaveScreen({ route, navigation }) {
             fetch(
               "https:wanderlust-backend.vercel.app/itineraries/addItinerary",
               {
-                method: "POST",
+                method: "Post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   profile_id: user.profile_id,
@@ -113,7 +104,7 @@ export default function ExploreSaveScreen({ route, navigation }) {
           Save my road
         </Button>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
@@ -123,7 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  title:{
+  title: {
     fontFamily: 'Inter_500Medium',
     fontSize: 24,
   },
@@ -146,3 +137,5 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
+
+export default ExploreSaveScreen
