@@ -15,7 +15,6 @@ import { useFonts, Inter_900Black } from '@expo-google-fonts/dev'; //import font
 SplashScreen.preventAutoHideAsync();
 
 function Card(props) {
-  console.log(props.card.photo);
   //Variable for calling useDispatch
   const dispatch = useDispatch();
 
