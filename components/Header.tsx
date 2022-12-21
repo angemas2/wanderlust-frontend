@@ -48,26 +48,31 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
 
 const styles = StyleSheet.create({
   container: {
-    height: '10%',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '10%',
+    height: "10%",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: "10%",
   },
   logo: {
     aspectRatio: 1,
-    right: '45%',
-    bottom: '35%',
+    width: 200,
+    right: "40%",
+    bottom: "35%",
   },
   title: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 24,
-    right: '80%',
+    fontFamily: "Inter_500Medium",
+    fontSize: 20,
+    textAlign: "center",
+    right: "80%",
+    width: 150,
+    color: "#023047",
   },
   userContainer: {
-    flexDirection: 'column',
-    width: '18%',
-    height: '100%',
+    display: "flex",
+    flexDirection: "column",
+    width: "18%",
+    height: "100%",
   },
   avatar: {
     aspectRatio: 1,
@@ -75,6 +80,10 @@ const styles = StyleSheet.create({
     maxHeight: 50,
   },
   username: {
-    fontSize: 14,
+    fontSize: 10,
+    textAlign: "center",
+    width: "70%",
+    color: "#023047",
+    opacity:0.5,
   },
 });

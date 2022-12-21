@@ -40,7 +40,7 @@ function ExploreSwipe() {
   useEffect(() => {
     placesData.length > 0
       ? placesData.map((e, i) => {
-          let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
+          let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
           if (e.photos[0] === undefined) {
             photo = '';
           }
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 10,
+    marginTop:10,
     fontSize: 14,
     fontFamily: 'Inter_400Regular',
   },

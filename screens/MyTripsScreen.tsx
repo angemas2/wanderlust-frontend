@@ -87,7 +87,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
           }}
         >
           <ImageBackground
-            imageStyle={{ opacity: 0.3 }}
+            imageStyle={{ opacity: 0.3,borderRadius:15 }}
             source={{ uri: data.viewpoints_id[0]?.photos }}
             style={styles.imgBg}
           >

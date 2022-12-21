@@ -17,15 +17,12 @@ import { MaterialIcons } from "@expo/vector-icons"; //import icons displayed in 
 import user from "../reducers/user";
 import { useSelector } from "react-redux";
 
-
 export default function ItinerarySummaryScreen({ route }: any) {
   const { _id, profile_id, name, viewpoints_id, description, followers } =
     route.params;
 
   const positionContext = useContext(PositionContext);
   const user = useSelector((state: { user: any }) => state.user.value);
-
-
 
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
@@ -40,6 +37,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
                 latitude: e.location.latitude,
                 longitude: e.location.longitude,
               }}
+              pinColor={"#FFB703"}
             />
           );
         })
@@ -62,70 +60,112 @@ export default function ItinerarySummaryScreen({ route }: any) {
     return (
       <View style={styles.place} key={i}>
         <Image source={{ uri: data.photos }} style={styles.placeimg}></Image>
-        <Text style={{ width: 150 }}>{data.name}</Text>
+        <Text
+          style={{
+            width: 150,
+            fontWeight: "bold",
+            color: "#023047",
+            fontSize: 12,
+            textAlign: "center",
+          }}
+        >
+          {data.name}
+        </Text>
       </View>
     );
   });
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
+  console.log(user.picture);
 
   return (
     <SafeAreaView style={styles.container}>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: 30,
-          }}
-        >
-          {" "}
-          {name}{" "}
-        </Text>
-        <Text style={{ textAlign: "center", marginBottom: 30, width: 350 }}>
-          {" "}
-          {description}{" "}
-        </Text>
-        <MapView
-          ref={(ref) => (map = ref)}
-          initialRegion={{
+      <View
+        style={{
+          backgroundColor: "#219EBC",
+          padding: 20,
+          position: "absolute",
+          height: "15%",
+          top: -20,
+          width: "100%",
+        }}
+      ></View>
+      <Image
+        source={{ uri: user.picture }}
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 50,
+          marginBottom: 10,
+          borderColor: "white",
+          borderWidth: 4,
+        }}
+      ></Image>
+
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 15,
+          color: "#023047",
+        }}
+      >
+        {" "}
+        {name}{" "}
+      </Text>
+      <Text
+        style={{
+          textAlign: "center",
+          marginBottom: 15,
+          width: 350,
+          color: "#023047",
+        }}
+      >
+        {" "}
+        {description}{" "}
+      </Text>
+      <MapView
+        ref={(ref) => (map = ref)}
+        initialRegion={{
+          latitude: viewpoints_id[0].location.latitude,
+          longitude: viewpoints_id[0].location.longitude,
+          latitudeDelta: 0.0522,
+          longitudeDelta: 0.0421,
+        }}
+        style={{ width: "90%", height: "40%" }}
+        onMapReady={fitMapToMarkers}
+      >
+        <MapViewDirections
+          origin={{
             latitude: viewpoints_id[0].location.latitude,
             longitude: viewpoints_id[0].location.longitude,
-            latitudeDelta: 0.0522,
-            longitudeDelta: 0.0421,
           }}
-          style={{ width: "95%", height: "40%" }}
-          onMapReady={fitMapToMarkers}
-        >
-          <MapViewDirections
-            origin={{
-              latitude: viewpoints_id[0].location.latitude,
-              longitude: viewpoints_id[0].location.longitude,
-            }}
-            destination={{
-              latitude:
-                viewpoints_id[viewpoints_id.length - 1].location.latitude,
-              longitude:
-                viewpoints_id[viewpoints_id.length - 1].location.longitude,
-            }}
-            waypoints={waypoints}
-            optimizeWaypoints={true}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={4}
-            strokeColor="#219EBC"
-            precision="high"
-            mode="WALKING"
-            onReady={(result) => console.log(result.distance)}
-          />
-          {point}
-        </MapView>
-        <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 15 }}>
-          Itinerary Steps
-        </Text>
-        <ScrollView horizontal={true} style={styles.placesCont}>
-          {steps}
-        </ScrollView>
+          destination={{
+            latitude: viewpoints_id[viewpoints_id.length - 1].location.latitude,
+            longitude:
+              viewpoints_id[viewpoints_id.length - 1].location.longitude,
+          }}
+          waypoints={waypoints}
+          optimizeWaypoints={true}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={4}
+          strokeColor="#219EBC"
+          precision="high"
+          mode="WALKING"
+          onReady={(result) => console.log(result.distance)}
+        />
+        {point}
+      </MapView>
+      <Text
+        style={{ color: "#023047", fontSize: 16, marginTop: 15, width: "90%" }}
+      >
+        Itinerary Steps
+      </Text>
+      <ScrollView horizontal={true} style={styles.placesCont}>
+        {steps}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -136,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: "20%",
+    paddingTop: "15%",
   },
   placesCont: {
     display: "flex",
@@ -144,14 +184,29 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   placeimg: {
-    width: 150,
-    height: 130,
-    borderRadius: 10,
     marginBottom: 15,
+    width: "100%",
+    height: 120,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   place: {
-    width: 150,
+    width: 160,
     marginRight: 20,
-    marginTop: 30,
+    marginTop: 20,
+    height: 180,
+    backgroundColor: "white",
+    borderRadius: 15,
+    paddingBottom: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    marginBottom: 5,
   },
 });

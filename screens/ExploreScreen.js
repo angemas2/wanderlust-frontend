@@ -10,7 +10,7 @@ export default function ExploreScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} title="Explore" />
+      <Header navigation={navigation} title="Create your itinerary !" />
       {visible ? (
         <SafeAreaView style={styles.container}>
           <ExploreSwipe />
