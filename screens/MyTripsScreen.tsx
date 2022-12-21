@@ -12,9 +12,8 @@ import {
 import { useSelector } from 'react-redux';
 import { UserState } from '../reducers/user';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
-
-import { TabView, TabBar, SceneMap } from "react-native-tab-view";
-import { Box, Input, Button, Icon, Radio, FlatList, Stack } from "native-base";
+import { Radio, FlatList, Stack } from 'native-base';
+import Header from '../components/Header';
 
 type NavigationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -42,7 +41,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
       });
   }, [followedTrips]);
 
-   // const tripList = trips.map((data: any, i) => {
+  // const tripList = trips.map((data: any, i) => {
   //   return (
   //     <View style={styles.tripCont} key={i}>
   //       <Pressable
@@ -111,7 +110,6 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   const FirstRoute = () => (
     <FlatList
-      ListHeaderComponent={<Text>My Custom Trips</Text>}
       showsVerticalScrollIndicator={false}
       data={trips}
       contentContainerStyle={styles.container}
@@ -119,26 +117,23 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
         <View style={styles.tripCont}>
           <Pressable
             onPress={() => {
-              navigation.navigate("ItinerarySummary", { ...item });
-            }}
-          >
+              navigation.navigate('ItinerarySummary', { ...item });
+            }}>
             <ImageBackground
               imageStyle={{ opacity: 0.3 }}
               blurRadius={2}
               source={{ uri: item.viewpoints_id[0]?.photos }}
-              style={styles.imgBg}
-            >
+              style={styles.imgBg}>
               <View
                 style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <Text style={styles.tripTitle}>{item.name}</Text>
                 <View style={styles.itineraryDatas}>
-                  <Text style={{ color: "white" }}>
+                  <Text style={{ color: 'white' }}>
                     {item.km.toFixed(2)} km | {item.viewpoints_id.length} spots
                   </Text>
                 </View>
@@ -152,7 +147,6 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   const SecondRoute = () => (
     <FlatList
-      ListHeaderComponent={<Text>Trips I followed</Text>}
       showsVerticalScrollIndicator={false}
       data={followedTrips}
       contentContainerStyle={styles.container}
@@ -160,26 +154,23 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
         <View style={styles.tripCont}>
           <Pressable
             onPress={() => {
-              navigation.navigate("ItinerarySummary", { ...item });
-            }}
-          >
+              navigation.navigate('ItinerarySummary', { ...item });
+            }}>
             <ImageBackground
               imageStyle={{ opacity: 0.3 }}
               blurRadius={2}
               source={{ uri: item.viewpoints_id[0]?.photos }}
-              style={styles.imgBg}
-            >
+              style={styles.imgBg}>
               <View
                 style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <Text style={styles.tripTitle}>{item.name}</Text>
                 <View style={styles.itineraryDatas}>
-                  <Text style={{ color: "white" }}>
+                  <Text style={{ color: 'white' }}>
                     {item.km.toFixed(2)} km | {item.viewpoints_id.length} spots
                   </Text>
                 </View>
@@ -216,40 +207,39 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   return (
     <View style={styles.container}>
+      <Header navigation={navigation} title="My travels" />
       <>
         <Radio.Group
           name="Route types"
           defaultValue="1"
           style={{
-            backgroundColor: "#219EBC",
-            width: "100%",
-            height: "10%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            backgroundColor: '#219EBC',
+            width: '100%',
+            height: '8%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
           onChange={() => {
             setRouteType(!routeType);
-          }}
-        >
+          }}>
           <Stack
             direction={{
-              base: "row",
-              md: "row",
+              base: 'row',
+              md: 'row',
             }}
             alignItems={{
-              base: "center",
-              md: "center",
+              base: 'center',
+              md: 'center',
             }}
-            justifyContent={"center"}
+            justifyContent={'center'}
             space={4}
-            w="100%"
-          >
-            <Radio value="1" colorScheme="white" size="md" my={1}>
-              <Text style={{ color: "white" }}>Custom</Text>
+            w="100%">
+            <Radio value="1" colorScheme="yellow" size="md" my={1}>
+              <Text style={{ color: 'white' }}>Custom</Text>
             </Radio>
-            <Radio value="2" colorScheme="white" size="md" my={1}>
-              <Text style={{ color: "white" }}>Followed</Text>
+            <Radio value="2" colorScheme="yellow" size="md" my={1}>
+              <Text style={{ color: 'white' }}>Followed</Text>
             </Radio>
           </Stack>
         </Radio.Group>
@@ -262,10 +252,8 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: "flex",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    paddingTop: 40,
+    backgroundColor: '#fff',
+    alignItems: 'center',
   },
   scrollviewContainer: {
     flexGrow: 1,
@@ -273,18 +261,17 @@ const styles = StyleSheet.create({
   },
   scrollviewContent: {},
   tripCont: {
-    width: "95%",
+    width: '95%',
     height: 200,
     marginTop: 20,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(2, 48, 71, 0.8)",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(2, 48, 71, 0.8)',
     borderRadius: 15,
   },
   imgBg: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

@@ -14,9 +14,11 @@ export default function ProfileScreen() {
 
   const user = useSelector((state: { user: UserState }) => state.user.value);
 
+  const avatar = user.picture ? user.picture : '';
+
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={{ uri: user.picture }} style={styles.avatar} />
+      <Image source={{ uri: avatar }} style={styles.avatar} />
       <Text>{user.username}</Text>
 
       <Box>
