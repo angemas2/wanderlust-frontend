@@ -51,7 +51,9 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
     return (
       <View style={styles.place} key={i}>
         <Image source={{ uri: data.photos }} style={styles.placeimg}></Image>
-        <Text style={{ width: 150 }}>{data.name}</Text>
+        <Text style={{ width: 150, textAlign: "center", color: "#023047" }}>
+          {data.name}
+        </Text>
       </View>
     );
   });
@@ -95,6 +97,7 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
           fontSize: 18,
           textAlign: "center",
           width: "80%",
+          color: "#023047",
         }}
       >
         {name}
@@ -105,6 +108,8 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
           width: "80%",
           marginTop: 15,
           marginBottom: 20,
+          color: "#023047",
+          opacity: 0.6,
         }}
       >
         {description}
@@ -203,7 +208,15 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
         </Button>
       </Pressable>
 
-      <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: 60 }}>
+      <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 16,
+          marginTop: 60,
+          color: "#023047",
+          width: "90%",
+        }}
+      >
         Itinerary Steps
       </Text>
       <ScrollView horizontal={true} style={styles.placesCont}>
@@ -226,15 +239,30 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   placeimg: {
-    width: 150,
-    height: 130,
-    borderRadius: 10,
     marginBottom: 15,
+    width: "100%",
+    height: 120,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   place: {
-    width: 150,
+    width: 160,
     marginRight: 20,
-    marginTop: 30,
+    marginTop: 20,
+    height: 180,
+    backgroundColor: "white",
+    borderRadius: 15,
+    paddingBottom: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    marginBottom: 5,
   },
   startBtn: {
     backgroundColor: "#FBBF13",
