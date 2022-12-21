@@ -37,6 +37,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
                 latitude: e.location.latitude,
                 longitude: e.location.longitude,
               }}
+              pinColor={"#FFB703"}
             />
           );
         })
@@ -59,7 +60,16 @@ export default function ItinerarySummaryScreen({ route }: any) {
     return (
       <View style={styles.place} key={i}>
         <Image source={{ uri: data.photos }} style={styles.placeimg}></Image>
-        <Text style={{ width: 150 }}>{data.name}</Text>
+        <Text
+          style={{
+            width: 150,
+            fontWeight: "bold",
+            color: "#023047",
+            fontSize: 12,
+          }}
+        >
+          {data.name}
+        </Text>
       </View>
     );
   });
@@ -70,22 +80,48 @@ export default function ItinerarySummaryScreen({ route }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View
+        style={{
+          backgroundColor: "#219EBC",
+          padding: 20,
+          position: "absolute",
+          height: "15%",
+          top: -20,
+          width: "100%",
+        }}
+      ></View>
       <Image
         source={{ uri: user.picture }}
-        style={{ width: 70, height: 70, borderRadius: 50, marginBottom: 10 }}
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 50,
+          marginBottom: 10,
+          borderColor: "white",
+          borderWidth: 4,
+        }}
       ></Image>
+
       <Text
         style={{
           fontSize: 20,
           fontWeight: "bold",
           textAlign: "center",
-          marginBottom: 30,
+          marginBottom: 15,
+          color: "#023047",
         }}
       >
         {" "}
         {name}{" "}
       </Text>
-      <Text style={{ textAlign: "center", marginBottom: 30, width: 350 }}>
+      <Text
+        style={{
+          textAlign: "center",
+          marginBottom: 15,
+          width: 350,
+          color: "#023047",
+        }}
+      >
         {" "}
         {description}{" "}
       </Text>
@@ -121,7 +157,9 @@ export default function ItinerarySummaryScreen({ route }: any) {
         />
         {point}
       </MapView>
-      <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 15 }}>
+      <Text
+        style={{ color: "#023047", fontSize: 16, marginTop: 15, width: "90%" }}
+      >
         Itinerary Steps
       </Text>
       <ScrollView horizontal={true} style={styles.placesCont}>
@@ -153,6 +191,6 @@ const styles = StyleSheet.create({
   place: {
     width: 150,
     marginRight: 20,
-    marginTop: 30,
+    marginTop: 20,
   },
 });

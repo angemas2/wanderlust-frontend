@@ -402,10 +402,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "90%",
-    marginTop: 60,
+    marginTop: 40,
   },
   titleContainer: {
     top: 50,
+    position:"relative"
   },
   title: {
     color: "white",
@@ -450,6 +451,7 @@ const styles = StyleSheet.create({
   registeredTextContainer: {
     flexDirection: "row",
     marginBottom: -35,
+  
   },
   registeredText: {
     color: "white",

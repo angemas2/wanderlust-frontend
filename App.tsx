@@ -144,8 +144,8 @@ export default function App() {
                     <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
                     <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
                     <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
-                    <Stack.Screen name="MyTrips" component={NavScreen} />
-                    <Stack.Screen name="Followed" component={FollowedTripsScreen} />
+                    <Stack.Screen name="CustomTrips" component={MyTripsScreen} />
+                    <Stack.Screen name="FollowedTrips" component={FollowedTripsScreen} />
                     <Stack.Screen name="ExploreSave" component={ExploreSaveScreen} />
                     <Stack.Screen name="TabNavigator" component={TabNavigator} />
                   </>
@@ -154,6 +154,8 @@ export default function App() {
                     <Stack.Screen name="Home" component={WelcomeScreen} />
                     <Stack.Screen name="Profile" component={ProfileScreen} />
                     <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
+                    <Stack.Screen name="CustomTrips" component={MyTripsScreen} />
+                    <Stack.Screen name="FollowedTrips" component={FollowedTripsScreen} />
                     <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
                     <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
 

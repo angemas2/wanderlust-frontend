@@ -8,10 +8,10 @@ type NavigationScreenProps = {
 export default function TopTabNav({ navigation }: NavigationScreenProps) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MyTrips')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CustomTrips')}>
         <Text>Custom</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Followed')}>
+      <TouchableOpacity onPress={() => navigation.navigate('FollowedTrips')}>
         <Text>Followed</Text>
       </TouchableOpacity>
     </View>
