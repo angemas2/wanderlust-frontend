@@ -29,6 +29,7 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
         email: null,
         picture: null,
         profile_id: null,
+        token: null,
       })
     );
     navigation.navigate('Login');
@@ -79,6 +80,11 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
                 </Text>
                 <Text style={{ fontSize: 10 }}>{user.email}</Text>
               </View>
+              <TouchableOpacity
+                style={styles.viewProfile}
+                onPress={() => navigation.navigate('Profile')}>
+                <Text>View Profile</Text>
+              </TouchableOpacity>
             </Popover.Body>
             <Popover.Footer justifyContent="flex-end">
               <Button.Group space={2}>
@@ -142,5 +148,8 @@ const styles = StyleSheet.create({
     width: '70%',
     color: '#023047',
     opacity: 0.5,
+  },
+  viewProfile: {
+    flexDirection: 'column',
   },
 });

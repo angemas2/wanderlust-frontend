@@ -4,6 +4,7 @@ export type User = {
   email: string | null;
   username: string | null;
   picture: string | null;
+  token: string | null;
   profile_id: string | null;
 };
 
@@ -12,7 +13,7 @@ export type UserState = {
 };
 
 const initialState: UserState = {
-  value: { email: null, username: null, picture: null, profile_id: null },
+  value: { email: null, username: null, picture: null, profile_id: null, token: null },
 };
 
 export const userSlice = createSlice({
