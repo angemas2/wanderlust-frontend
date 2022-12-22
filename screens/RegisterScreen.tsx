@@ -165,7 +165,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   const fbtoken: any = process.env.FACEBOOK_TOKEN;
 
-  const facebookUserInfo = async (token: string) => {
+  const facebookUserInfo = async (token: any) => {
     const response = await fetch(
       `https://graph.facebook.com/v15.0/me?fields=email%2Cfirst_name%2Clast_name%2Cpicture&access_token=${token}`
     );

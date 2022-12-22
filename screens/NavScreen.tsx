@@ -46,7 +46,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     longitude: positionContext?.longitude,
   });
 
-  const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
+  const GOOGLE_MAPS_APIKEY: any= process.env.GOOGLE_MAPS_API;
 
   //Check if coord destination is empty if not show Marker
   const destination = destinationCoord?.latitude ? (

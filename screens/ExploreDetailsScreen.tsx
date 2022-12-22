@@ -8,7 +8,7 @@ import {
   View,
   Image,
 } from "react-native";
-import { useContext, useState,useRef } from "react";
+import { useContext, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import MapViewDirections from "react-native-maps-alternatives-directions";
 import MapView from "react-native-maps";
@@ -35,8 +35,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
   const [status, setStatus] = useState<boolean>(false);
-    const [direction, setDirection] = useState("");
-  
+  const [direction, setDirection] = useState("");
 
   const likedPlace = useSelector(
     (state: { places: PlaceState }) => state.places.value.liked
@@ -48,9 +47,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
   const intinaries =
     positionContext != null && likedPlace.length > 0 ? (
-      
       <MapViewDirections
-     
         origin={userPosition}
         destination={{
           latitude: likedPlace[likedPlace.length - 1].latitude,
@@ -105,10 +102,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         })
       : "";
 
-
-       let map: any = useRef(null);
-
-     
+  let map: any = useRef(null);
 
   const getIds = async () => {
     const ids: string[] = [];
@@ -137,16 +131,15 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
     });
   };
 
-
- 
-
-
-
   const steps = likedPlace.map((e, i) => {
     console.log(e.photo);
+
+    const photo = !!e.photo
+      ? { uri: `${e.photo}` }
+      : require("../assets/images/background.png");
     return (
       <View key={i} style={styles.place}>
-        <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
+        <Image source={photo} style={styles.placeimg}></Image>
         <Text
           style={{
             width: "100%",
@@ -173,7 +166,6 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
           longitudeDelta: 0.0421,
         }}
         style={styles.map}
-      
         showsUserLocation={true}
         followsUserLocation={true}
       >
