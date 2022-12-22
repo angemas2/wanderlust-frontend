@@ -31,7 +31,7 @@ export default function InspirationScreen({
       .then((data) => {
         setItineraries(data.data);
       });
-  }, []);
+  }, [itineraries]);
 
   const handleSearch = () => {
     fetch(
