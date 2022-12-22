@@ -15,10 +15,12 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
 import { Button } from "native-base";
-import { PlaceState } from "../reducers/places";
+import { PlaceState, Proximity } from "../reducers/places";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { UserState } from "../reducers/user";
 
 type Props = {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 };
 
 export default function ExploreDetailsScreen({ navigation }: Props) {
@@ -29,7 +31,8 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
     latitude: positionContext.latitude,
     longitude: positionContext.longitude,
   };
-  const user = useSelector((state: any) => state.user.value);
+
+  const user = useSelector((state: { user: UserState }) => state.user.value);
 
   const [idsList, setIdsList] = useState<string[]>([]);
   const [duration, setDuration] = useState(0);
@@ -41,7 +44,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
     (state: { places: PlaceState }) => state.places.value.liked
   );
 
-  const wayPoints = likedPlace.map((e: any) => {
+  const wayPoints = likedPlace.map((e: Proximity) => {
     return { latitude: e.latitude, longitude: e.longitude };
   });
 
@@ -91,7 +94,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
   const point =
     likedPlace.length > 0
-      ? likedPlace.map((e: any, i: number) => {
+      ? likedPlace.map((e: Proximity, i: number) => {
           return (
             <Marker
               key={i}
@@ -102,17 +105,16 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         })
       : "";
 
-  let map: any = useRef(null);
 
   const getIds = async () => {
     const ids: string[] = [];
-    return likedPlace.map((data: any) => {
+    return likedPlace.map((data: Proximity) => {
       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.name,
-          description: data.description,
+          description: "",
           photos: data.photo,
           location: {
             latitude: data.latitude,
@@ -209,9 +211,10 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         <Button
           style={styles.startBtn}
           // disabled={!status && idsList.length < likedPlace.length}
+
           onPress={async () => {
             if (!status) {
-              await getIds().then(setStatus(!status));
+              await getIds().then(() => setStatus(!status));
             } else {
               navigation.navigate("ExploreSave", {
                 idsList,

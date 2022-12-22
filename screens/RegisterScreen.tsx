@@ -122,7 +122,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         const accessToken = authentication?.accessToken;
         fetchGoogleUserInfo(accessToken).then(async (userData) => {
           console.log(userData);
-          console.log(userData.name);
+          console.log(userData.picture);
           const postData = fetch(
             "https://wanderlust-backend.vercel.app/users/google",
             {
