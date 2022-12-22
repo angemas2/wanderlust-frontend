@@ -5,11 +5,12 @@ import ExploreSwipe from '../components/ExploreSwipe';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import { PlaceState } from '../reducers/places'
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
 
 
 //Interface defining the props of the component.
 interface Props {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 

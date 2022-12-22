@@ -120,7 +120,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         const accessToken = authentication?.accessToken;
         fetchGoogleUserInfo(accessToken).then(async (userData) => {
           console.log(userData);
-          console.log(userData.name);
+
           const postData = fetch('https://wanderlust-backend.vercel.app/users/google', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -161,7 +161,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
   const fbtoken: any = process.env.FACEBOOK_TOKEN;
 
-  const facebookUserInfo = async (token: string) => {
+  const facebookUserInfo = async (token: any) => {
     const response = await fetch(
       `https://graph.facebook.com/v15.0/me?fields=email%2Cfirst_name%2Clast_name%2Cpicture&access_token=${token}`
     );
@@ -173,25 +173,29 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       if (fbresponse?.type === 'success') {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
-
+        console.log(user.picture.data.url);
         setUsername(user.first_name);
         setEmail(user.email);
         fetch('https://wanderlust-backend.vercel.app/users/facebook', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username: username,
-            email: email,
+            username: user.first_name,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            picture: user.picture.data.url,
+            facebook_id: user.id,
           }),
         })
           .then((response) => response.json())
           .then((data: dataUsersProps) => {
-            console.log(data);
+            console.log('fb dataaaaaaaa', data);
             dispatch(
               updateUserProfile({
-                email: data.email,
-                username: data.username,
-                picture: data.profile_id.picture,
+                email: user.email,
+                username: user.first_name,
+                picture: user.picture.data.url,
                 profile_id: data.profile_id._id,
                 token: data.token,
               })

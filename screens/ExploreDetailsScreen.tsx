@@ -8,17 +8,19 @@ import {
   View,
   Image,
 } from "react-native";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import MapViewDirections from "react-native-maps-alternatives-directions";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import PositionContext from "../utils/context";
 import { Button } from "native-base";
-import { PlaceState } from "../reducers/places";
+import { PlaceState, Proximity } from "../reducers/places";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { UserState } from "../reducers/user";
 
 type Props = {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 };
 
 export default function ExploreDetailsScreen({ navigation }: Props) {
@@ -29,18 +31,20 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
     latitude: positionContext.latitude,
     longitude: positionContext.longitude,
   };
-  const user = useSelector((state: any) => state.user.value);
+
+  const user = useSelector((state: { user: UserState }) => state.user.value);
 
   const [idsList, setIdsList] = useState<string[]>([]);
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
   const [status, setStatus] = useState<boolean>(false);
+  const [direction, setDirection] = useState("");
 
   const likedPlace = useSelector(
     (state: { places: PlaceState }) => state.places.value.liked
   );
 
-  const wayPoints = likedPlace.map((e: any) => {
+  const wayPoints = likedPlace.map((e: Proximity) => {
     return { latitude: e.latitude, longitude: e.longitude };
   });
 
@@ -60,8 +64,28 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         precision="high"
         mode="WALKING"
         onReady={(result) => {
-          setDuration(result.duration);
+          let maneuver;
+          let step = result.legs[0].steps[0].distance.text.includes("km")
+            ? "km"
+            : "m";
+          if (step === "km" && result.legs[0].steps[0].distance.value < 0.3) {
+            //@ts-ignore
+            maneuver = `in ${result?.legs[0]?.steps[1].distance.text} ${result?.legs[0]?.steps[1]?.maneuver}`;
+          } else if (
+            step === "m" &&
+            result.legs[0].steps[0].distance.value < 30
+          ) {
+            //@ts-ignore
+            maneuver = `in ${result?.legs[0]?.steps[1]?.distance.text} ${result.legs[0].steps[1].maneuver}`;
+          } else {
+            maneuver = `continue for ${result.legs[0].steps[0].distance.text}`;
+          }
+          //@ts-ignore
+          console.log(result.legs[0].steps[1]);
           setDistance(result.distance);
+          setDuration(result.duration);
+          setDirection(maneuver);
+          console.log(result);
         }}
       />
     ) : (
@@ -70,7 +94,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
   const point =
     likedPlace.length > 0
-      ? likedPlace.map((e: any, i: number) => {
+      ? likedPlace.map((e: Proximity, i: number) => {
           return (
             <Marker
               key={i}
@@ -81,15 +105,16 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         })
       : "";
 
+
   const getIds = async () => {
     const ids: string[] = [];
-    return likedPlace.map((data: any) => {
+    return likedPlace.map((data: Proximity) => {
       fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
         method: "Post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.name,
-          description: data.description,
+          description: "",
           photos: data.photo,
           location: {
             latitude: data.latitude,
@@ -110,10 +135,25 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
   const steps = likedPlace.map((e, i) => {
     console.log(e.photo);
+
+    const photo = !!e.photo
+      ? { uri: `${e.photo}` }
+      : require("../assets/images/background.png");
     return (
-      <View key={i}>
-        <Image source={{ uri: e.photo }} style={styles.placeimg}></Image>
-        <Text style={{ width: 150 }}>{e.name}</Text>
+      <View key={i} style={styles.place}>
+        <Image source={photo} style={styles.placeimg}></Image>
+        <Text
+          style={{
+            width: "100%",
+            textAlign: "center",
+            marginTop: 8,
+            fontSize: 12,
+            fontWeight: "bold",
+            color: "#023047",
+          }}
+        >
+          {e.name}
+        </Text>
       </View>
     );
   });
@@ -128,6 +168,8 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
           longitudeDelta: 0.0421,
         }}
         style={styles.map}
+        showsUserLocation={true}
+        followsUserLocation={true}
       >
         <Marker
           draggable
@@ -140,13 +182,39 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         {point}
         {intinaries}
       </MapView>
+      {!status ? (
+        ""
+      ) : (
+        <View
+          style={{
+            position: "absolute",
+            top: 300,
+            left: 0,
+
+            backgroundColor: "rgba(2, 48, 71, 0.8)",
+
+            padding: 10,
+            borderTopRightRadius: 15,
+            borderBottomRightRadius: 15,
+          }}
+        >
+          <Text style={{ color: "white" }}>
+            Distance:{distance.toFixed(1)} km{" "}
+          </Text>
+          <Text style={{ color: "white" }}>
+            Duration: {duration.toFixed(0)} min
+          </Text>
+          <Text style={{ color: "white" }}>Direction: {direction}</Text>
+        </View>
+      )}
       <Pressable>
         <Button
           style={styles.startBtn}
           // disabled={!status && idsList.length < likedPlace.length}
+
           onPress={async () => {
             if (!status) {
-              await getIds().then(setStatus(!status));
+              await getIds().then(() => setStatus(!status));
             } else {
               navigation.navigate("ExploreSave", {
                 idsList,
@@ -159,7 +227,15 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
           {status ? "Stop" : "Start"}
         </Button>
       </Pressable>
-      <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: "15%" }}>
+      <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 16,
+          marginTop: 60,
+          color: "#023047",
+          width: "90%",
+        }}
+      >
         Itinerary Steps
       </Text>
       <ScrollView horizontal={true} style={styles.placesCont}>
@@ -204,9 +280,26 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
   },
   placeimg: {
-    width: 150,
-    height: 130,
-    borderRadius: 10,
-    marginBottom: 15,
+    width: "100%",
+    height: 120,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+  },
+  place: {
+    width: 160,
+    marginRight: 18,
+    backgroundColor: "white",
+    borderRadius: 15,
+    paddingBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    marginBottom: 10,
   },
 });

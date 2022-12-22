@@ -1,16 +1,28 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, StyleSheet, View,ImageBackground,Switch } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  ImageBackground,
+  Switch,
+} from "react-native";
 import { useSelector } from "react-redux";
-import { Input, Button,TextArea} from "native-base";
+import { Input, Button, TextArea } from "native-base";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { UserState } from "../reducers/user";
 
 interface ExploreSaveScreenProps {
   route: any;
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
-const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation }) => {
-  const user = useSelector((state: any) => state.user.value);
-  console.log(route.params.idsList)
+const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({
+  route,
+  navigation,
+}) => {
+   const user = useSelector((state: { user: UserState }) => state.user.value);
+  console.log(route.params.idsList);
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -75,8 +87,8 @@ const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation
             Share my trip with the community :
           </Text>
           <Switch
-            onValueChange={(e: any) => {
-              toggleSwitch(e);
+            onValueChange={() => {
+              toggleSwitch();
             }}
             value={isPublic}
           />
@@ -89,7 +101,9 @@ const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation
               navigation.navigate("Explore");
             }}
           >
-            <Text style={{color:"white",textDecorationLine:"underline"}}>Dont save my road</Text>
+            <Text style={{ color: "white", textDecorationLine: "underline" }}>
+              Dont save my road
+            </Text>
           </Button>
           <Button
             style={{ backgroundColor: "#219EBC" }}
@@ -116,7 +130,7 @@ const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation
               )
                 .then((response) => response.json())
                 .then((data) => console.log(data))
-                .then(navigation.navigate("MyTrips"));
+                .then(()=>navigation.navigate("MyTrips"));
             }}
           >
             Save my road
@@ -125,7 +139,7 @@ const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation
       </ImageBackground>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -134,7 +148,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#182535",
-    
   },
   title: {
     fontFamily: "Inter_500Medium",
@@ -147,7 +160,6 @@ const styles = StyleSheet.create({
   name: {
     width: "90%",
     marginTop: "5%",
-   
   },
   description: {
     width: "90%",
@@ -173,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreSaveScreen
+export default ExploreSaveScreen;

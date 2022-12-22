@@ -46,7 +46,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     longitude: positionContext?.longitude,
   });
 
-  const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
+  const GOOGLE_MAPS_APIKEY: any= process.env.GOOGLE_MAPS_API;
 
   //Check if coord destination is empty if not show Marker
   const destination = destinationCoord?.latitude ? (
@@ -55,7 +55,6 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     ""
   );
 
-  // const url = `http://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="attraction"](around:10000,${positionContext?.latitude},${positionContext?.longitude});out body;`;
 
   const googleurl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.latitude},${origin.longitude}&types=tourist_attraction&radius=10000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
   //Request to api / depend of user location

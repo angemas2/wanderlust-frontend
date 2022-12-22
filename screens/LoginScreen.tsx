@@ -138,28 +138,26 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       if (fbresponse?.type === 'success') {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
-        console.log('facebook :' + fbtoken);
-        setEmail(user.email);
+
         fetch('https://wanderlust-backend.vercel.app/users/facebook', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             username: user.first_name,
             email: user.email,
-            picture: user.picture,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            picture: user.picture.data.url,
             facebook_id: user.id,
-            firstName: user.first_name,
-            lastName: user.last_name,
           }),
         })
           .then((response) => response.json())
-          .then((data: dataProps) => {
-            console.log(data);
+          .then((data) => {
             dispatch(
               updateUserProfile({
-                email: data.email,
-                username: data.username,
-                picture: data.profile_id.picture,
+                email: user.email,
+                username: user.first_name,
+                picture: user.picture.data.url,
                 profile_id: data.profile_id._id,
                 token: data.token,
               })

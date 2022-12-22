@@ -1,6 +1,6 @@
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useCallback, useRef } from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 import PositionContext from "../utils/context";
 import { useSelector } from "react-redux";
@@ -9,12 +9,17 @@ import MapViewDirections from "react-native-maps-alternatives-directions";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowUp, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { setSwipeVisibility } from "../reducers/places";
-import { useFonts, Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/dev"; //import to handle the Roboto font
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_500Medium,
+} from "@expo-google-fonts/dev"; //import to handle the Roboto font
 import * as SplashScreen from "expo-splash-screen";
-import { PlaceState } from '../reducers/places'
+import { PlaceState } from "../reducers/places";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
 
 interface ExploreMapProps {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
@@ -24,9 +29,13 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
   //Variable for calling useDispatch
   const dispatch = useDispatch();
   //true or false sended from reducer places, used to choose a style for ExploreMap component if swipe component is visble or not.
-  const visible = useSelector((state: { places: PlaceState }) => state.places.value.isSwipeVisible);
-  //Variable that posses all the places that have been liked by the user 
-  const likedPlace = useSelector((state: { places: PlaceState }) => state.places.value.liked);
+  const visible = useSelector(
+    (state: { places: PlaceState }) => state.places.value.isSwipeVisible
+  );
+  //Variable that posses all the places that have been liked by the user
+  const likedPlace = useSelector(
+    (state: { places: PlaceState }) => state.places.value.liked
+  );
   //Get the context that contain the user position define in App.tsx
   const positionContext = useContext(PositionContext);
   const userPosition = {
@@ -49,7 +58,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
       marginTop: "2%",
     };
   }
-  //Setting diferent style to container if visible is false 
+  //Setting diferent style to container if visible is false
   else {
     container = {
       display: "flex",
@@ -140,7 +149,6 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
     dispatch(setSwipeVisibility());
   };
 
-
   const wayPoints = likedPlace.map((e) => {
     return { latitude: e.latitude, longitude: e.longitude };
   });
@@ -172,14 +180,14 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
   const point =
     likedPlace.length > 0
       ? likedPlace.map((e, i) => {
-        return (
-          <Marker
-            key={i}
-            title={e.name}
-            coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-          />
-        );
-      })
+          return (
+            <Marker
+              key={i}
+              title={e.name}
+              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+            />
+          );
+        })
       : "";
 
   const [fontsLoaded] = useFonts({
@@ -197,13 +205,10 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
     return null;
   }
 
-
   return (
     <View style={container} onLayout={onLayoutRootView}>
       <Text style={styles.title}>My adventure</Text>
-      <Pressable
-        style={styles.pressArrow}
-        onPress={() => handleVisible()}>
+      <Pressable style={styles.pressArrow} onPress={() => handleVisible()}>
         <FontAwesomeIcon
           icon={visible ? faCircleArrowUp : faXmark}
           style={styles.icon}
@@ -238,8 +243,7 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
       </Pressable>
     </View>
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   topContainer: {
@@ -273,10 +277,10 @@ const styles = StyleSheet.create({
   },
   pressArrow: {
     position: "absolute",
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginTop: 10,
-    zIndex: 1
-  }
+    zIndex: 1,
+  },
 });
 
 export default ExploreMap;

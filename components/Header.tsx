@@ -16,12 +16,14 @@ type HeaderProps = {
 SplashScreen.preventAutoHideAsync();
 
 export default function Header({ navigation, title }: HeaderProps & { title: string }) {
+  // get user infos
   const user = useSelector((state: { user: UserState }) => state.user.value);
-
-  const avatar = user.picture ? user.picture : '';
+  
+  const avatar = user.picture ? user.picture : "";
 
   const dispatch = useDispatch();
 
+  // disconnect user from app
   const logout = () => {
     dispatch(
       updateUserProfile({
@@ -32,7 +34,7 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
         token: null,
       })
     );
-    navigation.navigate('Login');
+    navigation.navigate("Login");
   };
 
   const [fontsLoaded] = useFonts({
@@ -51,31 +53,47 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
 
   return (
     <SafeAreaView style={styles.container} onLayout={onLayoutRootView}>
-      <Image source={require('../assets/images/logo-header.png')} style={styles.logo} />
+      <Image
+        source={require("../assets/images/logo-header.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>{title}</Text>
       <View style={styles.userContainer}>
         <Popover
           trigger={(triggerProps) => {
             return (
-              <TouchableOpacity onPress={() => navigation.navigate('Profile')} {...triggerProps}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Profile")}
+                {...triggerProps}
+              >
                 <Image style={styles.avatar} source={{ uri: avatar }} />
               </TouchableOpacity>
             );
-          }}>
-          <Popover.Content accessibilityLabel="Logout" w="56" style={{ top: 20 }}>
+          }}
+        >
+          <Popover.Content
+            accessibilityLabel="Logout"
+            w="56"
+            style={{ top: 20 }}
+          >
             <Popover.Arrow style={{ top: 25 }} />
             <Popover.CloseButton />
             <Popover.Header>
-              <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Hi! 🖐 Welcome to Wanderlust</Text>
+              <Text style={{ fontWeight: "bold", fontSize: 12 }}>
+                Hi! 🖐 Welcome to Wanderlust
+              </Text>
             </Popover.Header>
             <Popover.Body
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}>
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
               <Image style={styles.avatar} source={{ uri: avatar }} />
               <View style={{ marginLeft: 10 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#FFB703' }}>
+                <Text
+                  style={{ fontWeight: "bold", fontSize: 12, color: "#FFB703" }}
+                >
                   {user.username}
                 </Text>
                 <Text style={{ fontSize: 10 }}>{user.email}</Text>
@@ -93,8 +111,9 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
                 </Button>
                 <Button
                   colorScheme="warning"
-                  style={{ backgroundColor: '#219EBC' }}
-                  onPress={() => logout()}>
+                  style={{ backgroundColor: "#219EBC" }}
+                  onPress={() => logout()}
+                >
                   Log out
                 </Button>
               </Button.Group>
