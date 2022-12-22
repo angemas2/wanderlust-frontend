@@ -6,6 +6,7 @@ export type Proximity = {
   latitude: number;
   longitude: number;
   photo: string | null;
+
 };
 
 export type PlaceState = {

@@ -18,7 +18,7 @@ SplashScreen.preventAutoHideAsync();
 export default function Header({ navigation, title }: HeaderProps & { title: string }) {
   // get user infos
   const user = useSelector((state: { user: UserState }) => state.user.value);
-
+  
   const avatar = user.picture ? user.picture : "";
 
   const dispatch = useDispatch();

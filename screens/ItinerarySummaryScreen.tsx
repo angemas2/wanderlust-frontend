@@ -24,8 +24,10 @@ export default function ItinerarySummaryScreen({ route }: any) {
   const positionContext = useContext(PositionContext);
   const user = useSelector((state: { user: any }) => state.user.value);
 
+  //get intermediate points between start and end
   let waypoints = viewpoints_id.slice(0, -1).map((e: any) => e.location);
 
+  //add a marker for each step of the itinerary
   const point =
     viewpoints_id.length > 0
       ? viewpoints_id.map((e: any, i: number) => {
@@ -45,6 +47,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
 
   let map: any = useRef(null);
 
+  //zoom on the map to fit the marker
   async function fitMapToMarkers() {
     map.fitToCoordinates(waypoints, {
       edgePadding: {
@@ -56,6 +59,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
     });
   }
 
+  //show the info and image of each point of interest in the itinerary
   const steps = viewpoints_id.map((data: any, i: number) => {
     return (
       <View style={styles.place} key={i}>
@@ -76,8 +80,6 @@ export default function ItinerarySummaryScreen({ route }: any) {
   });
 
   const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
-
-  console.log(user.picture);
 
   return (
     <SafeAreaView style={styles.container}>

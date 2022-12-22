@@ -16,9 +16,10 @@ import {
 } from "@expo-google-fonts/dev"; //import to handle the Roboto font
 import * as SplashScreen from "expo-splash-screen";
 import { PlaceState } from "../reducers/places";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
 
 interface ExploreMapProps {
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {

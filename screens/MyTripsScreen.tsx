@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -8,12 +8,13 @@ import {
   useWindowDimensions,
   ImageBackground,
   ScrollView,
-} from 'react-native';
-import { useSelector } from 'react-redux';
-import { UserState } from '../reducers/user';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { Radio, FlatList, Stack } from 'native-base';
-import Header from '../components/Header';
+} from "react-native";
+import { useSelector } from "react-redux";
+import { UserState } from "../reducers/user";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { Radio, FlatList, Stack, Icon } from "native-base";
+import Header from "../components/Header";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type NavigationScreenProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -26,7 +27,9 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   const [routeType, setRouteType] = useState(true);
 
   useEffect(() => {
-    fetch(`https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`)
+    fetch(
+      `https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setTrips(data.data);
@@ -34,80 +37,16 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
   }, [trips]);
 
   useEffect(() => {
-    fetch(`https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`)
+    fetch(
+      `https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setFollowedTrips(data.data);
       });
   }, [followedTrips]);
 
-  // const tripList = trips.map((data: any, i) => {
-  //   return (
-  //     <View style={styles.tripCont} key={i}>
-  //       <Pressable
-  //         onPress={() => {
-  //           navigation.navigate("ItinerarySummary", { ...data });
-  //         }}
-  //       >
-  //         <ImageBackground
-  //           imageStyle={{ opacity: 0.3 }}
-  //           blurRadius={2}
-  //           source={{ uri: data.viewpoints_id[0]?.photos }}
-  //           style={styles.imgBg}
-  //         >
-  //           <View
-  //             style={{
-  //               display: "flex",
-  //               width: "100%",
-  //               justifyContent: "center",
-  //               alignItems: "center",
-  //             }}
-  //           >
-  //             <Text style={styles.tripTitle}>{data.name}</Text>
-  //             <View style={styles.itineraryDatas}>
-  //               <Text style={{ color: "white" }}>
-  //                 {data.km.toFixed(2)} km | {data.viewpoints_id.length} spots
-  //               </Text>
-  //             </View>
-  //           </View>
-  //         </ImageBackground>
-  //       </Pressable>
-  //     </View>
-  //   );
-  // });
-
-  /*const followedTripList = followedTrips.map((data: any, i) => {
-    return (
-      <View style={styles.tripCont} key={i}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate('ItinerarySummary', { ...data });
-          }}>
-          <ImageBackground
-            imageStyle={{ opacity: 0.3, borderRadius: 15 }}
-            source={{ uri: data.viewpoints_id[0]?.photos }}
-            style={styles.imgBg}>
-            <View
-              style={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={styles.tripTitle}>{data.name}</Text>
-              <View style={styles.itineraryDatas}>
-                <Text style={{ color: "white" }}>
-                  {data.city}|{data.km.toFixed(2)} km |{" "}
-                  {data.viewpoints_id.length} spots
-                </Text>
-              </View>
-            </View>
-          </ImageBackground>
-        </Pressable>
-      </View>
-    );
-  });*/
-
+  //get trips created by the user
   const FirstRoute = () => (
     <FlatList
       showsVerticalScrollIndicator={false}
@@ -117,23 +56,26 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
         <View style={styles.tripCont}>
           <Pressable
             onPress={() => {
-              navigation.navigate('ItinerarySummary', { ...item });
-            }}>
+              navigation.navigate("ItinerarySummary", { ...item });
+            }}
+          >
             <ImageBackground
               imageStyle={{ opacity: 0.3 }}
               blurRadius={2}
               source={{ uri: item.viewpoints_id[0]?.photos }}
-              style={styles.imgBg}>
+              style={styles.imgBg}
+            >
               <View
                 style={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <Text style={styles.tripTitle}>{item.name}</Text>
                 <View style={styles.itineraryDatas}>
-                  <Text style={{ color: 'white' }}>
+                  <Text style={{ color: "white" }}>
                     {item.km.toFixed(2)} km | {item.viewpoints_id.length} spots
                   </Text>
                 </View>
@@ -144,6 +86,8 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
       )}
     />
   );
+
+  //get existing trips followed by the user
 
   const SecondRoute = () => (
     <FlatList
@@ -154,23 +98,26 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
         <View style={styles.tripCont}>
           <Pressable
             onPress={() => {
-              navigation.navigate('ItinerarySummary', { ...item });
-            }}>
+              navigation.navigate("ItinerarySummary", { ...item });
+            }}
+          >
             <ImageBackground
               imageStyle={{ opacity: 0.3 }}
               blurRadius={2}
               source={{ uri: item.viewpoints_id[0]?.photos }}
-              style={styles.imgBg}>
+              style={styles.imgBg}
+            >
               <View
                 style={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <Text style={styles.tripTitle}>{item.name}</Text>
                 <View style={styles.itineraryDatas}>
-                  <Text style={{ color: 'white' }}>
+                  <Text style={{ color: "white" }}>
                     {item.km.toFixed(2)} km | {item.viewpoints_id.length} spots
                   </Text>
                 </View>
@@ -182,29 +129,6 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
     />
   );
 
-  /*const layout = useWindowDimensions();
-
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'Custom' },
-    { key: 'second', title: 'Followed' },
-  ]);
-
-  const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-  });
-
-  const renderTabBar = (props: any) => (
-    <TabBar
-      {...props}
-      activeColor={"#FFB703"}
-      inactiveColor={"#023047"}
-      style={{ paddingTop: 55, backgroundColor: "white" }}
-      scrollEnabled={false}
-    />
-  );*/
-
   return (
     <View style={styles.container}>
       <Header navigation={navigation} title="My travels" />
@@ -213,33 +137,45 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
           name="Route types"
           defaultValue="1"
           style={{
-            backgroundColor: '#219EBC',
-            width: '100%',
-            height: '8%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: "#219EBC",
+            width: "100%",
+            height: "8%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           onChange={() => {
             setRouteType(!routeType);
-          }}>
+          }}
+        >
           <Stack
             direction={{
-              base: 'row',
-              md: 'row',
+              base: "row",
+              md: "row",
             }}
             alignItems={{
-              base: 'center',
-              md: 'center',
+              base: "center",
+              md: "center",
             }}
-            justifyContent={'center'}
+            justifyContent={"center"}
             space={4}
-            w="100%">
-            <Radio value="1" colorScheme="yellow" size="md" my={1}>
-              <Text style={{ color: 'white' }}>Custom</Text>
+            w="100%"
+          >
+            <Radio
+              value="1"
+              size="md"
+              my={1}
+              icon={<Icon as={<MaterialIcons name="favorite" />} size={5} />}
+            >
+              <Text style={{ color: "white" }}>Custom</Text>
             </Radio>
-            <Radio value="2" colorScheme="yellow" size="md" my={1}>
-              <Text style={{ color: 'white' }}>Followed</Text>
+            <Radio
+              value="2"
+              size="md"
+              my={1}
+              icon={<Icon as={<MaterialIcons name="favorite" />} size={5} />}
+            >
+              <Text style={{ color: "white" }}>Followed</Text>
             </Radio>
           </Stack>
         </Radio.Group>
@@ -252,8 +188,8 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
   },
   scrollviewContainer: {
     flexGrow: 1,
@@ -261,33 +197,33 @@ const styles = StyleSheet.create({
   },
   scrollviewContent: {},
   tripCont: {
-    width: '95%',
+    width: "95%",
     height: 200,
     marginTop: 20,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(2, 48, 71, 0.8)',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(2, 48, 71, 0.8)",
     borderRadius: 15,
   },
   imgBg: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
   tripTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    width: '90%',
-    color: 'white',
+    fontWeight: "bold",
+    textAlign: "center",
+    width: "90%",
+    color: "white",
   },
   itineraryDatas: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     marginTop: 40,
   },
   tabView: {
