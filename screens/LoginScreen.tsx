@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserProfile } from '../reducers/user';
 
@@ -16,7 +16,6 @@ import {
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { Box, Input, Button, Icon } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { UserContext } from '../utils/logincontext';
 import * as Google from 'expo-auth-session/providers/google';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import { ResponseType } from 'expo-auth-session';
@@ -224,21 +223,22 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={-200}
       onLayout={onLayoutRootView}>
       <ImageBackground
         source={require('../assets/images/background.png')}
         style={styles.imageBackground}>
         <View style={styles.contentContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>CONNEXION</Text>
-            <Text style={styles.subtitle}>Se connecter avec une adresse e-mail</Text>
+            <Text style={styles.title}>LOGIN</Text>
+            <Text style={styles.subtitle}>Login with email adress</Text>
           </View>
 
           <Box alignItems="center" style={styles.boxStyle}>
             {/*box to contain form's registration fields */}
             <Input
               style={styles.input}
-              placeholder="E-mail"
+              placeholder="Email address"
               keyboardType="email-address"
               autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
@@ -260,7 +260,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             <Input
               style={styles.input}
               variant="rounded"
-              placeholder="Mot de passe"
+              placeholder="Password"
               color="white"
               bgColor="rgba(2, 48, 71, 0.7)"
               mx="3"
@@ -289,22 +289,21 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 </Pressable>
               }
             />
-            <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
           </Box>
 
           {error && <Text style={styles.error}>{error}</Text>}
           <Button style={styles.registerButton} onPress={handleSubmit}>
-            Se connecter
+            Connect
           </Button>
           <View style={styles.registeredTextContainer}>
-            <Text style={styles.registeredText}>Pas encore inscrit?</Text>
+            <Text style={styles.registeredText}>Not registered yet?</Text>
             <Text style={styles.pushHere} onPress={() => navigation.navigate('Register')}>
-              Appuyez ici
+              Push here
             </Text>
           </View>
           <View style={styles.midMenu}>
             <View style={styles.line}></View>
-            <Text style={styles.connectionOptionsText}>Ou</Text>
+            <Text style={styles.connectionOptionsText}>Or</Text>
             <View style={styles.line}></View>
           </View>
 
@@ -319,7 +318,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 source={require('../assets/images/google_logo.png')}
                 style={styles.googleLogo}
               />
-              <Text style={styles.googleText}>se connecter avec Google</Text>
+              <Text style={styles.googleText}>Sign in with Google</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.facebookButton}
@@ -331,7 +330,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 source={require('../assets/images/facebook_logo.png')}
                 style={styles.facebookLogo}
               />
-              <Text style={styles.facebookText}>se connecter avec Facebook</Text>
+              <Text style={styles.facebookText}>Sign in with Facebook</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -361,6 +360,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 20,
+    right: '15%',
   },
   title: {
     color: 'white',
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   },
   boxStyle: {
     width: '100%',
-    height: '23%',
+    height: '15%',
     justifyContent: 'space-between',
     marginBottom: -60,
   },
@@ -390,16 +390,7 @@ const styles = StyleSheet.create({
   lockIcon: {
     left: 8,
   },
-  forgotPassword: {
-    textDecorationLine: 'underline',
-    color: 'white',
-    fontSize: 12,
-    fontFamily: 'Montserrat_500Medium',
-    marginLeft: 140,
-    bottom: '15%',
-  },
   error: {
-    marginBottom: 20,
     color: 'red',
   },
   registerButton: {

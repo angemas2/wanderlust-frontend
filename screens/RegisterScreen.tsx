@@ -228,21 +228,22 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      onLayout={onLayoutRootView}>
+      keyboardVerticalOffset={-200}>
       <ImageBackground
         source={require('../assets/images/background.png')}
-        style={styles.imageBackground}>
+        style={styles.imageBackground}
+        onLayout={onLayoutRootView}>
         <View style={styles.contentContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>INSCRIPTION</Text>
-            <Text style={styles.subtitle}>S'inscrire avec une adresse e-mail</Text>
+            <Text style={styles.title}>REGISTER</Text>
+            <Text style={styles.subtitle}>Register with email adress</Text>
           </View>
 
           <Box alignItems="center" style={styles.boxStyle}>
             {/*box to contain form's registration fields */}
             <Input
               style={styles.input}
-              placeholder="E-mail"
+              placeholder="Email address"
               keyboardType="email-address"
               autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
@@ -263,7 +264,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             />
             <Input
               style={styles.input}
-              placeholder="Nom d'utilisateur"
+              placeholder="Username"
               autoCorrect={false}
               autoCapitalize="none"
               onChangeText={(value) => setUsername(value)}
@@ -280,7 +281,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
             <Input
               style={styles.input}
               variant="rounded"
-              placeholder="Mot de passe"
+              placeholder="Password"
               color="white"
               bgColor="rgba(2, 48, 71, 0.7)"
               w="100%"
@@ -312,12 +313,12 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
 
           {error && <Text style={styles.error}>{error}</Text>}
           <Button style={styles.registerButton} onPress={handleSubmit}>
-            S'inscrire
+            Register
           </Button>
           <View style={styles.registeredTextContainer}>
-            <Text style={styles.registeredText}>Déjà inscrit ?</Text>
+            <Text style={styles.registeredText}>Already registered?</Text>
             <Text style={styles.pushHere} onPress={() => navigation.navigate('Login')}>
-              Appuyez ici
+              Push here
             </Text>
           </View>
           <View style={styles.midMenu}>
@@ -380,6 +381,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     top: 50,
+    right: '10%',
     position: 'relative',
   },
   title: {
@@ -412,7 +414,6 @@ const styles = StyleSheet.create({
     left: 8,
   },
   error: {
-    marginBottom: 20,
     color: 'red',
   },
   registerButton: {
@@ -503,6 +504,5 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 55,
-    bottom: 20,
   },
 });
