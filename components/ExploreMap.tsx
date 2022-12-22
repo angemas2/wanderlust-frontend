@@ -89,63 +89,6 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
     };
   }
 
-  //Maping on likedPlace to get all the places that the user liked.
-  //Adding the likedPlaces to the db
-  // const getIds = () => {
-  //   return likedPlace.map((data) => {
-  //     fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
-  //       method: "Post",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         name: data.name,
-  //         description: data.description,
-  //         photos: data.photo,
-  //         location: {
-  //           latitude: data.latitude,
-  //           longitude: data.longitude,
-  //         },
-  //         tags_id: "",
-  //       }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log("data id list", data.data._id);
-  //         ids.push(data.data._id);
-  //         setIdsList(ids);
-  //         if (likedPlace.length === idsList.length) {
-  //           setCanAdd(true);
-  //         }
-  //       });
-  //   });
-  // };
-
-  // const createItinerary = () => {
-  //   getIds();
-
-  //   if (idsList.length === likedPlace.length) {
-  //     fetch("https://wanderlust-backend.vercel.app/itineraries/addItinerary", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         profile_id: user.profile_id,
-  //         viewpointsList: idsList,
-  //         km: distance,
-  //         map: duration,
-  //         photos: "",
-  //         name: "La capsuletest await fintest15",
-  //         description:
-  //           "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-  //         public: false,
-  //         custom: true,
-  //         isSponsor: false,
-  //         city: "Bruxelles",
-  //       }),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => console.log(data));
-  //   }
-  // };
-
   const handleVisible = () => {
     dispatch(setSwipeVisibility());
   };
@@ -181,14 +124,14 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
   const point =
     likedPlace.length > 0
       ? likedPlace.map((e, i) => {
-        return (
-          <Marker
-            key={i}
-            title={e.name}
-            coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-          />
-        );
-      })
+          return (
+            <Marker
+              key={i}
+              title={e.name}
+              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+            />
+          );
+        })
       : "";
 
   const [fontsLoaded] = useFonts({
@@ -210,7 +153,9 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
     <View style={container} onLayout={onLayoutRootView}>
       <View style={styles.topContainer}>
         <Text style={styles.title}>My adventure</Text>
-        <Text style={styles.distance}>{distance} km | {Math.floor(duration)} minutes</Text>
+        <Text style={styles.distance}>
+          {distance} km | {Math.floor(duration)} minutes
+        </Text>
       </View>
       <Pressable style={styles.pressArrow} onPress={() => handleVisible()}>
         <FontAwesomeIcon
@@ -299,7 +244,7 @@ const styles = StyleSheet.create({
     marginLeft: "3%",
     color: "#219EBC",
     fontWeight: "bold",
-  }
+  },
 });
 
 export default ExploreMap;
