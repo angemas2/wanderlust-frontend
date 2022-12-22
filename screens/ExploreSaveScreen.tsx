@@ -9,17 +9,19 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { Input, Button, TextArea } from "native-base";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { UserState } from "../reducers/user";
 
 interface ExploreSaveScreenProps {
   route: any;
-  navigation: any;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({
   route,
   navigation,
 }) => {
-  const user = useSelector((state: any) => state.user.value);
+   const user = useSelector((state: { user: UserState }) => state.user.value);
   console.log(route.params.idsList);
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
@@ -128,7 +130,7 @@ const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({
               )
                 .then((response) => response.json())
                 .then((data) => console.log(data))
-                .then(navigation.navigate("MyTrips"));
+                .then(()=>navigation.navigate("MyTrips"));
             }}
           >
             Save my road
