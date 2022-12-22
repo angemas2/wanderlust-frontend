@@ -1,13 +1,20 @@
-import { useCallback } from 'react';
-import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { UserState } from '../reducers/user';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { Popover, Button } from 'native-base';
+import { useCallback } from "react";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { UserState } from "../reducers/user";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { Popover, Button } from "native-base";
 
-import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Inter_500Medium } from '@expo-google-fonts/dev'; //import fonts
-import { updateUserProfile } from '../reducers/user';
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts, Inter_500Medium } from "@expo-google-fonts/dev"; //import fonts
+import { updateUserProfile } from "../reducers/user";
 
 type HeaderProps = {
   navigation: NavigationProp<ParamListBase>;
@@ -15,10 +22,13 @@ type HeaderProps = {
 
 SplashScreen.preventAutoHideAsync();
 
-export default function Header({ navigation, title }: HeaderProps & { title: string }) {
+export default function Header({
+  navigation,
+  title,
+}: HeaderProps & { title: string }) {
   // get user infos
   const user = useSelector((state: { user: UserState }) => state.user.value);
-  
+
   const avatar = user.picture ? user.picture : "";
 
   const dispatch = useDispatch();
@@ -97,12 +107,14 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
                   {user.username}
                 </Text>
                 <Text style={{ fontSize: 10 }}>{user.email}</Text>
+
+                <TouchableOpacity
+                  style={styles.viewProfile}
+                  onPress={() => navigation.navigate("Profile")}
+                >
+                  <Text>View Profile</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={styles.viewProfile}
-                onPress={() => navigation.navigate('Profile')}>
-                <Text>View Profile</Text>
-              </TouchableOpacity>
             </Popover.Body>
             <Popover.Footer justifyContent="flex-end">
               <Button.Group space={2}>
@@ -129,32 +141,32 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
 
 const styles = StyleSheet.create({
   container: {
-    height: '10%',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: '10%',
+    height: "10%",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: "10%",
   },
   logo: {
     aspectRatio: 1,
     width: 200,
-    right: '40%',
-    bottom: '35%',
+    right: "40%",
+    bottom: "35%",
   },
   title: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: "Inter_500Medium",
     fontSize: 20,
-    textAlign: 'center',
-    right: '80%',
+    textAlign: "center",
+    right: "80%",
     width: 150,
-    color: '#023047',
-    marginTop: '5%',
+    color: "#023047",
+    marginTop: "5%",
   },
   userContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '18%',
-    height: '100%',
+    display: "flex",
+    flexDirection: "column",
+    width: "18%",
+    height: "100%",
   },
   avatar: {
     aspectRatio: 1,
@@ -163,12 +175,15 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 10,
-    textAlign: 'center',
-    width: '70%',
-    color: '#023047',
+    textAlign: "center",
+    width: "70%",
+    color: "#023047",
     opacity: 0.5,
   },
   viewProfile: {
-    flexDirection: 'column',
+    flexDirection: "column",
+    fontWeight: "bold",
+    marginTop: 5,
+    fontSize: 10,
   },
 });
