@@ -14,7 +14,6 @@ import ExploreDetailsScreen from './screens/ExploreDetailsScreen';
 import ExploreSaveScreen from './screens/ExploreSaveScreen';
 import MyTripsScreen from './screens/MyTripsScreen';
 import NavScreen from './screens/NavScreen';
-import FollowedTripsScreen from './screens/FollowedTripsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ItinerarySummaryScreen from './screens/ItinerarySummaryScreen';
 
@@ -52,16 +51,16 @@ const TabNavigator = () => {
           let iconName: IconDefinition;
 
           switch (route.name) {
-            case "MyTrips":
+            case 'MyTrips':
               iconName = faMap;
               break;
-            case "Explore":
+            case 'Explore':
               iconName = faMapLocationDot;
               break;
-            case "Inspiration":
+            case 'Inspiration':
               iconName = faLightbulb;
               break;
-            case "Nav":
+            case 'Nav':
               iconName = faCompass;
               break;
             default:
@@ -71,11 +70,10 @@ const TabNavigator = () => {
 
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#FFB703",
-        tabBarInactiveTintColor: "#023047",
+        tabBarActiveTintColor: '#FFB703',
+        tabBarInactiveTintColor: '#023047',
         headerShown: false,
-      })}
-    >
+      })}>
       <Tab.Screen name="MyTrips" component={MyTripsScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Inspiration" component={InspirationScreen} />
@@ -146,7 +144,6 @@ export default function App() {
                     <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
                     <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
                     <Stack.Screen name="CustomTrips" component={MyTripsScreen} />
-                    <Stack.Screen name="FollowedTrips" component={FollowedTripsScreen} />
                     <Stack.Screen name="ExploreSave" component={ExploreSaveScreen} />
                     <Stack.Screen name="TabNavigator" component={TabNavigator} />
                   </>
@@ -156,7 +153,6 @@ export default function App() {
                     <Stack.Screen name="Profile" component={ProfileScreen} />
                     <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
                     <Stack.Screen name="CustomTrips" component={MyTripsScreen} />
-                    <Stack.Screen name="FollowedTrips" component={FollowedTripsScreen} />
                     <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
                     <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
 

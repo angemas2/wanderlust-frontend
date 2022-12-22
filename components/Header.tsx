@@ -3,7 +3,7 @@ import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View } from 'r
 import { useSelector, useDispatch } from 'react-redux';
 import { UserState } from '../reducers/user';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { Popover, Button, Box } from 'native-base';
+import { Popover, Button } from 'native-base';
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_500Medium } from '@expo-google-fonts/dev'; //import fonts
@@ -31,6 +31,7 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
         email: null,
         picture: null,
         profile_id: null,
+        token: null,
       })
     );
     navigation.navigate("Login");
@@ -97,6 +98,11 @@ export default function Header({ navigation, title }: HeaderProps & { title: str
                 </Text>
                 <Text style={{ fontSize: 10 }}>{user.email}</Text>
               </View>
+              <TouchableOpacity
+                style={styles.viewProfile}
+                onPress={() => navigation.navigate('Profile')}>
+                <Text>View Profile</Text>
+              </TouchableOpacity>
             </Popover.Body>
             <Popover.Footer justifyContent="flex-end">
               <Button.Group space={2}>
@@ -142,6 +148,7 @@ const styles = StyleSheet.create({
     right: '80%',
     width: 150,
     color: '#023047',
+    marginTop: '5%',
   },
   userContainer: {
     display: 'flex',
@@ -160,5 +167,8 @@ const styles = StyleSheet.create({
     width: '70%',
     color: '#023047',
     opacity: 0.5,
+  },
+  viewProfile: {
+    flexDirection: 'column',
   },
 });
