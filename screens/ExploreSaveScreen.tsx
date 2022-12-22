@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet, View, Switch } from "react-native";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Input, Button } from "native-base";
+import { resetLike } from '../reducers/places';
 
 interface ExploreSaveScreenProps {
   route: any;
@@ -9,6 +11,7 @@ interface ExploreSaveScreenProps {
 }
 
 const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation }) => {
+  const dispatch = useDispatch()
   const user = useSelector((state: any) => state.user.value);
   console.log(route.params.idsList)
   const [city, setCity] = useState("");
@@ -98,7 +101,10 @@ const ExploreSaveScreen: React.FC<ExploreSaveScreenProps> = ({ route, navigation
             )
               .then((response) => response.json())
               .then((data) => console.log(data))
-              .then(navigation.navigate("MyTrips"));
+              .then(
+                navigation.navigate("MyTrips")
+              );
+            dispatch(resetLike())
           }}
         >
           Save my road

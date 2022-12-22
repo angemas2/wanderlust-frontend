@@ -47,9 +47,12 @@ export const placesSlice = createSlice({
     setSwipeVisibility: (state: PlaceState) => {
       state.value.isSwipeVisible = !state.value.isSwipeVisible;
     },
+    resetLike: (state: PlaceState) => {
+      state.value.liked = []
+    }
   },
 });
 
-export const { addNewLike, getDefaultPlaces, updateAndLikePlaces, onDisLike, setSwipeVisibility } =
+export const { resetLike, addNewLike, getDefaultPlaces, updateAndLikePlaces, onDisLike, setSwipeVisibility } =
   placesSlice.actions;
 export default placesSlice.reducer;
