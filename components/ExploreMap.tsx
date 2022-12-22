@@ -239,7 +239,9 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
         style={styles.btn}
         onPress={() => navigation.navigate("ExploreDetails")}
       >
-        <Text>Start exploring</Text>
+        <Text style={{ color: "white", fontWeight: "bold" }}>
+          Start exploring
+        </Text>
       </Pressable>
     </View>
   );
@@ -265,6 +267,15 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     marginTop: "5%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+
+    elevation: 1,
   },
   icon: {
     color: "#FFB703",
