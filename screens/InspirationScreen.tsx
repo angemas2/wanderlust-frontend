@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, StyleSheet, View, ImageBackground, Pressable } from 'react-native';
-import { Box, Input, Button, Icon, ScrollView } from 'native-base';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  ImageBackground,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
+import { Input, Button, Icon, ScrollView } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import Header from '../components/Header';
@@ -29,52 +37,43 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
       });
   };
 
-
   const itinerariesList = itineraries.map((data: any, i) => {
+    const photo = !!data.viewpoints_id[0]
+      ? { uri: `${data.viewpoints_id[0].photos}` }
+      : require('../assets/images/background.png');
 
-    const photo = !!data.viewpoints_id[0] ? {uri:`${data.viewpoints_id[0].photos}`} : require("../assets/images/background.png")
-   
     return (
       <View style={styles.routeCont} key={i}>
-        
-        <ImageBackground style={styles.bg} source={photo} imageStyle={{borderRadius:15}}>
+        <ImageBackground
+          style={styles.background}
+          source={photo}
+          imageStyle={{ borderRadius: 15, resizeMode: 'cover' }}>
           <View style={styles.desc}>
             <View style={styles.infos}>
               <Text style={styles.title}>{data.name}</Text>
               <View
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginTop: 10,
-                }}
-              >
-                <Text
-                  style={{ color: "white", fontSize: 12, fontWeight: "bold" }}
-                >
-                  {data.followers.length - 1}{" "}
+                }}>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>
+                  {data.followers.length - 1}{' '}
                 </Text>
-                <Icon
-                  as={<MaterialIcons name="person" />}
-                  size={3}
-                  ml="1"
-                  color="white"
-                />
+                <Icon as={<MaterialIcons name="person" />} size={3} ml="1" color="white" />
               </View>
-              <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
-                {data.description}
-              </Text>
-              <Text style={{ color: "white", marginTop: 5, fontSize: 10 }}>
+              <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>{data.description}</Text>
+              <Text style={{ color: 'white', marginTop: 5, fontSize: 10 }}>
                 {data.km}km | {data.viewpoints_id.length} spots
               </Text>
 
               <Button
-                size={"sm"}
+                size={'sm'}
                 style={styles.followBtn}
                 onPress={() => {
-                  navigation.navigate("ItineraryDetails", { ...data });
-                }}
-              >
+                  navigation.navigate('ItineraryDetails', { ...data });
+                }}>
                 Follow
               </Button>
             </View>
@@ -85,73 +84,78 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
   });
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <Text>Inspiration screen</Text>
-        <Input
-          placeholder="City"
-          onChangeText={(value: string) => setCity(value)}
-          value={city}
-          variant="underlined"
-          mx="auto"
-          w="50%"
-          InputRightElement={
-            <Pressable
-              onPress={() => {
-                handleSearch();
-              }}>
-              <Icon as={<MaterialIcons name="arrow-forward" />} size={8} mr="2" color="#219EBC" />
-            </Pressable>
-          }
-        />
-        {itinerariesList}
-      </SafeAreaView>
-    </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <Header navigation={navigation} title="Get Inspired !" />
+      <ScrollView contentContainerStyle={styles.scrollview}>
+        <View style={styles.content}>
+          <Input
+            placeholder="City"
+            onChangeText={(value: string) => setCity(value)}
+            value={city}
+            variant="underlined"
+            mx="auto"
+            w="50%"
+            InputRightElement={
+              <Pressable
+                onPress={() => {
+                  handleSearch();
+                }}>
+                <Icon as={<MaterialIcons name="arrow-forward" />} size={8} mr="2" color="#219EBC" />
+              </Pressable>
+            }
+          />
+          {itinerariesList}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    paddingTop: 80,
+    backgroundColor: '#fff',
+  },
+  scrollview: {
+    flexGrow: 1,
+    paddingBottom: 100,
+  },
+  content: {
+    alignItems: 'center',
   },
   routeCont: {
     marginTop: 20,
-    width: "90%",
-    height: 200,
+    width: '90%',
+    height: '8%',
   },
-  bg: {
-    width: "100%",
-    height: "100%",
+  background: {
+    width: '100%',
+    height: '100%',
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   infos: {
-    display: "flex",
-    justifyContent: "center",
-    width: "60%",
-    height: "100%",
-    backgroundColor: "rgba(2, 48, 71, 0.7)",
+    justifyContent: 'center',
+    width: '60%',
+    height: '100%',
+    backgroundColor: 'rgba(2, 48, 71, 0.7)',
     paddingLeft: 10,
     borderTopLeftRadius: 15,
     borderBottomLeftRadius: 15,
-   
   },
 
   desc: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    height: "100%",
+    justifyContent: 'space-around',
+    height: '100%',
   },
   followBtn: {
+    top: '5%',
     borderRadius: 15,
-    width: "85%",
+    width: '85%',
     marginTop: 15,
+    marginBottom: 5,
   },
 });

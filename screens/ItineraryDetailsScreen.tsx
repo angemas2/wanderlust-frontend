@@ -81,7 +81,7 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
       method: "Put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: user.profile_id._id,
+        userId: user.profile_id,
         id: _id,
       }),
     }).then(() => {
