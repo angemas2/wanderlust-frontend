@@ -23,19 +23,19 @@ type Photo = {
 };
 
 type Element = {
-  name: string,
+  name: string;
   geometry: {
     location: {
-      lat: number,
-      lng: number
-    }
-  },
-  photos: Photo[]
+      lat: number;
+      lng: number;
+    };
+  };
+  photos: Photo[];
 };
 
 function ExploreSwipe() {
   //API key
-  const GOOGLE_MAPS_APIKEY = 'AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk';
+  const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
   //Font variable
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -44,8 +44,10 @@ function ExploreSwipe() {
   const userPosition: UserPosition = useContext(PositionContext);
   //Variable for calling useDispatch
   const dispatch = useDispatch();
-  //Variable that posses all the places in a cetrain perimeter. 
-  const places = useSelector((state: { places: PlaceState }) => state.places.value.proximity);
+  //Variable that posses all the places in a cetrain perimeter.
+  const places = useSelector(
+    (state: { places: PlaceState }) => state.places.value.proximity
+  );
   //Array of places with all information in a certain perimeter.
   const [placesData, setPlacesData] = useState([]);
   //Index used <Swiper/> to reference all card, still need optimisation.
@@ -72,23 +74,22 @@ function ExploreSwipe() {
   useEffect(() => {
     placesData.length > 0
       ? placesData.map((e: Element, i: number) => {
-        let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
-        if (e.photos[0] === undefined) {
-          photo = '';
-        }
-        dispatch(
-          getDefaultPlaces({
-            key: i,
-            name: e.name,
-            latitude: e.geometry.location.lat,
-            longitude: e.geometry.location.lng,
-            photo: photo,
-          })
-        );
-      })
-      : '';
+          let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
+          if (e.photos[0] === undefined) {
+            photo = "";
+          }
+          dispatch(
+            getDefaultPlaces({
+              key: i,
+              name: e.name,
+              latitude: e.geometry.location.lat,
+              longitude: e.geometry.location.lng,
+              photo: photo,
+            })
+          );
+        })
+      : "";
   }, [placesData]);
-
 
   //Snippet code to initialize fonts
   const onLayoutRootView = useCallback(async () => {
@@ -99,7 +100,6 @@ function ExploreSwipe() {
   if (!fontsLoaded) {
     return null;
   }
-
 
   //Making sure places isnt empty to avoid error.
   if (places.length > 0) {
@@ -158,34 +158,34 @@ function ExploreSwipe() {
           disableBottomSwipe
           overlayLabels={{
             left: {
-              title: 'NOPE',
+              title: "NOPE",
               style: {
                 label: {
-                  backgroundColor: 'red',
-                  color: '#fff',
+                  backgroundColor: "red",
+                  color: "#fff",
                   fontSize: 20,
                 },
                 wrapper: {
-                  flexDirection: 'column',
-                  alignItems: 'flex-end',
-                  justifyContent: 'flex-start',
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  justifyContent: "flex-start",
                   marginTop: 10,
                   marginLeft: -10,
                 },
               },
             },
             right: {
-              title: 'LOVE',
+              title: "LOVE",
               style: {
                 label: {
-                  backgroundColor: '#219EBC',
-                  color: '#fff',
+                  backgroundColor: "#219EBC",
+                  color: "#fff",
                   fontSize: 20,
                 },
                 wrapper: {
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-start',
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
                   marginTop: 10,
                   marginLeft: 10,
                 },
@@ -203,7 +203,6 @@ function ExploreSwipe() {
     );
   }
 }
-
 
 //Variable containing style object
 const styles = StyleSheet.create({
@@ -226,8 +225,4 @@ const styles = StyleSheet.create({
   }
 });
 
-
 export default ExploreSwipe;
-
-
-

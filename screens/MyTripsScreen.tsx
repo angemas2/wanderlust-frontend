@@ -137,7 +137,6 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
           name="Route types"
           defaultValue="1"
           style={{
-            backgroundColor: "#219EBC",
             width: "100%",
             height: "8%",
             display: "flex",
@@ -167,7 +166,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
               my={1}
               icon={<Icon as={<MaterialIcons name="favorite" />} size={5} />}
             >
-              <Text style={{ color: "white" }}>Custom</Text>
+              <Text style={{ color: "#219EBC" }}>Custom</Text>
             </Radio>
             <Radio
               value="2"
@@ -175,7 +174,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
               my={1}
               icon={<Icon as={<MaterialIcons name="favorite" />} size={5} />}
             >
-              <Text style={{ color: "white" }}>Followed</Text>
+              <Text style={{ color: "#219EBC" }}>Followed</Text>
             </Radio>
           </Stack>
         </Radio.Group>
