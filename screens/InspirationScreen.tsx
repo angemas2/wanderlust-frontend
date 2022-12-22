@@ -43,8 +43,6 @@ export default function InspirationScreen({
       });
   };
 
-
-
   return (
     <SafeAreaView style={styles.container}>
       <Header navigation={navigation} title="Get Inspired !" />
@@ -78,13 +76,19 @@ export default function InspirationScreen({
               const photo = !!item.viewpoints_id[0]
                 ? { uri: `${item.viewpoints_id[0].photos}` }
                 : require("../assets/images/background.png");
-            
+
               return (
                 <View style={styles.routeCont}>
                   <ImageBackground
                     style={styles.background}
                     source={photo}
-                    imageStyle={{ borderRadius: 15, resizeMode: "cover" }}
+                    imageStyle={{
+                      borderRadius: 15,
+                      resizeMode: "cover",
+                      opacity: 0.8,
+                      backgroundColor: "black",
+                    }}
+                    blurRadius={2}
                   >
                     <View style={styles.desc}>
                       <View style={styles.infos}>
