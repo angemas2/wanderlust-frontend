@@ -17,6 +17,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { PlaceState } from "../reducers/places";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 
 interface ExploreMapProps {
   navigation: NavigationProp<ParamListBase>;
@@ -180,14 +181,14 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
   const point =
     likedPlace.length > 0
       ? likedPlace.map((e, i) => {
-          return (
-            <Marker
-              key={i}
-              title={e.name}
-              coordinate={{ latitude: e.latitude, longitude: e.longitude }}
-            />
-          );
-        })
+        return (
+          <Marker
+            key={i}
+            title={e.name}
+            coordinate={{ latitude: e.latitude, longitude: e.longitude }}
+          />
+        );
+      })
       : "";
 
   const [fontsLoaded] = useFonts({
@@ -207,7 +208,10 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
 
   return (
     <View style={container} onLayout={onLayoutRootView}>
-      <Text style={styles.title}>My adventure</Text>
+      <View style={styles.topContainer}>
+        <Text style={styles.title}>My adventure</Text>
+        <Text style={styles.distance}>{distance} km | {Math.floor(duration)} minutes</Text>
+      </View>
       <Pressable style={styles.pressArrow} onPress={() => handleVisible()}>
         <FontAwesomeIcon
           icon={visible ? faCircleArrowUp : faXmark}
@@ -248,7 +252,6 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   topContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     width: "100%",
   },
   title: {
@@ -281,6 +284,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     zIndex: 1,
   },
+  distance: {
+    marginLeft: "3%",
+    color: "#219EBC",
+    fontWeight: "bold",
+  }
 });
 
 export default ExploreMap;

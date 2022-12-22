@@ -11,7 +11,7 @@ import { useFonts, Inter_400Regular } from '@expo-google-fonts/dev'; //import fo
 import { PlaceState } from '../reducers/places'
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { Modal, FormControl, Input, Button, Slider, Select } from "native-base";
+import { Modal, FormControl, Input, Button, Slider, Select, Box } from "native-base";
 
 interface UserPosition {
   latitude: number;
@@ -110,7 +110,7 @@ function ExploreSwipe() {
           <Pressable onPress={() => setShowModal(true)}>
             <FontAwesomeIcon
               icon={faFilter}
-              size={30}
+              size={20}
               style={styles.icon}
             />
           </Pressable>
@@ -121,16 +121,18 @@ function ExploreSwipe() {
             <Modal.Header>Filter</Modal.Header>
             <Modal.Body>
               <Text>{onChangeEndValue} km</Text>
-              <Slider w="3/4" maxW="300" defaultValue={5} minValue={5} maxValue={50} accessibilityLabel="hello world" step={5} onChange={v => {
-                setOnChangeEndValue(Math.floor(v))
-              }
-              }
-              >
-                <Slider.Track>
-                  <Slider.FilledTrack />
-                </Slider.Track>
-                <Slider.Thumb />
-              </Slider>
+              <Box>
+                <Slider w="3/4" maxW="300" defaultValue={5} minValue={5} maxValue={50} accessibilityLabel="hello world" step={5} onChange={v => {
+                  setOnChangeEndValue(Math.floor(v))
+                }
+                }
+                >
+                  <Slider.Track>
+                    <Slider.FilledTrack />
+                  </Slider.Track>
+                  <Slider.Thumb />
+                </Slider>
+              </Box>
             </Modal.Body>
             <Modal.Footer>
               <Button.Group space={2}>
