@@ -6,6 +6,8 @@ export type Proximity = {
   latitude: number;
   longitude: number;
   photo: string | null;
+ rating:number | null;
+ ratingTotal:number | null;
 
 };
 

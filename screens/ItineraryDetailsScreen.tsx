@@ -174,26 +174,51 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
       {!started ? (
         ""
       ) : (
-        <View
-          style={{
-            position: "absolute",
-            top: 300,
-            left: 0,
-
-            backgroundColor: "rgba(2, 48, 71, 0.8)",
-
-            padding: 10,
-            borderTopRightRadius: 15,
-            borderBottomRightRadius: 15,
-          }}
-        >
-          <Text style={{ color: "white" }}>
-            Distance:{distance.toFixed(1)} km{" "}
-          </Text>
-          <Text style={{ color: "white" }}>
-            Duration: {duration.toFixed(0)} min
-          </Text>
-          <Text style={{ color: "white" }}>Direction: {direction}</Text>
+        <View style={styles.direction}>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: 10,
+              minWidth: 80,
+            }}
+          >
+            <Text style={{ fontSize: 10, opacity: 0.9 }}>Total km</Text>
+            <Text style={{ color: "#023047" }}>
+              {distance ? distance : ""} km
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: 80,
+            }}
+          >
+            <Text style={styles.DirectionContent}>Total time</Text>
+            <Text style={{ color: "#023047" }}>{duration.toFixed(0)} min</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: 80,
+            }}
+          >
+            <Text style={styles.DirectionContent}>Direction</Text>
+            <Text
+              style={{
+                color: "#023047",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {direction}
+            </Text>
+          </View>
         </View>
       )}
       <Pressable>
@@ -281,5 +306,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  direction: {
+    position: "absolute",
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    top: 200,
+    left: 40,
+
+    backgroundColor: "white",
+
+    padding: 10,
+    borderRadius: 15,
+    width: 300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  DirectionContent: {
+    fontSize: 10,
+    opacity: 0.9,
+    marginRight: 10,
+    color: "#023047",
   },
 });

@@ -9,6 +9,7 @@ import {
   faLocationDot,
   faPlay,
   faXmark,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts, Inter_900Black } from "@expo-google-fonts/dev"; //import fonts
@@ -50,7 +51,6 @@ function Card(props: Props) {
     return null;
   }
 
-
   //check if photo is available, if not put the brand picture by default
 
   const photo = !!props.card.photo
@@ -65,19 +65,50 @@ function Card(props: Props) {
         imageStyle={{ opacity: 0.5 }}
         style={styles.image}
       >
-        {props.card && <Text style={styles.text}>{props.card.name}</Text>}
+        {props.card && (
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.text}>{props.card.name}</Text>
+            <View>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "white",
+                  marginTop: 15,
+                  backgroundColor: "#023047",
+                  padding: 10,
+                  borderRadius: 10,
+                  borderWidth: 0.5,
+                  borderColor: "#219EBC",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faStar}
+                  style={{ color: "#FFB703" }}
+                  size={11}
+                />
+                {""} {props.card.rating} ({props.card.ratingTotal})
+              </Text>
+            </View>
+          </View>
+        )}
         <View style={styles.btnContainer}>
+          <Button style={styles.button} onPress={() => disLike()}>
+            <FontAwesomeIcon icon={faXmark} style={{ color: "#FFB703" }} />
+          </Button>
+          <Button style={styles.button} onPress={() => onGo()}>
+            <FontAwesomeIcon icon={faPlay} style={{ color: "#FFB703" }} />
+          </Button>
           <Button style={styles.button} onPress={() => onLike(props)}>
             <FontAwesomeIcon
               icon={faLocationDot}
               style={{ color: "#FFB703" }}
             />
-          </Button>
-          <Button style={styles.button} onPress={() => onGo()}>
-            <FontAwesomeIcon icon={faPlay} style={{ color: "#FFB703" }} />
-          </Button>
-          <Button style={styles.button} onPress={() => disLike()}>
-            <FontAwesomeIcon icon={faXmark} style={{ color: "#FFB703" }} />
           </Button>
         </View>
       </ImageBackground>
