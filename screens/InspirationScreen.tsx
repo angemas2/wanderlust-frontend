@@ -27,7 +27,7 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
       .then((data) => {
         setItineraries(data.data);
       });
-  }, []);
+  }, [itineraries]);
 
   const handleSearch = () => {
     fetch(`https://wanderlust-backend.vercel.app/itineraries/${city.toLocaleLowerCase()}`)
@@ -70,7 +70,13 @@ export default function InspirationScreen({ navigation }: InspirationScreenProps
                   <ImageBackground
                     style={styles.background}
                     source={photo}
-                    imageStyle={{ borderRadius: 15, resizeMode: 'cover' }}>
+                    imageStyle={{
+                      borderRadius: 15,
+                      resizeMode: 'cover',
+                      opacity: 0.8,
+                      backgroundColor: 'black',
+                    }}
+                    blurRadius={2}>
                     <View style={styles.desc}>
                       <View style={styles.infos}>
                         <Text style={styles.title}>{item.name}</Text>

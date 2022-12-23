@@ -17,6 +17,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { PlaceState } from "../reducers/places";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 
 interface ExploreMapProps {
   navigation: NavigationProp<ParamListBase>;
@@ -88,63 +89,6 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
     };
   }
 
-  //Maping on likedPlace to get all the places that the user liked.
-  //Adding the likedPlaces to the db
-  // const getIds = () => {
-  //   return likedPlace.map((data) => {
-  //     fetch("https://wanderlust-backend.vercel.app/viewpoints/addPoint", {
-  //       method: "Post",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         name: data.name,
-  //         description: data.description,
-  //         photos: data.photo,
-  //         location: {
-  //           latitude: data.latitude,
-  //           longitude: data.longitude,
-  //         },
-  //         tags_id: "",
-  //       }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log("data id list", data.data._id);
-  //         ids.push(data.data._id);
-  //         setIdsList(ids);
-  //         if (likedPlace.length === idsList.length) {
-  //           setCanAdd(true);
-  //         }
-  //       });
-  //   });
-  // };
-
-  // const createItinerary = () => {
-  //   getIds();
-
-  //   if (idsList.length === likedPlace.length) {
-  //     fetch("https://wanderlust-backend.vercel.app/itineraries/addItinerary", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         profile_id: user.profile_id,
-  //         viewpointsList: idsList,
-  //         km: distance,
-  //         map: duration,
-  //         photos: "",
-  //         name: "La capsuletest await fintest15",
-  //         description:
-  //           "visite du parc du bois de la cambre et de son lac ainsi que des parcs autour (drhome, plaine, plateau d'avrij ...)",
-  //         public: false,
-  //         custom: true,
-  //         isSponsor: false,
-  //         city: "Bruxelles",
-  //       }),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => console.log(data));
-  //   }
-  // };
-
   const handleVisible = () => {
     dispatch(setSwipeVisibility());
   };
@@ -207,7 +151,12 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
 
   return (
     <View style={container} onLayout={onLayoutRootView}>
-      <Text style={styles.title}>My adventure</Text>
+      <View style={styles.topContainer}>
+        <Text style={styles.title}>My adventure</Text>
+        <Text style={styles.distance}>
+          {distance} km | {Math.floor(duration)} minutes
+        </Text>
+      </View>
       <Pressable style={styles.pressArrow} onPress={() => handleVisible()}>
         <FontAwesomeIcon
           icon={visible ? faCircleArrowUp : faXmark}
@@ -239,7 +188,9 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
         style={styles.btn}
         onPress={() => navigation.navigate("ExploreDetails")}
       >
-        <Text>Start exploring</Text>
+        <Text style={{ color: "white", fontWeight: "bold" }}>
+          Start exploring
+        </Text>
       </Pressable>
     </View>
   );
@@ -248,7 +199,6 @@ const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   topContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     width: "100%",
   },
   title: {
@@ -265,6 +215,15 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     marginTop: "5%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+
+    elevation: 1,
   },
   icon: {
     color: "#FFB703",
@@ -280,6 +239,11 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginTop: 10,
     zIndex: 1,
+  },
+  distance: {
+    marginLeft: "3%",
+    color: "#219EBC",
+    fontWeight: "bold",
   },
 });
 

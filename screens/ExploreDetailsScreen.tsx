@@ -9,6 +9,7 @@ import { Button } from 'native-base';
 import { PlaceState, Proximity } from '../reducers/places';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { UserState } from '../reducers/user';
+import { Dimensions } from 'react-native';
 
 type Props = {
   navigation: NavigationProp<ParamListBase>;
@@ -200,16 +201,26 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
           {status ? 'Stop' : 'Start'}
         </Button>
       </Pressable>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 16,
-          marginTop: 60,
-          color: '#023047',
-          width: '90%',
-        }}>
-        Itinerary Steps
-      </Text>
+      <View style={styles.distanceContainer}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+            marginLeft: 10,
+            color: '#023047',
+          }}>
+          Itinerary Steps
+        </Text>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+            marginLeft: 10,
+            color: '#219EBC',
+          }}>
+          {distance} km | {Math.floor(duration)} minutes
+        </Text>
+      </View>
       <ScrollView horizontal={true} style={styles.placesCont}>
         {steps}
       </ScrollView>
@@ -220,11 +231,12 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     height: '100%',
+    maxWidth: Dimensions.get('window').width,
     alignItems: 'center',
   },
   map: {
     height: '65%',
-    width: '95%',
+    width: Dimensions.get('window').width,
     borderRadius: 10,
   },
   startBtn: {
@@ -270,8 +282,14 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
     marginBottom: 10,
+  },
+  distanceContainer: {
+    flexDirection: 'row',
+    marginTop: 60,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: Dimensions.get('window').width,
   },
 });
