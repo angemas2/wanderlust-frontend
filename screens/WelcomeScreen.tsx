@@ -51,11 +51,11 @@ export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             <Text style={{ ...styles.title, color: '#FFB703' }}>Lust</Text>
           </View>
           <Text style={styles.description}>
-            Laissez-vous guider par notre compagnon de voyage et découvrez les pépites cachées
-            autour de vous
+            Let our companion's travel to guide you in the city and discover the hidden gems around
+            you !
           </Text>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.textButton}>Commencer à explorer</Text>
+            <Text style={styles.textButton}>Start to explore!</Text>
           </TouchableOpacity>
         </View>
 

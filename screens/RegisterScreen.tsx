@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile, UserState } from '../reducers/user';
+import { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateUserProfile } from '../reducers/user';
 import {
   Platform,
   KeyboardAvoidingView,
@@ -40,8 +40,6 @@ type RegisterScreenProps = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RegisterScreen({ navigation }: RegisterScreenProps) {
-  const user = useSelector((state: { user: UserState }) => state.user.value);
-
   const dispatch = useDispatch();
 
   const [username, setUsername] = useState('');
@@ -78,9 +76,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       .then((response) => response.json())
       .then((data: dataUsersProps) => {
         if (!data.result) {
-          console.log(data);
-          // error message displayed if both fields are empty, verification handled & returned by backend
-          setError(data.error);
+          setError(data.error); // error message displayed if both fields are empty, verification handled & returned by backend
         } else {
           dispatch(
             updateUserProfile({
@@ -119,8 +115,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         const { authentication } = response;
         const accessToken = authentication?.accessToken;
         fetchGoogleUserInfo(accessToken).then(async (userData) => {
-          console.log(userData);
-
           const postData = fetch('https://wanderlust-backend.vercel.app/users/google', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -135,7 +129,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           const data = (await postData).json();
 
           const userDataFromAPI: dataUsersProps = await data;
-          console.log('--------', userDataFromAPI);
 
           const { profile_id } = userDataFromAPI;
           dispatch(
@@ -173,7 +166,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
       if (fbresponse?.type === 'success') {
         const { code } = fbresponse.params;
         const user = await facebookUserInfo(fbtoken);
-        console.log(user.picture.data.url);
         setUsername(user.first_name);
         setEmail(user.email);
         fetch('https://wanderlust-backend.vercel.app/users/facebook', {
@@ -190,7 +182,6 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         })
           .then((response) => response.json())
           .then((data: dataUsersProps) => {
-            console.log('fb dataaaaaaaa', data);
             dispatch(
               updateUserProfile({
                 email: user.email,
@@ -327,7 +318,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
           </View>
           <View style={styles.midMenu}>
             <View style={styles.line}></View>
-            <Text style={styles.connectionOptionsText}>Ou</Text>
+            <Text style={styles.connectionOptionsText}>Or</Text>
             <View style={styles.line}></View>
           </View>
 
@@ -342,7 +333,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                 source={require('../assets/images/google_logo.png')}
                 style={styles.googleLogo}
               />
-              <Text style={styles.googleText}>se connecter avec Google</Text>
+              <Text style={styles.googleText}>Sign in with Google</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.facebookButton}
@@ -354,7 +345,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
                 source={require('../assets/images/facebook_logo.png')}
                 style={styles.facebookLogo}
               />
-              <Text style={styles.facebookText}>se connecter avec Facebook</Text>
+              <Text style={styles.facebookText}>Sign in with Facebook</Text>
             </TouchableOpacity>
           </View>
         </View>
