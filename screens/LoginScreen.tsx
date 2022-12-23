@@ -84,8 +84,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         const { authentication } = response;
         const accessToken = authentication?.accessToken;
         fetchGoogleUserInfo(accessToken).then(async (userData) => {
-          console.log(userData);
-          console.log(userData.name);
           const postData = fetch('https://wanderlust-backend.vercel.app/users/google', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -100,7 +98,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           const data = (await postData).json();
 
           const userDataFromAPI: dataProps = await data;
-          console.log('--------', userDataFromAPI);
 
           const { profile_id } = userDataFromAPI;
           dispatch(

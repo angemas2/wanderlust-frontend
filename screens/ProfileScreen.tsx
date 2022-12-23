@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Image,
   ImageBackground,
@@ -6,13 +6,14 @@ import {
   Platform,
   Pressable,
   Text,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 import { Box, Input, Button, Icon } from 'native-base';
 import { useSelector } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
-import user, { UserState } from '../reducers/user';
+import { UserState } from '../reducers/user';
 
 import * as SplashScreen from 'expo-splash-screen';
 import {
@@ -20,11 +21,9 @@ import {
   Montserrat_700Bold,
   Montserrat_500Medium,
   Inter_300Light,
-  Inter_500Medium,
   Inter_400Regular,
   PlayfairDisplay_800ExtraBold,
   PlayfairDisplay_400Regular,
-  Roboto_500Medium,
 } from '@expo-google-fonts/dev';
 
 SplashScreen.preventAutoHideAsync();
@@ -42,8 +41,6 @@ export default function ProfileScreen() {
     ? user.picture
     : 'https://res.cloudinary.com/donutkh1m/image/upload/v1671476791/WanderLust/default_ph2ga6.jpg';
   const userToken = user.token;
-
-  console.log(user.picture);
 
   type userData = {
     result: boolean;
@@ -139,126 +136,128 @@ export default function ProfileScreen() {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={-150}
-      onLayout={onLayoutRootView}>
-      <ImageBackground
-        source={require('../assets/images/background.png')}
-        style={styles.imageBackground}>
-        <View style={styles.contentContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Edit your profile</Text>
-            <View>
-              <Image source={{ uri: avatar }} style={styles.avatar} />
+    <ScrollView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={-150}
+        onLayout={onLayoutRootView}>
+        <ImageBackground
+          source={require('../assets/images/background.png')}
+          style={styles.imageBackground}>
+          <View style={styles.contentContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Edit your profile</Text>
+              <View>
+                <Image source={{ uri: avatar }} style={styles.avatar} />
+              </View>
+              <Text style={styles.subtitle}>{user.username}</Text>
+              <Text style={styles.subtitle}>{user.email}</Text>
             </View>
-            <Text style={styles.subtitle}>{user.username}</Text>
-            <Text style={styles.subtitle}>{user.email}</Text>
+
+            <Box style={styles.boxStyle}>
+              {/*box to contain form's registration fields */}
+              <Input
+                style={styles.input}
+                variant="rounded"
+                placeholder="Type current password"
+                color="white"
+                bgColor="rgba(2, 48, 71, 0.7)"
+                mx="3"
+                w="100%"
+                type={show ? 'text' : 'password'}
+                onChangeText={(value) => setCurrentPassword(value)}
+                value={currentPassword}
+                InputLeftElement={
+                  <Icon
+                    as={<MaterialIcons name={'lock-outline'} />}
+                    style={styles.lockIcon}
+                    size={5}
+                    mr="2"
+                    color="#8ECAE6"
+                  />
+                }
+                InputRightElement={
+                  <Pressable onPress={() => setShow(!show)}>
+                    <Icon
+                      as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
+                      style={styles.eyeIcon}
+                      size={5}
+                      mr="2"
+                      color="#8ECAE6"
+                    />
+                  </Pressable>
+                }
+              />
+              <Input
+                style={styles.input}
+                variant="rounded"
+                placeholder="Type new password"
+                color="white"
+                bgColor="rgba(2, 48, 71, 0.7)"
+                mx="3"
+                w="100%"
+                type={show ? 'text' : 'password'}
+                onChangeText={(value) => setNewPassword(value)}
+                value={newPassword}
+                InputLeftElement={
+                  <Icon
+                    as={<MaterialIcons name={'lock-outline'} />}
+                    style={styles.lockIcon}
+                    size={5}
+                    mr="2"
+                    color="#8ECAE6"
+                  />
+                }
+                InputRightElement={
+                  <Pressable onPress={() => setShow(!show)}>
+                    <Icon
+                      as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
+                      style={styles.eyeIcon}
+                      size={5}
+                      mr="2"
+                      color="#8ECAE6"
+                    />
+                  </Pressable>
+                }
+              />
+              <Input
+                style={styles.input}
+                variant="rounded"
+                placeholder="Type new password again"
+                color="white"
+                bgColor="rgba(2, 48, 71, 0.7)"
+                mx="3"
+                w="100%"
+                type={show ? 'text' : 'password'}
+                onChangeText={(value) => setTestNewPassword(value)}
+                value={testNewPassword}
+                InputLeftElement={
+                  <Icon
+                    as={<MaterialIcons name={'lock-outline'} />}
+                    style={styles.lockIcon}
+                    size={5}
+                    mr="2"
+                    color="#8ECAE6"
+                  />
+                }
+              />
+            </Box>
+            <Button style={styles.button} onPress={handlePasswordSubmit}>
+              Change password
+            </Button>
+
+            {resultMessage && (
+              <Text
+                style={passwordModified ? styles.passwordIsModified : styles.passwordNotModified}>
+                {resultMessage}
+              </Text>
+            )}
+
+            <Image source={require('../assets/images/logowithtext.png')} style={styles.logo} />
           </View>
-
-          <Box alignItems="center" style={styles.boxStyle}>
-            {/*box to contain form's registration fields */}
-            <Input
-              style={styles.input}
-              variant="rounded"
-              placeholder="Type current password"
-              color="white"
-              bgColor="rgba(2, 48, 71, 0.7)"
-              mx="3"
-              w="100%"
-              type={show ? 'text' : 'password'}
-              onChangeText={(value) => setCurrentPassword(value)}
-              value={currentPassword}
-              InputLeftElement={
-                <Icon
-                  as={<MaterialIcons name={'lock-outline'} />}
-                  style={styles.lockIcon}
-                  size={5}
-                  mr="2"
-                  color="#8ECAE6"
-                />
-              }
-              InputRightElement={
-                <Pressable onPress={() => setShow(!show)}>
-                  <Icon
-                    as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
-                    style={styles.eyeIcon}
-                    size={5}
-                    mr="2"
-                    color="#8ECAE6"
-                  />
-                </Pressable>
-              }
-            />
-            <Input
-              style={styles.input}
-              variant="rounded"
-              placeholder="Type new password"
-              color="white"
-              bgColor="rgba(2, 48, 71, 0.7)"
-              mx="3"
-              w="100%"
-              type={show ? 'text' : 'password'}
-              onChangeText={(value) => setNewPassword(value)}
-              value={newPassword}
-              InputLeftElement={
-                <Icon
-                  as={<MaterialIcons name={'lock-outline'} />}
-                  style={styles.lockIcon}
-                  size={5}
-                  mr="2"
-                  color="#8ECAE6"
-                />
-              }
-              InputRightElement={
-                <Pressable onPress={() => setShow(!show)}>
-                  <Icon
-                    as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
-                    style={styles.eyeIcon}
-                    size={5}
-                    mr="2"
-                    color="#8ECAE6"
-                  />
-                </Pressable>
-              }
-            />
-            <Input
-              style={styles.input}
-              variant="rounded"
-              placeholder="Type new password again"
-              color="white"
-              bgColor="rgba(2, 48, 71, 0.7)"
-              mx="3"
-              w="100%"
-              type={show ? 'text' : 'password'}
-              onChangeText={(value) => setTestNewPassword(value)}
-              value={testNewPassword}
-              InputLeftElement={
-                <Icon
-                  as={<MaterialIcons name={'lock-outline'} />}
-                  style={styles.lockIcon}
-                  size={5}
-                  mr="2"
-                  color="#8ECAE6"
-                />
-              }
-            />
-          </Box>
-          <Button style={styles.button} onPress={handlePasswordSubmit}>
-            Change password
-          </Button>
-
-          {resultMessage && (
-            <Text style={passwordModified ? styles.passwordIsModified : styles.passwordNotModified}>
-              {resultMessage}
-            </Text>
-          )}
-
-          <Image source={require('../assets/images/logowithtext.png')} style={styles.logo} />
-        </View>
-      </ImageBackground>
-    </KeyboardAvoidingView>
+        </ImageBackground>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -310,6 +309,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '23%',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 0,
   },
   input: {
