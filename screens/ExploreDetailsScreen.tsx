@@ -25,7 +25,7 @@ type Props = {
 };
 
 export default function ExploreDetailsScreen({ navigation }: Props) {
-  const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
+  const GOOGLE_MAPS_APIKEY = 'AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk';
 
   const positionContext = useContext(PositionContext);
   const userPosition = {
@@ -36,14 +36,12 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const user = useSelector((state: { user: UserState }) => state.user.value);
 
   const [idsList, setIdsList] = useState<string[]>([]);
-  const [duration, setDuration] = useState(0);
-  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [distance, setDistance] = useState<number>(0);
   const [status, setStatus] = useState<boolean>(false);
-  const [direction, setDirection] = useState("");
+  const [direction, setDirection] = useState<string>('');
 
-  const likedPlace = useSelector(
-    (state: { places: PlaceState }) => state.places.value.liked
-  );
+  const likedPlace = useSelector((state: { places: PlaceState }) => state.places.value.liked);
 
   const wayPoints = likedPlace.map((e: Proximity) => {
     return { latitude: e.latitude, longitude: e.longitude };
@@ -66,16 +64,11 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         mode="WALKING"
         onReady={(result) => {
           let maneuver;
-          let step = result.legs[0].steps[0].distance.text.includes("km")
-            ? "km"
-            : "m";
-          if (step === "km" && result.legs[0].steps[0].distance.value < 0.3) {
+          let step = result.legs[0].steps[0].distance.text.includes('km') ? 'km' : 'm';
+          if (step === 'km' && result.legs[0].steps[0].distance.value < 0.3) {
             //@ts-ignore
             maneuver = `in ${result?.legs[0]?.steps[1].distance.text} ${result?.legs[0]?.steps[1]?.maneuver}`;
-          } else if (
-            step === "m" &&
-            result.legs[0].steps[0].distance.value < 30
-          ) {
+          } else if (step === 'm' && result.legs[0].steps[0].distance.value < 30) {
             //@ts-ignore
             maneuver = `in ${result?.legs[0]?.steps[1]?.distance.text} ${result.legs[0].steps[1].maneuver}`;
           } else {
@@ -90,7 +83,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         }}
       />
     ) : (
-      ""
+      ''
     );
 
   const point =
@@ -109,23 +102,23 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const getIds = async () => {
     const ids: string[] = [];
     return likedPlace.map((data: Proximity) => {
-      fetch("https:wanderlust-backend.vercel.app/viewpoints/addPoint", {
-        method: "Post",
-        headers: { "Content-Type": "application/json" },
+      fetch('https:wanderlust-backend.vercel.app/viewpoints/addPoint', {
+        method: 'Post',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: data.name,
-          description: "",
+          description: '',
           photos: data.photo,
           location: {
             latitude: data.latitude,
             longitude: data.longitude,
           },
-          tags_id: "",
+          tags_id: '',
         }),
       })
         .then((res: any) => res.json())
         .then((data: any) => {
-          console.log("data id list", data.data._id);
+          console.log('data id list', data.data._id);
           ids.push(data.data._id);
           setIdsList(ids);
           return ids;
@@ -136,22 +129,19 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
   const steps = likedPlace.map((e, i) => {
     console.log(e.photo);
 
-    const photo = !!e.photo
-      ? { uri: `${e.photo}` }
-      : require("../assets/images/background.png");
+    const photo = !!e.photo ? { uri: `${e.photo}` } : require('../assets/images/background.png');
     return (
       <View key={i} style={styles.place}>
         <Image source={photo} style={styles.placeimg}></Image>
         <Text
           style={{
-            width: "100%",
-            textAlign: "center",
+            width: '100%',
+            textAlign: 'center',
             marginTop: 8,
             fontSize: 12,
-            fontWeight: "bold",
-            color: "#023047",
-          }}
-        >
+            fontWeight: 'bold',
+            color: '#023047',
+          }}>
           {e.name}
         </Text>
       </View>
@@ -169,21 +159,20 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
         }}
         style={styles.map}
         showsUserLocation={true}
-        followsUserLocation={true}
-      >
+        followsUserLocation={true}>
         <Marker
           draggable
           coordinate={{
             latitude: positionContext.latitude,
             longitude: positionContext.longitude,
           }}
-          pinColor={"#FFB703"}
+          pinColor={'#FFB703'}
         />
         {point}
         {intinaries}
       </MapView>
       {!status ? (
-        ""
+        ''
       ) : (
         <View style={styles.direction}>
           <View
@@ -241,31 +230,29 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
             if (!status) {
               await getIds().then(() => setStatus(!status));
             } else {
-              navigation.navigate("ExploreSave", {
+              navigation.navigate('ExploreSave', {
                 idsList,
                 distance,
                 duration,
               });
             }
-          }}
-        >
-          {status ? "Stop" : "Start"}
+          }}>
+          {status ? 'Stop' : 'Start'}
         </Button>
       </Pressable>
       <View style={styles.distanceContainer}>
         <Text
           style={{
-            fontWeight: "bold",
+            fontWeight: 'bold',
             fontSize: 16,
             marginLeft: 10,
-            color: "#023047",
-          }}
-        >
+            color: '#023047',
+          }}>
           Itinerary Steps
         </Text>
         <Text
           style={{
-            fontWeight: "bold",
+            fontWeight: 'bold',
             fontSize: 16,
             marginLeft: 10,
             color: "#219EBC",
@@ -283,25 +270,25 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    maxWidth: Dimensions.get("window").width,
-    alignItems: "center",
+    height: '100%',
+    maxWidth: Dimensions.get('window').width,
+    alignItems: 'center',
   },
   map: {
-    height: "65%",
-    width: Dimensions.get("window").width,
+    height: '65%',
+    width: Dimensions.get('window').width,
     borderRadius: 10,
   },
   startBtn: {
-    backgroundColor: "#FBBF13",
+    backgroundColor: '#FBBF13',
     width: 80,
     height: 80,
-    color: "white",
+    color: 'white',
     borderRadius: 50,
     top: -35,
-    alignSelf: "center",
-    position: "absolute",
-    shadowColor: "#000",
+    alignSelf: 'center',
+    position: 'absolute',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -311,13 +298,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   placesCont: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: "5%",
-    marginLeft: "5%",
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '5%',
+    marginLeft: '5%',
   },
   placeimg: {
-    width: "100%",
+    width: '100%',
     height: 120,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
@@ -325,10 +312,10 @@ const styles = StyleSheet.create({
   place: {
     width: 160,
     marginRight: 18,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 15,
     paddingBottom: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
