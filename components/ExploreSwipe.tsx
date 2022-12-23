@@ -1,17 +1,25 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Text, StyleSheet, View, Pressable } from 'react-native';
-import Swiper from 'react-native-deck-swiper';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { addNewLike, getDefaultPlaces } from '../reducers/places';
-import Card from './Card';
-import PositionContext from '../utils/context';
-import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Inter_400Regular } from '@expo-google-fonts/dev'; //import fonts
-import { PlaceState } from '../reducers/places'
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import { Text, StyleSheet, View, Pressable } from "react-native";
+import Swiper from "react-native-deck-swiper";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addNewLike, getDefaultPlaces } from "../reducers/places";
+import Card from "./Card";
+import PositionContext from "../utils/context";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts, Inter_400Regular } from "@expo-google-fonts/dev"; //import fonts
+import { PlaceState } from "../reducers/places";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { Modal, FormControl, Input, Button, Slider, Select, Box } from "native-base";
+import {
+  Modal,
+  FormControl,
+  Input,
+  Button,
+  Slider,
+  Select,
+  Box,
+} from "native-base";
 
 interface UserPosition {
   latitude: number;
@@ -31,6 +39,9 @@ type Element = {
     };
   };
   photos: Photo[];
+  description: string;
+  rating: number;
+  user_ratings_total: number;
 };
 
 function ExploreSwipe() {
@@ -54,16 +65,16 @@ function ExploreSwipe() {
   const [index, setIndex] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
   const [onChangeEndValue, setOnChangeEndValue] = useState(5);
-  const monumentRange = onChangeEndValue * 1000
+  const monumentRange = onChangeEndValue * 1000;
 
-
-  //Request to get places in a certain perimeter, and give the response to placesData 
+  //Request to get places in a certain perimeter, and give the response to placesData
   useEffect(() => {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${userPosition.latitude},${userPosition.longitude}&types=tourist_attraction&radius=10000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setPlacesData(data.results);
+       console.log(data.results[0])
       })
       .catch((error) => {
         console.log(error);
@@ -85,6 +96,8 @@ function ExploreSwipe() {
               latitude: e.geometry.location.lat,
               longitude: e.geometry.location.lng,
               photo: photo,
+              rating: e.rating,
+              ratingTotal: e.user_ratings_total,
             })
           );
         })
@@ -108,11 +121,7 @@ function ExploreSwipe() {
         <View style={styles.topContainer}>
           <Text style={styles.title}>Browse our suggestions</Text>
           <Pressable onPress={() => setShowModal(true)}>
-            <FontAwesomeIcon
-              icon={faFilter}
-              size={20}
-              style={styles.icon}
-            />
+            <FontAwesomeIcon icon={faFilter} size={20} style={styles.icon} />
           </Pressable>
         </View>
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
@@ -122,10 +131,17 @@ function ExploreSwipe() {
             <Modal.Body>
               <Text>{onChangeEndValue} km</Text>
               <Box>
-                <Slider w="3/4" maxW="300" defaultValue={5} minValue={5} maxValue={50} accessibilityLabel="hello world" step={5} onChange={v => {
-                  setOnChangeEndValue(Math.floor(v))
-                }
-                }
+                <Slider
+                  w="3/4"
+                  maxW="300"
+                  defaultValue={5}
+                  minValue={5}
+                  maxValue={50}
+                  accessibilityLabel="hello world"
+                  step={5}
+                  onChange={(v) => {
+                    setOnChangeEndValue(Math.floor(v));
+                  }}
                 >
                   <Slider.Track>
                     <Slider.FilledTrack />
@@ -136,9 +152,11 @@ function ExploreSwipe() {
             </Modal.Body>
             <Modal.Footer>
               <Button.Group space={2}>
-                <Button onPress={() => {
-                  setShowModal(false);
-                }}>
+                <Button
+                  onPress={() => {
+                    setShowModal(false);
+                  }}
+                >
                   Save
                 </Button>
               </Button.Group>
@@ -150,7 +168,7 @@ function ExploreSwipe() {
           renderCard={(card) => <Card card={card} />}
           onSwipedRight={(i) => dispatch(addNewLike(places[i]))}
           disableTopSwipe
-          backgroundColor={'transparent'}
+          backgroundColor={"transparent"}
           swipeAnimationDuration={600}
           marginTop={10}
           cardVerticalMargin={25}
@@ -208,12 +226,12 @@ function ExploreSwipe() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  
-    marginTop:15,
+
+    marginTop: 15,
   },
   topContainer: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   title: {
     marginLeft: 10,
@@ -222,8 +240,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: "#FFB703",
-    marginRight: 10
-  }
+    marginRight: 10,
+  },
 });
 
 export default ExploreSwipe;

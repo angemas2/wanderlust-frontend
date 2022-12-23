@@ -4,18 +4,18 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View } from "react-native";
 
-import WelcomeScreen from './screens/WelcomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import ExploreScreen from './screens/ExploreScreen';
-import InspirationScreen from './screens/InspirationScreen';
-import ItineraryDetailsScreen from './screens/ItineraryDetailsScreen';
-import ExploreDetailsScreen from './screens/ExploreDetailsScreen';
-import ExploreSaveScreen from './screens/ExploreSaveScreen';
-import MyTripsScreen from './screens/MyTripsScreen';
-import NavScreen from './screens/NavScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import ItinerarySummaryScreen from './screens/ItinerarySummaryScreen';
+import WelcomeScreen from "./screens/WelcomeScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+import ExploreScreen from "./screens/ExploreScreen";
+import InspirationScreen from "./screens/InspirationScreen";
+import ItineraryDetailsScreen from "./screens/ItineraryDetailsScreen";
+import ExploreDetailsScreen from "./screens/ExploreDetailsScreen";
+import ExploreSaveScreen from "./screens/ExploreSaveScreen";
+import MyTripsScreen from "./screens/MyTripsScreen";
+import NavScreen from "./screens/NavScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import ItinerarySummaryScreen from "./screens/ItinerarySummaryScreen";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -39,6 +39,7 @@ import user from "./reducers/user";
 import UserProvider, { UserContext } from "./utils/logincontext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LogBox } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -51,16 +52,16 @@ const TabNavigator = () => {
           let iconName: IconDefinition;
 
           switch (route.name) {
-            case 'MyTrips':
+            case "MyTrips":
               iconName = faMap;
               break;
-            case 'Explore':
+            case "Explore":
               iconName = faMapLocationDot;
               break;
-            case 'Inspiration':
+            case "Inspiration":
               iconName = faLightbulb;
               break;
-            case 'Nav':
+            case "Nav":
               iconName = faCompass;
               break;
             default:
@@ -70,10 +71,11 @@ const TabNavigator = () => {
 
           return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#FFB703',
-        tabBarInactiveTintColor: '#023047',
+        tabBarActiveTintColor: "#FFB703",
+        tabBarInactiveTintColor: "#023047",
         headerShown: false,
-      })}>
+      })}
+    >
       <Tab.Screen name="MyTrips" component={MyTripsScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Inspiration" component={InspirationScreen} />
@@ -87,6 +89,8 @@ const store = configureStore({
 });
 
 export default function App() {
+  LogBox.ignoreAllLogs();
+
   const [positionObj, setPositionObj] = useState({
     accuracy: 0,
     altitude: 0,
@@ -125,12 +129,9 @@ export default function App() {
     })();
   }, []);
 
-
-
   return (
     <Provider store={store}>
       <>
-     
         <PositionContext.Provider value={positionObj}>
           <NativeBaseProvider>
             <NavigationContainer>
@@ -138,24 +139,54 @@ export default function App() {
                 {user.username === "" ? (
                   <>
                     <Stack.Screen name="Home" component={WelcomeScreen} />
-                    <Stack.Screen name="Register" component={RegisterScreen} /> 
+                    <Stack.Screen name="Register" component={RegisterScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
                     <Stack.Screen name="Profile" component={ProfileScreen} />
-                    <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
-                    <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
-                    <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
-                    <Stack.Screen name="CustomTrips" component={MyTripsScreen} />
-                    <Stack.Screen name="ExploreSave" component={ExploreSaveScreen} />
-                    <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                    <Stack.Screen
+                      name="ItineraryDetails"
+                      component={ItineraryDetailsScreen}
+                    />
+                    <Stack.Screen
+                      name="ItinerarySummary"
+                      component={ItinerarySummaryScreen}
+                    />
+                    <Stack.Screen
+                      name="ExploreDetails"
+                      component={ExploreDetailsScreen}
+                    />
+                    <Stack.Screen
+                      name="CustomTrips"
+                      component={MyTripsScreen}
+                    />
+                    <Stack.Screen
+                      name="ExploreSave"
+                      component={ExploreSaveScreen}
+                    />
+                    <Stack.Screen
+                      name="TabNavigator"
+                      component={TabNavigator}
+                    />
                   </>
                 ) : (
                   <>
                     <Stack.Screen name="Home" component={WelcomeScreen} />
                     <Stack.Screen name="Profile" component={ProfileScreen} />
-                    <Stack.Screen name="ItineraryDetails" component={ItineraryDetailsScreen} />
-                    <Stack.Screen name="CustomTrips" component={MyTripsScreen} />
-                    <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
-                    <Stack.Screen name="ItinerarySummary" component={ItinerarySummaryScreen} />
+                    <Stack.Screen
+                      name="ItineraryDetails"
+                      component={ItineraryDetailsScreen}
+                    />
+                    <Stack.Screen
+                      name="CustomTrips"
+                      component={MyTripsScreen}
+                    />
+                    <Stack.Screen
+                      name="ExploreDetails"
+                      component={ExploreDetailsScreen}
+                    />
+                    <Stack.Screen
+                      name="ItinerarySummary"
+                      component={ItinerarySummaryScreen}
+                    />
 
                     <Stack.Screen
                       name="TabNavigator"

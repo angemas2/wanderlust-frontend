@@ -1,15 +1,24 @@
-import { SafeAreaView, Text, StyleSheet, Pressable, ScrollView, View, Image } from 'react-native';
-import { useContext, useState } from 'react';
-import { useSelector } from 'react-redux';
-import MapViewDirections from 'react-native-maps-alternatives-directions';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
-import PositionContext from '../utils/context';
-import { Button } from 'native-base';
-import { PlaceState, Proximity } from '../reducers/places';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { UserState } from '../reducers/user';
-import { Dimensions } from 'react-native';
+import React from "react";
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  View,
+  Image,
+} from "react-native";
+import { useContext, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import MapViewDirections from "react-native-maps-alternatives-directions";
+import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
+import PositionContext from "../utils/context";
+import { Button } from "native-base";
+import { PlaceState, Proximity } from "../reducers/places";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { UserState } from "../reducers/user";
+import { Dimensions } from "react-native";
 
 type Props = {
   navigation: NavigationProp<ParamListBase>;
@@ -88,7 +97,7 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
             />
           );
         })
-      : '';
+      : "";
 
   const getIds = async () => {
     const ids: string[] = [];
@@ -165,21 +174,51 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
       {!status ? (
         ''
       ) : (
-        <View
-          style={{
-            position: 'absolute',
-            top: 300,
-            left: 0,
-
-            backgroundColor: 'rgba(2, 48, 71, 0.8)',
-
-            padding: 10,
-            borderTopRightRadius: 15,
-            borderBottomRightRadius: 15,
-          }}>
-          <Text style={{ color: 'white' }}>Distance:{distance.toFixed(1)} km </Text>
-          <Text style={{ color: 'white' }}>Duration: {duration.toFixed(0)} min</Text>
-          <Text style={{ color: 'white' }}>Direction: {direction}</Text>
+        <View style={styles.direction}>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: 10,
+              minWidth: 80,
+            }}
+          >
+            <Text style={{ fontSize: 10, opacity: 0.9 }}>Total km</Text>
+            <Text style={{ color: "#023047" }}>
+              {distance ? distance : ""} km
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: 80,
+            }}
+          >
+            <Text style={styles.DirectionContent}>Total time</Text>
+            <Text style={{ color: "#023047" }}>{duration.toFixed(0)} min</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: 80,
+            }}
+          >
+            <Text style={styles.DirectionContent}>Direction</Text>
+            <Text
+              style={{
+                color: "#023047",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {direction}
+            </Text>
+          </View>
         </View>
       )}
       <Pressable>
@@ -216,8 +255,9 @@ export default function ExploreDetailsScreen({ navigation }: Props) {
             fontWeight: 'bold',
             fontSize: 16,
             marginLeft: 10,
-            color: '#219EBC',
-          }}>
+            color: "#219EBC",
+          }}
+        >
           {distance} km | {Math.floor(duration)} minutes
         </Text>
       </View>
@@ -286,10 +326,39 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   distanceContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 60,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: Dimensions.get('window').width,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: Dimensions.get("window").width,
+  },
+  direction: {
+    position: "absolute",
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    top: 80,
+    left: 40,
+
+    backgroundColor: "white",
+
+    padding: 10,
+    borderRadius: 15,
+    width: 300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  DirectionContent: {
+    fontSize: 10,
+    opacity: 0.9,
+    marginRight: 10,
+    color: "#023047",
   },
 });

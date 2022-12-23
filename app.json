@@ -1,5 +1,6 @@
 {
   "expo": {
+    "warning": false,
     "name": "wanderlust",
     "slug": "wanderlust",
     "version": "1.0.0",
