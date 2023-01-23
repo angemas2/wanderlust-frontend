@@ -28,7 +28,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   useEffect(() => {
     fetch(
-      `https://wanderlust-backend.vercel.app/itineraries/profile/${user.profile_id}`
+      `https://wanderlust-backend.vercel.app/activities/${user.profile_id}/custom`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -38,7 +38,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
 
   useEffect(() => {
     fetch(
-      `https://wanderlust-backend.vercel.app/itineraries/followed/${user.profile_id}`
+      `https://wanderlust-backend.vercel.app/activities/${user.profile_id}/followed`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -62,7 +62,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
             <ImageBackground
               imageStyle={{ opacity: 0.3 }}
               blurRadius={2}
-              source={{ uri: item.viewpoints_id[0]?.photos }}
+              source={{ uri: item.itinerary_id.viewpoints_id[0]?.photos }}
               style={styles.imgBg}
             >
               <View
@@ -73,10 +73,10 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.tripTitle}>{item.name}</Text>
+                <Text style={styles.tripTitle}>{item.itinerary_id.name}</Text>
                 <View style={styles.itineraryDatas}>
                   <Text style={{ color: "white" }}>
-                    {item.km.toFixed(2)} km | {item.viewpoints_id.length} spots
+                    {item.itinerary_id.km.toFixed(2)} km | {item.itinerary_id.viewpoints_id.length} spots
                   </Text>
                 </View>
               </View>
@@ -104,7 +104,7 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
             <ImageBackground
               imageStyle={{ opacity: 0.3 }}
               blurRadius={2}
-              source={{ uri: item.viewpoints_id[0]?.photos }}
+              source={{ uri: item.itinerary_id.viewpoints_id[0]?.photos }}
               style={styles.imgBg}
             >
               <View
@@ -115,10 +115,10 @@ export default function MyTripsScreen({ navigation }: NavigationScreenProps) {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.tripTitle}>{item.name}</Text>
+                <Text style={styles.tripTitle}>{item.itinerary_id.name}</Text>
                 <View style={styles.itineraryDatas}>
                   <Text style={{ color: "white" }}>
-                    {item.km.toFixed(2)} km | {item.viewpoints_id.length} spots
+                    {item.itinerary_id.km.toFixed(2)} km | {item.itinerary_id.viewpoints_id.length} spots
                   </Text>
                 </View>
               </View>

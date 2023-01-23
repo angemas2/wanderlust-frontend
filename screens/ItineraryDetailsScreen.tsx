@@ -76,17 +76,35 @@ export default function ItineraryDetailsScreen({ route, navigation }: any) {
     );
   }
 
-  const handleFollow = () => {
-    fetch("https://wanderlust-backend.vercel.app/itineraries/followers", {
+  const handleFollow = async () => {
+
+    // add the user as a follower to the itinerary 
+    
+    await fetch("https://wanderlust-backend.vercel.app/itineraries/followers", {
       method: "Put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: user.profile_id,
         id: _id,
       }),
-    }).then(() => {
-      navigation.navigate("MyTrips");
     });
+
+    //create new activity for the user 
+
+    await fetch(
+      "https://wanderlust-backend.vercel.app/activities/newActivity",
+      {
+        method: "Post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          itinerary_id: _id,
+          profile_id: user.profile_id,
+          type: "followed",
+        }),
+      }
+    );
+
+    navigation.navigate("MyTrips");
   };
 
   return (
