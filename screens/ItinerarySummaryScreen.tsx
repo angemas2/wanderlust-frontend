@@ -130,7 +130,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
   });
 
   //get user pictures of the itinerary
-  const itineraryPhotos = photos.map((data: any, i: number) => {
+  const itineraryPhotos = photos.reverse().map((data: any, i: number) => {
     return (
       <View key={i} style={styles.photos}>
         <Pressable onPress={() => setZoom(!zoom)}>
@@ -262,7 +262,7 @@ export default function ItinerarySummaryScreen({ route }: any) {
               fontSize: 16,
             }}
           >
-            Souvenirs ❤
+            Souvenirs
           </Text>
           <Pressable onPress={pickImage}>
             <Icon
