@@ -46,7 +46,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     longitude: positionContext?.longitude,
   });
 
-  const GOOGLE_MAPS_APIKEY: any= process.env.GOOGLE_MAPS_API;
+  const GOOGLE_MAPS_APIKEY: any = process.env.GOOGLE_MAPS_API;
 
   //Check if coord destination is empty if not show Marker
   const destination = destinationCoord?.latitude ? (
@@ -54,7 +54,6 @@ export default function NavScreen({ navigation }: NavScreenProps) {
   ) : (
     ""
   );
-
 
   const googleurl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.latitude},${origin.longitude}&types=tourist_attraction&radius=10000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
   //Request to api / depend of user location
@@ -64,6 +63,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
       fetch(googleurl)
         .then((response) => response.json())
         .then((data: any) => {
+          console.log(data.results);
           if (data.results) {
             setPlaces(data.results);
             setLoading(false);
@@ -100,7 +100,8 @@ export default function NavScreen({ navigation }: NavScreenProps) {
     !loading &&
     places?.map((data: any, i) => {
       let photo = "";
-      if (data.photos[0]) {
+      console.log("------------------------" + data.photos);
+      if (data.photos && data.photos.length > 0) {
         photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${data.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
       }
       return (
@@ -122,7 +123,13 @@ export default function NavScreen({ navigation }: NavScreenProps) {
             {data.rating}
           </Text>
           <View style={styles.placeinfos}>
-            <View style={{display:"flex", justifyContent:"center",width:"50%"}}>
+            <View
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "50%",
+              }}
+            >
               <Text
                 isTruncated
                 maxW="120"
@@ -130,7 +137,6 @@ export default function NavScreen({ navigation }: NavScreenProps) {
                   fontSize: 10,
                   fontWeight: "bold",
                   marginLeft: 5,
-                  
                 }}
               >
                 {data.name}
@@ -241,9 +247,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
       {distance === 0 ? (
         ""
       ) : (
-        <View
-          style={styles.direction}
-        >
+        <View style={styles.direction}>
           <View
             style={{
               display: "flex",
@@ -254,7 +258,9 @@ export default function NavScreen({ navigation }: NavScreenProps) {
             }}
           >
             <Text style={{ fontSize: 10, opacity: 0.9 }}>Total km</Text>
-            <Text style={{ color: "#023047" }}>{distance ? distance : ""} km</Text>
+            <Text style={{ color: "#023047" }}>
+              {distance ? distance : ""} km
+            </Text>
           </View>
           <View
             style={{
@@ -264,9 +270,7 @@ export default function NavScreen({ navigation }: NavScreenProps) {
               minWidth: 80,
             }}
           >
-            <Text style={styles.DirectionContent}>
-              Total time
-            </Text>
+            <Text style={styles.DirectionContent}>Total time</Text>
             <Text style={{ color: "#023047" }}>{duration.toFixed(0)} min</Text>
           </View>
           <View
@@ -277,10 +281,14 @@ export default function NavScreen({ navigation }: NavScreenProps) {
               minWidth: 80,
             }}
           >
-            <Text style={styles.DirectionContent}>
-              Direction
-            </Text>
-            <Text style={{ color: "#023047", fontWeight: "bold", textAlign:"center" }}>
+            <Text style={styles.DirectionContent}>Direction</Text>
+            <Text
+              style={{
+                color: "#023047",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
               {direction}
             </Text>
           </View>

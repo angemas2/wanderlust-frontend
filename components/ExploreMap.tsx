@@ -26,7 +26,7 @@ interface ExploreMapProps {
 const ExploreMap: React.FC<ExploreMapProps> = ({ navigation }) => {
   SplashScreen.preventAutoHideAsync();
   //API key
-  const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
+  const GOOGLE_MAPS_APIKEY : any= process.env.GOOGLE_MAPS_API;
   //Variable for calling useDispatch
   const dispatch = useDispatch();
   //true or false sended from reducer places, used to choose a style for ExploreMap component if swipe component is visble or not.

@@ -46,7 +46,7 @@ type Element = {
 
 function ExploreSwipe() {
   //API key
-  const GOOGLE_MAPS_APIKEY = "AIzaSyCveSLV5eqlnggp-8nsCSh5zrGdTssTkVk";
+  const GOOGLE_MAPS_APIKEY = process.env.GOOGLE_MAPS_API;
   //Font variable
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -74,7 +74,7 @@ function ExploreSwipe() {
       .then((response) => response.json())
       .then((data) => {
         setPlacesData(data.results);
-       console.log(data.results[0])
+        console.log(data.results[0]);
       })
       .catch((error) => {
         console.log(error);
@@ -85,9 +85,9 @@ function ExploreSwipe() {
   useEffect(() => {
     placesData.length > 0
       ? placesData.map((e: Element, i: number) => {
-          let photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
-          if (e.photos[0] === undefined) {
-            photo = "";
+          let photo = "";
+          if (e.photos && e.photos.length > 0) {
+            photo = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${e.photos[0].photo_reference}&key=${GOOGLE_MAPS_APIKEY}`;
           }
           dispatch(
             getDefaultPlaces({
