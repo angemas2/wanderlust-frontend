@@ -297,10 +297,10 @@ export default function NavScreen({ navigation }: NavScreenProps) {
 
       <View>
         <View style={styles.aroundContainer}>
-          <Text style={styles.subtitle}>Around Me</Text>
+          <Text style={styles.subtitle}>Around Me 🌍</Text>
           <Text style={styles.desc}>
             Let yourself be guided by our travel buddy & discover the hidden
-            gems around you
+            gems around you 
           </Text>
           <ScrollView horizontal={true} style={styles.placesCont}>
             {!loading && placestosee}
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   },
   map: {
     height: "40%",
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
     marginTop: 20,
     backgroundColor: "white",

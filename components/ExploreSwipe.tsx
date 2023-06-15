@@ -65,11 +65,16 @@ function ExploreSwipe() {
   const [index, setIndex] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
   const [onChangeEndValue, setOnChangeEndValue] = useState(5);
+  const [radius, setRadius] = useState(10);
   const monumentRange = onChangeEndValue * 1000;
 
   //Request to get places in a certain perimeter, and give the response to placesData
   useEffect(() => {
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${userPosition.latitude},${userPosition.longitude}&types=tourist_attraction&radius=10000&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${
+      userPosition.latitude
+    },${userPosition.longitude}&types=tourist_attraction&radius=${
+      radius * 1000
+    }&sensor=false&key=${GOOGLE_MAPS_APIKEY}`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -134,7 +139,7 @@ function ExploreSwipe() {
                 <Slider
                   w="3/4"
                   maxW="300"
-                  defaultValue={5}
+                  defaultValue={radius}
                   minValue={5}
                   maxValue={50}
                   accessibilityLabel="hello world"
@@ -155,6 +160,7 @@ function ExploreSwipe() {
                 <Button
                   onPress={() => {
                     setShowModal(false);
+                    setRadius(onChangeEndValue);
                   }}
                 >
                   Save
@@ -237,6 +243,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 14,
     fontFamily: "Inter_400Regular",
+   
   },
   icon: {
     color: "#FFB703",
